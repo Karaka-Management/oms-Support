@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace Modules\Support;
+namespace Modules\Support\Controller;
 
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -31,59 +31,8 @@ use Modules\Support\Models\TicketMapper;
  * @link       http://website.orange-management.de
  * @since      1.0.0
  */
-final class Controller extends ModuleAbstract implements WebInterface
+class BackendController extends Controller
 {
-
-    /**
-     * Module path.
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    public const MODULE_PATH = __DIR__;
-
-    /**
-     * Module version.
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    public const MODULE_VERSION = '1.0.0';
-
-    /**
-     * Module name.
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    public const MODULE_NAME = 'Support';
-
-    /**
-     * Module id.
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public const MODULE_ID = 1002900000;
-
-    /**
-     * Providing.
-     *
-     * @var string[]
-     * @since 1.0.0
-     */
-    protected static $providing = [
-        'Navigation'
-    ];
-
-    /**
-     * Dependencies.
-     *
-     * @var string[]
-     * @since 1.0.0
-     */
-    protected static $dependencies = [
-    ];
 
     /**
      * @param RequestAbstract  $request  Request
