@@ -21,9 +21,9 @@ echo $this->getData('nav')->render(); ?>
 
 <div class="row">
     <div class="col-xs-12 col-md-9">
-        <div class="box wf-100">
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Tickets') ?><i class="fa fa-download floatRight download btn"></i></div>
             <table class="default">
-                <caption><?= $this->getHtml('Tickets') ?><i class="fa fa-download floatRight download btn"></i></caption>
                 <thead>
                     <td><?= $this->getHtml('Status') ?>
                     <td><?= $this->getHtml('Due') ?>
@@ -47,43 +47,43 @@ echo $this->getData('nav')->render(); ?>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getCreatedBy()->getName1()); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getCreatedAt()->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
-                <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
             </table>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-3">
-            <section class="box wf-100">
-                <header><h1><?= $this->getHtml('Settings') ?></h1></header>
-                <div class="inner">
-                    <form>
-                        <table class="layout wf-100">
-                            <tr><td><label for="iIntervarl"><?= $this->getHtml('Interval') ?></label>
-                            <tr><td><select id="iIntervarl" name="interval">
-                                        <option><?= $this->getHtml('All') ?>
-                                        <option><?= $this->getHtml('Day') ?>
-                                        <option><?= $this->getHtml('Week') ?>
-                                        <option selected><?= $this->getHtml('Month') ?>
-                                        <option><?= $this->getHtml('Year') ?>
-                                    </select>
-                        </table>
-                    </form>
-                </div>
-            </section>
-
-            <section class="box wf-100">
-                <header><h1><?= $this->getHtml('Settings') ?></h1></header>
-                <div class="inner">
-                    <table class="list">
-                        <tr><th><?= $this->getHtml('Received') ?><td>0
-                        <tr><th><?= $this->getHtml('Created') ?><td>0
-                        <tr><th><?= $this->getHtml('Forwarded') ?><td>0
-                        <tr><th><?= $this->getHtml('AverageAmount') ?><td>0
-                        <tr><th><?= $this->getHtml('AverageProcessTime') ?><td>0
-                        <tr><th><?= $this->getHtml('InTime') ?><td>0
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Settings') ?></div>
+            <div class="portlet-body">
+                <form>
+                    <table class="layout wf-100">
+                        <tr><td><label for="iIntervarl"><?= $this->getHtml('Interval') ?></label>
+                        <tr><td><select id="iIntervarl" name="interval">
+                                    <option><?= $this->getHtml('All') ?>
+                                    <option><?= $this->getHtml('Day') ?>
+                                    <option><?= $this->getHtml('Week') ?>
+                                    <option selected><?= $this->getHtml('Month') ?>
+                                    <option><?= $this->getHtml('Year') ?>
+                                </select>
                     </table>
-                </div>
-            </section>
+                </form>
+            </div>
+        </section>
+
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Settings') ?></div>
+            <div class="portlet-body">
+                <table class="list">
+                    <tr><th><?= $this->getHtml('Received') ?><td>0
+                    <tr><th><?= $this->getHtml('Created') ?><td>0
+                    <tr><th><?= $this->getHtml('Forwarded') ?><td>0
+                    <tr><th><?= $this->getHtml('AverageAmount') ?><td>0
+                    <tr><th><?= $this->getHtml('AverageProcessTime') ?><td>0
+                    <tr><th><?= $this->getHtml('InTime') ?><td>0
+                </table>
+            </div>
+        </section>
     </div>
 </div>
