@@ -43,7 +43,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="inner">
                 <div class="pAlignTable">
                     <div class="vC wf-100">Created <?= $this->printHtml($ticket->getTask()->getCreatedBy()->getName1()); ?></div>
-                    <span class="vC nobreak tag"><?= $this->getHtml('S' . $ticket->getTask()->getStatus()) ?></span>
+                    <span class="vC nobreak tag"><?= $this->getHtml('S' . $ticket->getTask()->getStatus()); ?></span>
                 </div>
             </div>
         </section>
@@ -58,7 +58,7 @@ echo $this->getData('nav')->render(); ?>
             <section class="box wf-100">
                 <div class="inner pAlignTable">
                     <div class="vC wf-100"><?= $this->printHtml($element->getCreatedBy()->getName1()); ?> - <?= $this->printHtml($element->getCreatedAt()->format('Y-m-d H:i')); ?></div>
-                    <span class="vC tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $element->getStatus()) ?></span>
+                    <span class="vC tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $element->getStatus()); ?></span>
                 </div>
 
             <?php if ($element->getDescription() !== '') : ?>
@@ -86,11 +86,11 @@ echo $this->getData('nav')->render(); ?>
             <div class="inner">
                 <form id="taskElementCreate" method="POST" action="<?= \phpOMS\Uri\UriFactory::build('{/api}task/element?{?}&csrf={$CSRF}'); ?>">
                     <table class="layout wf-100">
-                        <tr><td><label for="iMessage"><?= $this->getHtml('Message') ?></label>
+                        <tr><td><label for="iMessage"><?= $this->getHtml('Message'); ?></label>
                         <tr><td><textarea id="iMessage" name="description"></textarea>
-                        <tr><td><label for="iDue"><?= $this->getHtml('Due') ?></label>
+                        <tr><td><label for="iDue"><?= $this->getHtml('Due'); ?></label>
                         <tr><td><input type="datetime-local" id="iDue" name="due" value="<?= $this->printHtml(!empty($elements) ? \end($elements)->getDue()->format('Y-m-d\TH:i:s') : $ticket->getTask()->getDue()->format('Y-m-d\TH:i:s')); ?>">
-                        <tr><td><label for="iStatus"><?= $this->getHtml('Status') ?></label>
+                        <tr><td><label for="iStatus"><?= $this->getHtml('Status'); ?></label>
                         <tr><td><select id="iStatus" name="status">
                                     <option value="<?= $this->printHtml(\Modules\Tasks\Models\TaskStatus::OPEN); ?>" selected>Open
                                     <option value="<?= $this->printHtml(\Modules\Tasks\Models\TaskStatus::WORKING); ?>">Working
@@ -98,11 +98,11 @@ echo $this->getData('nav')->render(); ?>
                                     <option value="<?= $this->printHtml(\Modules\Tasks\Models\TaskStatus::CANCELED); ?>">Canceled
                                     <option value="<?= $this->printHtml(\Modules\Tasks\Models\TaskStatus::DONE); ?>">Done
                                 </select>
-                        <tr><td><label for="iReceiver"><?= $this->getHtml('To') ?></label>
+                        <tr><td><label for="iReceiver"><?= $this->getHtml('To'); ?></label>
                         <tr><td><input type="text" id="iReceiver" name="forward" value="<?= $this->printHtml($this->request->getHeader()->getAccount()); ?>" placeholder="&#xf007; Guest">
-                        <tr><td colspan="2"><label for="iMedia"><?= $this->getHtml('Media') ?></label>
-                        <tr><td><input type="text" id="iMedia" placeholder="&#xf15b; File"><td><button><?= $this->getHtml('Select') ?></button>
-                        <tr><td colspan="2"><label for="iUpload"><?= $this->getHtml('Upload') ?></label>
+                        <tr><td colspan="2"><label for="iMedia"><?= $this->getHtml('Media'); ?></label>
+                        <tr><td><input type="text" id="iMedia" placeholder="&#xf15b; File"><td><button><?= $this->getHtml('Select'); ?></button>
+                        <tr><td colspan="2"><label for="iUpload"><?= $this->getHtml('Upload'); ?></label>
                         <tr><td><input type="file" id="iUpload" form="fTask"><input form="fTask" type="hidden" name="type"><td>
                         <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>"><input type="hidden" name="task" value="<?= $this->printHtml($this->request->getData('id')); ?>"><input type="hidden" name="type" value="1">
                     </table>

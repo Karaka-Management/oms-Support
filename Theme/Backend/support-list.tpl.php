@@ -22,14 +22,14 @@ echo $this->getData('nav')->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-9">
         <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Tickets') ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head"><?= $this->getHtml('Tickets'); ?><i class="fa fa-download floatRight download btn"></i></div>
             <table class="default">
                 <thead>
-                    <td><?= $this->getHtml('Status') ?>
-                    <td><?= $this->getHtml('Due') ?>
-                    <td class="full"><?= $this->getHtml('Title') ?>
-                    <td><?= $this->getHtml('Creator') ?>
-                    <td><?= $this->getHtml('Created') ?>
+                    <td><?= $this->getHtml('Status'); ?>
+                    <td><?= $this->getHtml('Due'); ?>
+                    <td class="full"><?= $this->getHtml('Title'); ?>
+                    <td><?= $this->getHtml('Creator'); ?>
+                    <td><?= $this->getHtml('Created'); ?>
                 <tfoot>
                 <tbody>
                 <?php $c = 0; foreach ($tickets as $key => $ticket) : ++$c;
@@ -41,7 +41,7 @@ echo $this->getData('nav')->render(); ?>
                 elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::CANCELED) { $color = 'red'; }
                 elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::SUSPENDED) { $color = 'yellow'; } ?>
                     <tr data-href="<?= $url; ?>">
-                        <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $ticket->getTask()->getStatus(), 'Tasks') ?></span></a>
+                        <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $ticket->getTask()->getStatus(), 'Tasks'); ?></span></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getDue()->format('Y-m-d H:i')); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getTitle()); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getCreatedBy()->getName1()); ?></a>
@@ -55,17 +55,17 @@ echo $this->getData('nav')->render(); ?>
 
     <div class="col-xs-12 col-md-3">
         <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Settings') ?></div>
+            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
             <div class="portlet-body">
                 <form>
                     <table class="layout wf-100">
-                        <tr><td><label for="iIntervarl"><?= $this->getHtml('Interval') ?></label>
+                        <tr><td><label for="iIntervarl"><?= $this->getHtml('Interval'); ?></label>
                         <tr><td><select id="iIntervarl" name="interval">
-                                    <option><?= $this->getHtml('All') ?>
-                                    <option><?= $this->getHtml('Day') ?>
-                                    <option><?= $this->getHtml('Week') ?>
-                                    <option selected><?= $this->getHtml('Month') ?>
-                                    <option><?= $this->getHtml('Year') ?>
+                                    <option><?= $this->getHtml('All'); ?>
+                                    <option><?= $this->getHtml('Day'); ?>
+                                    <option><?= $this->getHtml('Week'); ?>
+                                    <option selected><?= $this->getHtml('Month'); ?>
+                                    <option><?= $this->getHtml('Year'); ?>
                                 </select>
                     </table>
                 </form>
@@ -73,15 +73,15 @@ echo $this->getData('nav')->render(); ?>
         </section>
 
         <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Settings') ?></div>
+            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
             <div class="portlet-body">
                 <table class="list">
-                    <tr><th><?= $this->getHtml('Received') ?><td>0
-                    <tr><th><?= $this->getHtml('Created') ?><td>0
-                    <tr><th><?= $this->getHtml('Forwarded') ?><td>0
-                    <tr><th><?= $this->getHtml('AverageAmount') ?><td>0
-                    <tr><th><?= $this->getHtml('AverageProcessTime') ?><td>0
-                    <tr><th><?= $this->getHtml('InTime') ?><td>0
+                    <tr><th><?= $this->getHtml('Received'); ?><td>0
+                    <tr><th><?= $this->getHtml('Created'); ?><td>0
+                    <tr><th><?= $this->getHtml('Forwarded'); ?><td>0
+                    <tr><th><?= $this->getHtml('AverageAmount'); ?><td>0
+                    <tr><th><?= $this->getHtml('AverageProcessTime'); ?><td>0
+                    <tr><th><?= $this->getHtml('InTime'); ?><td>0
                 </table>
             </div>
         </section>
