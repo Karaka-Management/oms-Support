@@ -32,13 +32,13 @@ echo $this->getData('nav')->render(); ?>
                     <td><?= $this->getHtml('Created'); ?>
                 <tfoot>
                 <tbody>
-                <?php $c = 0; foreach ($tickets as $key => $ticket) : ++$c;
-                $url = \phpOMS\Uri\UriFactory::build('{/prefix}support/single?{?}&id=' . $ticket->getId());
-                $color = 'darkred';
-                if ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::DONE) { $color = 'green'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::OPEN) { $color = 'darkblue'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::WORKING) { $color = 'purple'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::CANCELED) { $color = 'red'; }
+                <?php $c                                                                                          = 0; foreach ($tickets as $key => $ticket) : ++$c;
+                $url                                                                                              = \phpOMS\Uri\UriFactory::build('{/prefix}support/single?{?}&id=' . $ticket->getId());
+                $color                                                                                            = 'darkred';
+                if ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::DONE) { $color          = 'green'; }
+                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::OPEN) { $color      = 'darkblue'; }
+                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::WORKING) { $color   = 'purple'; }
+                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::CANCELED) { $color  = 'red'; }
                 elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::SUSPENDED) { $color = 'yellow'; } ?>
                     <tr data-href="<?= $url; ?>">
                         <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $ticket->getTask()->getStatus(), 'Tasks'); ?></span></a>
