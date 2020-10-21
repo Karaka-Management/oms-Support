@@ -47,7 +47,7 @@ final class TicketMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'task' => [
             'mapper' => TaskMapper::class,
-            'self'   => 'support_ticket_task',
+            'external'   => 'support_ticket_task',
         ],
     ];
 
