@@ -13,7 +13,7 @@ return [
             'permission' => [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SUPPORT,
+                'state'  => PermissionState::TICKET,
             ],
         ],
     ],
@@ -24,7 +24,7 @@ return [
             'permission' => [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SUPPORT,
+                'state'  => PermissionState::TICKET,
             ],
         ],
     ],
@@ -35,7 +35,7 @@ return [
             'permission' => [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::SUPPORT,
+                'state'  => PermissionState::TICKET,
             ],
         ],
     ],
