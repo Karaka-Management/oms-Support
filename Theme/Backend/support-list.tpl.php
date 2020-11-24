@@ -44,8 +44,8 @@ echo $this->getData('nav')->render(); ?>
                         <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $ticket->getTask()->getStatus(), 'Tasks'); ?></span></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getDue()->format('Y-m-d H:i')); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getTitle()); ?></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getCreatedBy()->getName1()); ?></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getCreatedAt()->format('Y-m-d H:i')); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->createdBy->name1); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
                     <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>

@@ -38,7 +38,7 @@ class Message
      * @var string
      * @since 1.0.0
      */
-    private string $name = '';
+    public string $name = '';
 
     /**
      * Description.
@@ -84,32 +84,6 @@ class Message
     public function getId() : int
     {
         return $this->id;
-    }
-
-    /**
-     * Get name/title.
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name Name/title
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setName(string $name) : void
-    {
-        $this->name = $name;
     }
 
     /**

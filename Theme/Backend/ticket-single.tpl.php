@@ -33,16 +33,16 @@ echo $this->getData('nav')->render(); ?>
             <header><h1><?= $this->printHtml($ticket->getTask()->getTitle()); ?></h1></header>
             <div class="inner">
                 <div class="floatRight">Due <?= $this->printHtml($ticket->getTask()->getDue()->format('Y-m-d H:i')); ?></div>
-                <div>Created <?= $this->printHtml($ticket->getTask()->getCreatedAt()->format('Y-m-d H:i')); ?></div>
+                <div>Created <?= $this->printHtml($ticket->getTask()->createdAt->format('Y-m-d H:i')); ?></div>
             </div>
             <div class="inner">
                 <blockquote>
-                    <?= $this->printHtml($ticket->getTask()->getDescription()); ?>
+                    <?= $this->printHtml($ticket->getTask()->description); ?>
                 </blockquote>
             </div>
             <div class="inner">
                 <div class="pAlignTable">
-                    <div class="vC wf-100">Created <?= $this->printHtml($ticket->getTask()->getCreatedBy()->getName1()); ?></div>
+                    <div class="vC wf-100">Created <?= $this->printHtml($ticket->getTask()->createdBy->name1); ?></div>
                     <span class="vC nobreak tag"><?= $this->getHtml('S' . $ticket->getTask()->getStatus()); ?></span>
                 </div>
             </div>
@@ -57,14 +57,14 @@ echo $this->getData('nav')->render(); ?>
             elseif ($element->getStatus() === \Modules\Tasks\Models\TaskStatus::SUSPENDED) { $color = 'yellow'; } ?>
             <section class="box wf-100">
                 <div class="inner pAlignTable">
-                    <div class="vC wf-100"><?= $this->printHtml($element->getCreatedBy()->getName1()); ?> - <?= $this->printHtml($element->getCreatedAt()->format('Y-m-d H:i')); ?></div>
+                    <div class="vC wf-100"><?= $this->printHtml($element->createdBy->name1); ?> - <?= $this->printHtml($element->createdAt->format('Y-m-d H:i')); ?></div>
                     <span class="vC tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $element->getStatus()); ?></span>
                 </div>
 
-            <?php if ($element->getDescription() !== '') : ?>
+            <?php if ($element->description !== '') : ?>
                     <div class="inner">
                         <blockquote>
-                            <?= $this->printHtml($element->getDescription()); ?>
+                            <?= $this->printHtml($element->description); ?>
                         </blockquote>
                     </div>
             <?php endif; ?>
@@ -99,7 +99,7 @@ echo $this->getData('nav')->render(); ?>
                                     <option value="<?= $this->printHtml(\Modules\Tasks\Models\TaskStatus::DONE); ?>">Done
                                 </select>
                         <tr><td><label for="iReceiver"><?= $this->getHtml('To'); ?></label>
-                        <tr><td><input type="text" id="iReceiver" name="forward" value="<?= $this->printHtml($this->request->getHeader()->getAccount()); ?>" placeholder="&#xf007; Guest">
+                        <tr><td><input type="text" id="iReceiver" name="forward" value="<?= $this->printHtml($this->request->header->account); ?>" placeholder="&#xf007; Guest">
                         <tr><td colspan="2"><label for="iMedia"><?= $this->getHtml('Media'); ?></label>
                         <tr><td><input type="text" id="iMedia" placeholder="&#xf15b; File"><td><button><?= $this->getHtml('Select'); ?></button>
                         <tr><td colspan="2"><label for="iUpload"><?= $this->getHtml('Upload'); ?></label>
