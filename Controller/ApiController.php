@@ -38,22 +38,10 @@ use phpOMS\Utils\Parser\Markdown\Markdown;
  * @link    https://orange-management.org
  * @since   1.0.0
  *
- * @todo Orange-Management/oms-Tasks#9
- *  Create task/calendar reference
- *  Show tasks in calendars not just in user calendars but also in event calendars and project calendars?!
- *
  * @todo Orange-Management/Modules#33
  *  Repeating tasks should be implemented.
  *  At the same time this means a fix to the due date needs to be implemented.
  *  Maybe simple calculate the time difference between first start and first due?
- *
- * @todo Orange-Management/oms-Tasks#6
- *  Add tags
- *  The user should be able to add a tag to a task and also decide on the color of the tag.
- *  User means the creator of the task.
- *  If task elements should have their own tags of if other users should be able to modify tags should be ignored for now.
- *  Maybe instead of creating a tasks specific tag system a global tag system could be used? Maybe this was already created as an issue.
- *  Tags should be globally and users should be able to define tags separately for their own organization purposes.
  */
 final class ApiController extends Controller
 {
