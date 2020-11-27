@@ -136,7 +136,7 @@ final class ApiController extends Controller
 
         $element = new TaskElement();
         $element->addTo(new NullAccount((int) ($request->getData('forward') ?? $request->header->account)));
-        $element->createdBy = $task->createdBy;
+        $element->createdBy = $task->getCreatedBy();
         $element->due       = $task->due;
         $element->setPriority($task->getPriority());
         $element->setStatus(TaskStatus::OPEN);
