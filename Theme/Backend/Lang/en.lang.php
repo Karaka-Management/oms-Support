@@ -4,7 +4,7 @@
  *
  * PHP Version 8.0
  *
- * @package   Modules\Support
+ * @package   Modules\Localization
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
@@ -27,8 +27,8 @@ return ['Support' => [
     'Forwarded'          => 'Forwarded',
     'From'               => 'From',
     'Group'              => 'Group',
-    'Interval'           => 'Interval',
     'InTime'             => 'In Time',
+    'Interval'           => 'Interval',
     'Media'              => 'Media',
     'Message'            => 'Message',
     'Month'              => 'Month',
@@ -54,6 +54,7 @@ return ['Support' => [
     'Today'              => 'Today',
     'Topic'              => 'Topic',
     'Type'               => 'Type',
+    'Upload'             => 'Upload',
     'Week'               => 'Week',
     'Year'               => 'Year',
 ]];
