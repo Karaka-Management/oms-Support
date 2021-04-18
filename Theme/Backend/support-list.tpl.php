@@ -23,7 +23,7 @@ echo $this->getData('nav')->render(); ?>
     <div class="col-xs-12 col-md-9">
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Tickets'); ?><i class="fa fa-download floatRight download btn"></i></div>
-            <table class="default">
+            <table class="default sticky">
                 <thead>
                     <td><?= $this->getHtml('Status'); ?>
                     <td><?= $this->getHtml('Due'); ?>
