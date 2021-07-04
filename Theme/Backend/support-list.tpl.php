@@ -12,11 +12,14 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Uri\UriFactory;
+
 /**
  * @var \phpOMS\Views\View           $this
- * @var \Modules\Tasks\Models\Task[] $tickets
+ * @var \Modules\Support\Models\Ticket[] $tickets
  */
 $tickets = $this->getData('tickets');
+
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
@@ -26,26 +29,27 @@ echo $this->getData('nav')->render(); ?>
             <table class="default sticky">
                 <thead>
                     <td><?= $this->getHtml('Status'); ?>
-                    <td><?= $this->getHtml('Due'); ?>
+                    <td><?= $this->getHtml('Priority'); ?>
                     <td class="full"><?= $this->getHtml('Title'); ?>
                     <td><?= $this->getHtml('Creator'); ?>
+                    <td><?= $this->getHtml('Assigned'); ?>
+                    <td><?= $this->getHtml('For'); ?>
                     <td><?= $this->getHtml('Created'); ?>
                 <tfoot>
                 <tbody>
-                <?php $c                                                                                          = 0; foreach ($tickets as $key => $ticket) : ++$c;
-                $url                                                                                              = \phpOMS\Uri\UriFactory::build('{/prefix}support/single?{?}&id=' . $ticket->getId());
-                $color                                                                                            = 'darkred';
-                if ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::DONE) { $color          = 'green'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::OPEN) { $color      = 'darkblue'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::WORKING) { $color   = 'purple'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::CANCELED) { $color  = 'red'; }
-                elseif ($ticket->getTask()->getStatus() === \Modules\Tasks\Models\TaskStatus::SUSPENDED) { $color = 'yellow'; } ?>
+                <?php
+                    $c = 0;
+                foreach ($tickets as $key => $ticket) : ++$c;
+                    $url = UriFactory::build('{/prefix}support/ticket?{?}&id=' . $ticket->getId());
+                ?>
                     <tr data-href="<?= $url; ?>">
-                        <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml($color); ?>"><?= $this->getHtml('S' . $ticket->getTask()->getStatus(), 'Tasks'); ?></span></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getDue()->format('Y-m-d H:i')); ?></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->getTitle()); ?></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->createdBy->name1); ?></a>
-                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->getTask()->createdAt->format('Y-m-d H:i')); ?></a>
+                        <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml('task-status-' . $ticket->task->getStatus()); ?>"><?= $this->getHtml('S' . $ticket->task->getStatus(), 'Tasks'); ?></span></a>
+                        <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->getPriority(), 'Tasks'); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('{/prefix}profile/single?for=' . $ticket->task->createdBy->getId()); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('{/prefix}profile/single?for=' . $ticket->for->getId()); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
                     <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
@@ -76,11 +80,11 @@ echo $this->getData('nav')->render(); ?>
             <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
             <div class="portlet-body">
                 <table class="list">
-                    <tr><th><?= $this->getHtml('Received'); ?><td>0
-                    <tr><th><?= $this->getHtml('Created'); ?><td>0
-                    <tr><th><?= $this->getHtml('Forwarded'); ?><td>0
-                    <tr><th><?= $this->getHtml('AverageAmount'); ?><td>0
-                    <tr><th><?= $this->getHtml('AverageProcessTime'); ?><td>0
+                    <tr><th><?= $this->getHtml('All'); ?><td>0
+                    <tr><th><?= $this->getHtml('Unassigned'); ?><td>0
+                    <tr><th><?= $this->getHtml('Open'); ?><td>0
+                    <tr><th><?= $this->getHtml('Unsolved'); ?><td>0
+                    <tr><th><?= $this->getHtml('Closed'); ?><td>0
                     <tr><th><?= $this->getHtml('InTime'); ?><td>0
                 </table>
             </div>

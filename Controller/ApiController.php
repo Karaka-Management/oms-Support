@@ -16,10 +16,13 @@ namespace Modules\Support\Controller;
 
 use Modules\Admin\Models\NullAccount;
 use Modules\Tag\Models\NullTag;
-use Modules\Tasks\Models\Task;
-use Modules\Tasks\Models\TaskElement;
-use Modules\Tasks\Models\TaskElementMapper;
-use Modules\Tasks\Models\TaskMapper;
+use Modules\Support\Models\Ticket;
+use Modules\Support\Models\TicketElement;
+use Modules\Support\Models\TicketElementMapper;
+use Modules\Support\Models\TicketMapper;
+use Modules\Support\Models\SupportApp;
+use Modules\Support\Models\NullSupportApp;
+use Modules\Support\Models\SupportAppMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
 use phpOMS\Message\Http\HttpResponse;
@@ -31,22 +34,17 @@ use phpOMS\Model\Message\FormValidation;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 
 /**
- * Api controller for the tasks module.
+ * Api controller for the tickets module.
  *
  * @package Modules\Support
  * @license OMS License 1.0
  * @link    https://orange-management.org
  * @since   1.0.0
- *
- * @todo Orange-Management/Modules#33
- *  Repeating tasks should be implemented.
- *  At the same time this means a fix to the due date needs to be implemented.
- *  Maybe simple calculate the time difference between first start and first due?
  */
 final class ApiController extends Controller
 {
     /**
-     * Validate task create request
+     * Validate ticket create request
      *
      * @param RequestAbstract $request Request
      *
@@ -67,7 +65,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to create a task
+     * Api method to create a ticket
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -88,67 +86,38 @@ final class ApiController extends Controller
             return;
         }
 
-        $task = $this->createTicketFromRequest($request);
-        $this->createModel($request->header->account, $task, TaskMapper::class, 'task', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task', 'Task successfully created.', $task);
+        $ticket = $this->createTicketFromRequest($request);
+
+        $this->createModel($request->header->account, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully created.', $ticket);
     }
 
     /**
-     * Method to create task from request.
+     * Method to create ticket from request.
      *
      * @param RequestAbstract $request Request
      *
-     * @return Task Returns the created task from the request
+     * @return Ticket Returns the created ticket from the request
      *
      * @since 1.0.0
      */
-    private function createTicketFromRequest(RequestAbstract $request) : Task
+    private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $task                 = new Task();
-        $task->title          = (string) ($request->getData('title') ?? '');
-        $task->description    = Markdown::parse((string) ($request->getData('plain') ?? ''));
-        $task->descriptionRaw = (string) ($request->getData('plain') ?? '');
-        $task->setCreatedBy(new NullAccount($request->header->account));
-        $task->setStatus(TaskStatus::OPEN);
-        $task->setType(TaskType::SINGLE);
+        $task = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
+        $task->setType(TaskType::HIDDEN);
 
-        if (empty($request->getData('priority'))) {
-            $task->due = empty($request->getData('due')) ? null : new \DateTime($request->getData('due'));
-        } else {
-            $task->setPriority((int) $request->getData('priority'));
+        $ticket      = new Ticket($task);
+        $ticket->app = new NullSupportApp((int) ($request->getData('app') ?? 1));
+
+        if ($request->getData('for') !== null) {
+            $ticket->for = new NullAccount((int) $request->getData('for'));
         }
 
-        if (!empty($tags = $request->getDataJson('tags'))) {
-            foreach ($tags as $tag) {
-                if (!isset($tag['id'])) {
-                    $request->setData('title', $tag['title'], true);
-                    $request->setData('color', $tag['color'], true);
-                    $request->setData('icon', $tag['icon'] ?? null, true);
-                    $request->setData('language', $tag['language'], true);
-
-                    $internalResponse = new HttpResponse();
-                    $this->app->moduleManager->get('Tag')->apiTagCreate($request, $internalResponse, null);
-                    $task->addTag($internalResponse->get($request->uri->__toString())['response']);
-                } else {
-                    $task->addTag(new NullTag((int) $tag['id']));
-                }
-            }
-        }
-
-        $element = new TaskElement();
-        $element->addTo(new NullAccount((int) ($request->getData('forward') ?? $request->header->account)));
-        $element->createdBy = $task->getCreatedBy();
-        $element->due       = $task->due;
-        $element->setPriority($task->getPriority());
-        $element->setStatus(TaskStatus::OPEN);
-
-        $task->addElement($element);
-
-        return $task;
+        return $ticket;
     }
 
     /**
-     * Api method to get a task
+     * Api method to get a ticket
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -162,12 +131,12 @@ final class ApiController extends Controller
      */
     public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $task = TaskMapper::get((int) $request->getData('id'));
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task', 'Task successfully returned.', $task);
+        $ticket = TicketMapper::get((int) $request->getData('id'));
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully returned.', $ticket);
     }
 
     /**
-     * Api method to update a task
+     * Api method to update a ticket
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -181,37 +150,30 @@ final class ApiController extends Controller
      */
     public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $old = clone TaskMapper::get((int) $request->getData('id'));
+        $old = clone TicketMapper::get((int) $request->getData('id'));
         $new = $this->updateTicketFromRequest($request);
-        $this->updateModel($request->header->account, $old, $new, TaskMapper::class, 'task', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task', 'Task successfully updated.', $new);
+        $this->updateModel($request->header->account, $old, $new, TicketMapper::class, 'ticket', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully updated.', $new);
     }
 
     /**
-     * Method to update an task from a request
+     * Method to update an ticket from a request
      *
      * @param RequestAbstract $request Request
      *
-     * @return Task Returns the updated task from the request
+     * @return Ticket Returns the updated ticket from the request
      *
      * @since 1.0.0
      */
-    private function updateTicketFromRequest(RequestAbstract $request) : Task
+    private function updateTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $task                 = TaskMapper::get((int) ($request->getData('id')));
-        $task->title          = (string) ($request->getData('title') ?? $task->getTitle());
-        $task->description    = Markdown::parse((string) ($request->getData('plain') ?? $task->descriptionRaw));
-        $task->descriptionRaw = (string) ($request->getData('plain') ?? $task->descriptionRaw);
-        $task->due            = new \DateTime((string) ($request->getData('due') ?? $task->getDue()->format('Y-m-d H:i:s')));
-        $task->setStatus((int) ($request->getData('status') ?? $task->getStatus()));
-        $task->setType((int) ($request->getData('type') ?? $task->getType()));
-        $task->setPriority((int) ($request->getData('priority') ?? $task->getPriority()));
+        $ticket = TicketMapper::get((int) ($request->getData('id')));
 
-        return $task;
+        return $ticket;
     }
 
     /**
-     * Validate task element create request
+     * Validate ticket element create request
      *
      * @param RequestAbstract $request Request
      *
@@ -224,7 +186,7 @@ final class ApiController extends Controller
         $val = [];
         if (($val['status'] = !TaskStatus::isValidValue((int) $request->getData('status')))
             || ($val['due'] = !((bool) \strtotime((string) $request->getData('due'))))
-            || ($val['task'] = !(\is_numeric($request->getData('task'))))
+            || ($val['ticket'] = !(\is_numeric($request->getData('ticket'))))
             || ($val['forward'] = !(\is_numeric(empty($request->getData('forward')) ? $request->header->account : $request->getData('forward'))))
         ) {
             return $val;
@@ -234,7 +196,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to create a task element
+     * Api method to create a ticket element
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -249,72 +211,46 @@ final class ApiController extends Controller
     public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         if (!empty($val = $this->validateTicketElementCreate($request))) {
-            $response->set('task_element_create', new FormValidation($val));
+            $response->set('ticket_element_create', new FormValidation($val));
             $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
-        /**
-         * @todo Orange-Management/oms-Tasks#3
-         *  Validate that the user is allowed to create a task element for a specific task
-         */
+        $ticket  = TicketMapper::get((int) ($request->getData('ticket')));
+        $element = $this->createTicketElementFromRequest($request, $ticket);
+        $ticket->task->setStatus($element->taskElement->getStatus());
+        $ticket->task->setPriority($element->taskElement->getPriority());
+        $ticket->task->setDue($element->taskElement->due);
 
-        $task    = TaskMapper::get((int) ($request->getData('task')));
-        $element = $this->createTicketElementFromRequest($request, $task);
-        $task->setStatus($element->getStatus());
-        $task->setPriority($element->getPriority());
-        $task->setDue($element->due);
-
-        $this->createModel($request->header->account, $element, TaskElementMapper::class, 'taskelement', $request->getOrigin());
-        $this->updateModel($request->header->account, $task, $task, TaskMapper::class, 'task', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task element', 'Task element successfully created.', $element);
+        $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
+        $this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully created.', $element);
     }
 
     /**
-     * Method to create task element from request.
+     * Method to create ticket element from request.
      *
      * @param RequestAbstract $request Request
-     * @param Task            $task    Task
+     * @param Ticket            $ticket    Ticket
      *
-     * @return TaskElement Returns the task created from the request
+     * @return TicketElement Returns the ticket created from the request
      *
      * @since 1.0.0
      */
-    private function createTicketElementFromRequest(RequestAbstract $request, Task $task) : TaskElement
+    private function createTicketElementFromRequest(RequestAbstract $request, Ticket $ticket) : TicketElement
     {
-        $element            = new TaskElement();
-        $element->createdBy = new NullAccount($request->header->account);
-        $element->due       = !empty($request->getData('due')) ? new \DateTime((string) ($request->getData('due'))) : $task->due;
-        $element->setPriority((int) ($request->getData('priority') ?? $task->getPriority()));
-        $element->setStatus((int) ($request->getData('status')));
-        $element->task           = $task->getId();
-        $element->description    = Markdown::parse((string) ($request->getData('plain') ?? ''));
-        $element->descriptionRaw = (string) ($request->getData('plain') ?? '');
+        $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request);
 
-        $tos = $request->getData('to') ?? $request->header->account;
-        if (!\is_array($tos)) {
-            $tos = [$tos];
-        }
+        $ticketElement = new TicketElement($taskElement);
+        $ticketElement->time = (int) $request->getData('time') ?? 0;
+        $ticketElement->ticket = $ticket->getId();
 
-        $ccs = $request->getData('cc') ?? [];
-        if (!\is_array($ccs)) {
-            $ccs = [$ccs];
-        }
-
-        foreach ($tos as $to) {
-            $element->addTo(new NullAccount((int) $to));
-        }
-
-        foreach ($ccs as $cc) {
-            $element->addCC(new NullAccount((int) $cc));
-        }
-
-        return $element;
+        return $ticketElement;
     }
 
     /**
-     * Api method to get a task
+     * Api method to get a ticket
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -328,12 +264,12 @@ final class ApiController extends Controller
      */
     public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $task = TaskElementMapper::get((int) $request->getData('id'));
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task element', 'Task element successfully returned.', $task);
+        $ticket = TicketElementMapper::get((int) $request->getData('id'));
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully returned.', $ticket);
     }
 
     /**
-     * Api method to update a task
+     * Api method to update a ticket
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -347,32 +283,26 @@ final class ApiController extends Controller
      */
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $old = clone TaskElementMapper::get((int) $request->getData('id'));
+        $old = clone TicketElementMapper::get((int) $request->getData('id'));
         $new = $this->updateTicketElementFromRequest($request);
-        $this->updateModel($request->header->account, $old, $new, TaskElementMapper::class, 'taskelement', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
 
-        /**
-         * @todo Orange-Management/oms-Tasks#2
-         *  Update task status depending on the new task element or updated task element
-         *  The task status is not normalized and relates to the last task element.
-         *  Depending on the task status of the last task element also the task status should change.
-         */
-        //$this->updateModel($request->header->account, $task, $task, TaskMapper::class, 'task', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Task element', 'Task element successfully updated.', $new);
+        //$this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully updated.', $new);
     }
 
     /**
-     * Method to update an task element from a request
+     * Method to update an ticket element from a request
      *
      * @param RequestAbstract $request Request
      *
-     * @return TaskElement Returns the updated task element from the request
+     * @return TaskElement Returns the updated ticket element from the request
      *
      * @since 1.0.0
      */
     private function updateTicketElementFromRequest(RequestAbstract $request) : TaskElement
     {
-        $element = TaskElementMapper::get((int) ($request->getData('id')));
+        $element = TicketElementMapper::get((int) ($request->getData('id')));
         $element->setDue(new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s'))));
         $element->setStatus((int) ($request->getData('status') ?? $element->getStatus()));
         $element->description    = Markdown::parse((string) ($request->getData('plain') ?? $element->descriptionRaw));
@@ -397,5 +327,69 @@ final class ApiController extends Controller
         }
 
         return $element;
+    }
+
+    /**
+     * Api method to create a category
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        if (!empty($val = $this->validateSupportAppCreate($request))) {
+            $response->set('qa_app_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $app = $this->createSupportAppFromRequest($request);
+        $this->createModel($request->header->account, $app, SupportAppMapper::class, 'app', $request->getOrigin());
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'App', 'App successfully created.', $app);
+    }
+
+    /**
+     * Method to create app from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return SupportApp Returns the created app from the request
+     *
+     * @since 1.0.0
+     */
+    public function createSupportAppFromRequest(RequestAbstract $request) : SupportApp
+    {
+        $app = new SupportApp();
+        $app->name = $request->getData('name') ?? '';
+
+        return $app;
+    }
+
+    /**
+     * Validate app create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool> Returns the validation array of the request
+     *
+     * @since 1.0.0
+     */
+    private function validateSupportAppCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['name'] = empty($request->getData('name')))) {
+            return $val;
+        }
+
+        return [];
     }
 }

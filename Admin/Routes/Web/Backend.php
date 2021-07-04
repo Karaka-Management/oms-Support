@@ -17,7 +17,7 @@ return [
             ],
         ],
     ],
-    '^.*/support/single.*$' => [
+    '^.*/support/ticket.*$' => [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportTicket',
             'verb'       => RouteVerb::GET,

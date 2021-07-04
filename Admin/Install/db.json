@@ -1,4 +1,21 @@
 {
+    "support_app": {
+        "name": "support_app",
+        "fields": {
+            "support_app_id": {
+                "name": "support_app_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_app_name": {
+                "name": "support_app_name",
+                "type": "VARCHAR(255)",
+                "default": null
+            }
+        }
+    },
     "support_ticket": {
         "name": "support_ticket",
         "fields": {
@@ -15,6 +32,244 @@
                 "null": false,
                 "foreignTable": "task",
                 "foreignKey": "task_id"
+            },
+            "support_ticket_for": {
+                "name": "support_ticket_for",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "support_ticket_app": {
+                "name": "support_ticket_app",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "support_app",
+                "foreignKey": "support_app_id"
+            }
+        }
+    },
+    "support_ticket_element": {
+        "name": "support_ticket_element",
+        "fields": {
+            "support_ticket_element_id": {
+                "name": "support_ticket_element_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_ticket_element_time": {
+                "name": "support_ticket_element_time",
+                "type": "INT",
+                "null": false
+            },
+            "support_ticket_element_task_element": {
+                "name": "support_ticket_element_task_element",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "task_element",
+                "foreignKey": "task_element_id"
+            },
+            "support_ticket_element_ticket": {
+                "name": "support_ticket_element_ticket",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "support_ticket",
+                "foreignKey": "support_ticket_id"
+            }
+        }
+    },
+    "support_attr_type": {
+        "name": "support_attr_type",
+        "fields": {
+            "support_attr_type_id": {
+                "name": "support_attr_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_attr_type_name": {
+                "name": "support_attr_type_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "support_attr_type_fields": {
+                "name": "support_attr_type_fields",
+                "type": "INT(11)",
+                "null": false
+            },
+            "support_attr_type_custom": {
+                "name": "support_attr_type_custom",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "support_attr_type_required": {
+                "description": "Every ticket must have this attribute type if set to true.",
+                "name": "support_attr_type_required",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "support_attr_type_pattern": {
+                "description": "This is a regex validation pattern.",
+                "name": "support_attr_type_pattern",
+                "type": "VARCHAR(255)",
+                "null": false
+            }
+        }
+    },
+    "support_attr_type_l11n": {
+        "name": "support_attr_type_l11n",
+        "fields": {
+            "support_attr_type_l11n_id": {
+                "name": "support_attr_type_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_attr_type_l11n_title": {
+                "name": "support_attr_type_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "support_attr_type_l11n_type": {
+                "name": "support_attr_type_l11n_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_attr_type",
+                "foreignKey": "support_attr_type_id"
+            },
+            "support_attr_type_l11n_lang": {
+                "name": "support_attr_type_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "support_attr_value": {
+        "name": "support_attr_value",
+        "fields": {
+            "support_attr_value_id": {
+                "name": "support_attr_value_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_attr_value_default": {
+                "name": "support_attr_value_default",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "support_attr_value_type": {
+                "name": "support_attr_value_type",
+                "type": "INT(11)",
+                "null": false
+            },
+            "support_attr_value_valueStr": {
+                "name": "support_attr_value_valueStr",
+                "type": "VARCHAR(255)",
+                "null": true,
+                "default": null
+            },
+            "support_attr_value_valueInt": {
+                "name": "support_attr_value_valueInt",
+                "type": "INT(11)",
+                "null": true,
+                "default": null
+            },
+            "support_attr_value_valueDec": {
+                "name": "support_attr_value_valueDec",
+                "type": "DECIMAL(19,5)",
+                "null": true,
+                "default": null
+            },
+            "support_attr_value_valueDat": {
+                "name": "support_attr_value_valueDat",
+                "type": "DATETIME",
+                "null": true,
+                "default": null
+            },
+            "support_attr_value_lang": {
+                "name": "support_attr_value_lang",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            },
+            "support_attr_value_country": {
+                "name": "support_attr_value_country",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
+                "foreignTable": "country",
+                "foreignKey": "country_code2"
+            }
+        }
+    },
+    "support_ticket_attr_default": {
+        "name": "support_ticket_attr_default",
+        "fields": {
+            "support_ticket_attr_default_id": {
+                "name": "support_ticket_attr_default_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_ticket_attr_default_type": {
+                "name": "support_ticket_attr_default_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_attr_type",
+                "foreignKey": "support_attr_type_id"
+            },
+            "support_ticket_attr_default_value": {
+                "name": "support_ticket_attr_default_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_attr_value",
+                "foreignKey": "support_attr_value_id"
+            }
+        }
+    },
+    "support_ticket_attr": {
+        "name": "support_ticket_attr",
+        "fields": {
+            "support_ticket_attr_id": {
+                "name": "support_ticket_attr_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_ticket_attr_ticket": {
+                "name": "support_ticket_attr_ticket",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_ticket",
+                "foreignKey": "support_ticket_id"
+            },
+            "support_ticket_attr_type": {
+                "name": "support_ticket_attr_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_attr_type",
+                "foreignKey": "support_attr_type_id"
+            },
+            "support_ticket_attr_value": {
+                "name": "support_ticket_attr_value",
+                "type": "INT(11)",
+                "null": true,
+                "default": null,
+                "foreignTable": "support_attr_value",
+                "foreignKey": "support_attr_value_id"
             }
         }
     }

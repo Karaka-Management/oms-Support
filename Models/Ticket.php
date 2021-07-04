@@ -14,11 +14,12 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
+use Modules\Admin\Models\Account;
 use Modules\Tasks\Models\Task;
 use Modules\Tasks\Models\TaskType;
 
 /**
- * Issue class.
+ * Ticket class.
  *
  * @package Modules\Support\Models
  * @license OMS License 1.0
@@ -35,17 +36,24 @@ class Ticket
      */
     protected int $id = 0;
 
-    private $task = null;
+    public Task $task;
+
+    public SupportApp $app;
+
+    private array $ticketElements = [];
+
+    public ?Account $for = null;
 
     /**
      * Constructor.
      *
      * @since 1.0.0
      */
-    public function __construct()
+    public function __construct(Task $task = null)
     {
-        $this->task = new Task();
+        $this->task = $task ?? new Task();
         $this->task->setType(TaskType::HIDDEN);
+        $this->app = new SupportApp();
     }
 
     /**
@@ -61,28 +69,80 @@ class Ticket
     }
 
     /**
-     * Get task.
+     * Adding new task element.
      *
-     * @return Task
+     * @param TicketElement $element Ticket element
+     *
+     * @return int
      *
      * @since 1.0.0
      */
-    public function getTask() : Task
+    public function addElement(TicketElement $element) : int
     {
-        return $this->task;
+        $this->ticketElements[] = $element;
+
+        \end($this->ticketElements);
+        $key = (int) \key($this->ticketElements);
+        \reset($this->ticketElements);
+
+        return $key;
     }
 
     /**
-     * Set task.
+     * Remove Element from list.
      *
-     * @param Task $task Task
+     * @param int $id Ticket element
      *
-     * @return void
+     * @return bool
      *
      * @since 1.0.0
      */
-    public function setTask(Task $task) : void
+    public function removeElement($id) : bool
     {
-        $this->task = $task;
+        if (isset($this->ticketElements[$id])) {
+            unset($this->ticketElements[$id]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get ticket elements.
+     *
+     * @return TicketElement[]
+     *
+     * @since 1.0.0
+     */
+    public function getTicketElements() : array
+    {
+        return $this->ticketElements;
+    }
+
+    /**
+     * Get ticket elements in inverted order.
+     *
+     * @return TicketElement[]
+     *
+     * @since 1.0.0
+     */
+    public function invertTicketElements() : array
+    {
+        return \array_reverse($this->ticketElements);
+    }
+
+    /**
+     * Get ticket elements.
+     *
+     * @param int $id Element id
+     *
+     * @return TicketElement
+     *
+     * @since 1.0.0
+     */
+    public function getTicketElement(int $id) : TicketElement
+    {
+        return $this->ticketElements[$id] ?? new NullTicketElement();
     }
 }
