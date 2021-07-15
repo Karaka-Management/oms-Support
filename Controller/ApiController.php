@@ -32,6 +32,17 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
 use phpOMS\Utils\Parser\Markdown\Markdown;
+use Modules\Support\Models\AttributeValueType;
+use Modules\Support\Models\TicketAttribute;
+use Modules\Support\Models\TicketAttributeMapper;
+use Modules\Support\Models\TicketAttributeType;
+use Modules\Support\Models\TicketAttributeTypeL11n;
+use Modules\Support\Models\TicketAttributeTypeL11nMapper;
+use Modules\Support\Models\TicketAttributeTypeMapper;
+use Modules\Support\Models\TicketAttributeValue;
+use Modules\Support\Models\TicketAttributeValueMapper;
+use Modules\Support\Models\NullTicketAttributeType;
+use Modules\Support\Models\NullTicketAttributeValue;
 
 /**
  * Api controller for the tickets module.
@@ -221,7 +232,7 @@ final class ApiController extends Controller
         $element = $this->createTicketElementFromRequest($request, $ticket);
         $ticket->task->setStatus($element->taskElement->getStatus());
         $ticket->task->setPriority($element->taskElement->getPriority());
-        $ticket->task->setDue($element->taskElement->due);
+        $ticket->task->due = $element->taskElement->due;
 
         $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
         $this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
@@ -232,7 +243,7 @@ final class ApiController extends Controller
      * Method to create ticket element from request.
      *
      * @param RequestAbstract $request Request
-     * @param Ticket            $ticket    Ticket
+     * @param Ticket          $ticket  Ticket
      *
      * @return TicketElement Returns the ticket created from the request
      *
@@ -240,7 +251,7 @@ final class ApiController extends Controller
      */
     private function createTicketElementFromRequest(RequestAbstract $request, Ticket $ticket) : TicketElement
     {
-        $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request);
+        $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
         $ticketElement = new TicketElement($taskElement);
         $ticketElement->time = (int) $request->getData('time') ?? 0;
@@ -296,17 +307,17 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return TaskElement Returns the updated ticket element from the request
+     * @return TicketElementMapper Returns the updated ticket element from the request
      *
      * @since 1.0.0
      */
-    private function updateTicketElementFromRequest(RequestAbstract $request) : TaskElement
+    private function updateTicketElementFromRequest(RequestAbstract $request) : TicketElementMapper
     {
         $element = TicketElementMapper::get((int) ($request->getData('id')));
-        $element->setDue(new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s'))));
-        $element->setStatus((int) ($request->getData('status') ?? $element->getStatus()));
-        $element->description    = Markdown::parse((string) ($request->getData('plain') ?? $element->descriptionRaw));
-        $element->descriptionRaw = (string) ($request->getData('plain') ?? $element->descriptionRaw);
+        $element->taskElement->due = new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s')));
+        $element->taskElement->setStatus((int) ($request->getData('status') ?? $element->taskElement->getStatus()));
+        $element->taskElement->description    = Markdown::parse((string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw));
+        $element->taskElement->descriptionRaw = (string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw);
 
         $tos = $request->getData('to') ?? $request->header->account;
         if (!\is_array($tos)) {
@@ -319,11 +330,11 @@ final class ApiController extends Controller
         }
 
         foreach ($tos as $to) {
-            $element->addTo($to);
+            $element->taskElement->addTo($to);
         }
 
         foreach ($ccs as $cc) {
-            $element->addCC($cc);
+            $element->taskElement->addCC($cc);
         }
 
         return $element;
@@ -387,6 +398,316 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['name'] = empty($request->getData('name')))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create ticket attribute
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        if (!empty($val = $this->validateTicketAttributeCreate($request))) {
+            $response->set('attribute_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /**
+        @todo: If value data is in attribute create, create attribute value
+
+        if () {
+            $attrValue = $this->createTicketAttributeValueFromRequest($request);
+            $this->createModel($request->header->account, $attrValue, TicketAttributeValueMapper::class, 'attr_value', $request->getOrigin());
+        }*/
+
+        $attribute = $this->createTicketAttributeFromRequest($request);
+        $this->createModel($request->header->account, $attribute, TicketAttributeMapper::class, 'attribute', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully created', $attribute);
+    }
+
+    /**
+     * Method to create ticket attribute from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return TicketAttribute
+     *
+     * @since 1.0.0
+     */
+    private function createTicketAttributeFromRequest(RequestAbstract $request) : TicketAttribute
+    {
+        $attribute        = new TicketAttribute();
+        $attribute->ticket  = (int) $request->getData('ticket');
+        $attribute->type  = new NullTicketAttributeType((int) $request->getData('type'));
+        $attribute->value = new NullTicketAttributeValue((int) $request->getData('value'));
+
+        return $attribute;
+    }
+
+    /**
+     * Validate ticket attribute create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateTicketAttributeCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['type'] = empty($request->getData('type')))
+            || ($val['value'] = empty($request->getData('value')))
+            || ($val['ticket'] = empty($request->getData('ticket')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create ticket attribute l11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        if (!empty($val = $this->validateTicketAttributeTypeL11nCreate($request))) {
+            $response->set('attr_type_l11n_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrL11n = $this->createTicketAttributeTypeL11nFromRequest($request);
+        $this->createModel($request->header->account, $attrL11n, TicketAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+    }
+
+    /**
+     * Method to create ticket attribute l11n from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return TicketAttributeTypeL11n
+     *
+     * @since 1.0.0
+     */
+    private function createTicketAttributeTypeL11nFromRequest(RequestAbstract $request) : TicketAttributeTypeL11n
+    {
+        $attrL11n = new TicketAttributeTypeL11n();
+        $attrL11n->setType((int) ($request->getData('type') ?? 0));
+        $attrL11n->setLanguage((string) (
+            $request->getData('language') ?? $request->getLanguage()
+        ));
+        $attrL11n->title = (string) ($request->getData('title') ?? '');
+
+        return $attrL11n;
+    }
+
+    /**
+     * Validate ticket attribute l11n create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateTicketAttributeTypeL11nCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = empty($request->getData('title')))
+            || ($val['type'] = empty($request->getData('type')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create ticket attribute type
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        if (!empty($val = $this->validateTicketAttributeTypeCreate($request))) {
+            $response->set('attr_type_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrType = $this->createTicketAttributeTypeFromRequest($request);
+        $attrType->setL11n($request->getData('title'), $request->getData('language'));
+        $this->createModel($request->header->account, $attrType, TicketAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
+    }
+
+    /**
+     * Method to create ticket attribute from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return TicketAttributeType
+     *
+     * @since 1.0.0
+     */
+    private function createTicketAttributeTypeFromRequest(RequestAbstract $request) : TicketAttributeType
+    {
+        $attrType       = new TicketAttributeType();
+        $attrType->name = (string) ($request->getData('name') ?? '');
+        $attrType->setFields((int) ($request->getData('fields') ?? 0));
+        $attrType->setCustom((bool) ($request->getData('custom') ?? false));
+
+        return $attrType;
+    }
+
+    /**
+     * Validate ticket attribute create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateTicketAttributeTypeCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['name'] = empty($request->getData('name')))
+            || ($val['title'] = empty($request->getData('title')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create ticket attribute value
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        if (!empty($val = $this->validateTicketAttributeValueCreate($request))) {
+            $response->set('attr_value_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrValue = $this->createTicketAttributeValueFromRequest($request);
+        $this->createModel($request->header->account, $attrValue, TicketAttributeValueMapper::class, 'attr_value', $request->getOrigin());
+
+        if ($attrValue->isDefault) {
+            $this->createModelRelation(
+                $request->header->account,
+                (int) $request->getData('attributetype'),
+                $attrValue->getId(),
+                TicketAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
+            );
+        }
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute value', 'Attribute value successfully created', $attrValue);
+    }
+
+    /**
+     * Method to create ticket attribute value from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return TicketAttributeValue
+     *
+     * @since 1.0.0
+     */
+    private function createTicketAttributeValueFromRequest(RequestAbstract $request) : TicketAttributeValue
+    {
+        $attrValue = new TicketAttributeValue();
+
+        $type = $request->getData('type') ?? 0;
+        if ($type === AttributeValueType::_INT) {
+            $attrValue->valueInt = (int) $request->getData('value');
+        } elseif ($type === AttributeValueType::_STRING) {
+            $attrValue->valueStr = (string) $request->getData('value');
+        } elseif ($type === AttributeValueType::_FLOAT) {
+            $attrValue->valueDec = (float) $request->getData('value');
+        } elseif ($type === AttributeValueType::_DATETIME) {
+            $attrValue->valueDat = new \DateTime($request->getData('value') ?? '');
+        }
+
+        $attrValue->type      = $type;
+        $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
+
+        if ($request->hasData('language')) {
+            $attrValue->setLanguage((string) ($request->getData('language') ?? $request->getLanguage()));
+        }
+
+        if ($request->hasData('country')) {
+            $attrValue->setCountry((string) ($request->getData('country') ?? $request->header->l11n->getCountry()));
+        }
+
+        return $attrValue;
+    }
+
+    /**
+     * Validate ticket attribute value create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateTicketAttributeValueCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['type'] = empty($request->getData('type')))
+            || ($val['value'] = empty($request->getData('value')))
+        ) {
             return $val;
         }
 

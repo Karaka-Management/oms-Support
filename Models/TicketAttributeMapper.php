@@ -14,18 +14,17 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use Modules\Tasks\Models\TaskElementMapper;
 use phpOMS\DataStorage\Database\DataMapperAbstract;
 
 /**
- * Mapper class.
+ * Ticket mapper class.
  *
  * @package Modules\Support\Models
  * @license OMS License 1.0
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class TicketElementMapper extends DataMapperAbstract
+final class TicketAttributeMapper extends DataMapperAbstract
 {
     /**
      * Columns.
@@ -34,10 +33,10 @@ final class TicketElementMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'support_ticket_element_id'   => ['name' => 'support_ticket_element_id',   'type' => 'int', 'internal' => 'id'],
-        'support_ticket_element_task_element' => ['name' => 'support_ticket_element_task_element', 'type' => 'int', 'internal' => 'taskElement'],
-        'support_ticket_element_time' => ['name' => 'support_ticket_element_time', 'type' => 'int', 'internal' => 'time'],
-        'support_ticket_element_ticket' => ['name' => 'support_ticket_element_ticket', 'type' => 'int', 'internal' => 'ticket'],
+        'support_ticket_attr_id'    => ['name' => 'support_ticket_attr_id',    'type' => 'int', 'internal' => 'id'],
+        'support_ticket_attr_ticket'  => ['name' => 'support_ticket_attr_ticket',  'type' => 'int', 'internal' => 'ticket'],
+        'support_ticket_attr_type'  => ['name' => 'support_ticket_attr_type',  'type' => 'int', 'internal' => 'type'],
+        'support_ticket_attr_value' => ['name' => 'support_ticket_attr_value', 'type' => 'int', 'internal' => 'value'],
     ];
 
     /**
@@ -47,9 +46,13 @@ final class TicketElementMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $ownsOne = [
-        'taskElement' => [
-            'mapper'     => TaskElementMapper::class,
-            'external'   => 'support_ticket_element_task_element',
+        'type' => [
+            'mapper'            => TicketAttributeTypeMapper::class,
+            'external'          => 'support_ticket_attr_type',
+        ],
+        'value' => [
+            'mapper'            => TicketAttributeValueMapper::class,
+            'external'          => 'support_ticket_attr_value',
         ],
     ];
 
@@ -59,7 +62,7 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'support_ticket_element';
+    protected static string $table = 'support_ticket_attr';
 
     /**
      * Primary field name.
@@ -67,5 +70,5 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'support_ticket_element_id';
+    protected static string $primaryField = 'support_ticket_attr_id';
 }

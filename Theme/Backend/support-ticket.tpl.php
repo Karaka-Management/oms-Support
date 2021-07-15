@@ -97,7 +97,7 @@ echo $this->getData('nav')->render(); ?>
                             <?php if ($task->getPriority() === TaskPriority::NONE) : ?>
                                 <?= $this->getHtml('Due'); ?>: <?= $this->printHtml($task->due->format('Y/m/d H:i')); ?>
                             <?php else : ?>
-                                <?= $this->getHtml('Priority'); ?>: <?= $this->getHtml('P' . $task->getPriority()); ?>
+                                <?= $this->getHtml('Priority'); ?>: <?= $this->getHtml('P' . $task->getPriority(), 'Tasks'); ?>
                             <?php endif; ?>
 
                             <?php $tags = $task->getTags(); foreach ($tags as $tag) : ?>
@@ -200,7 +200,7 @@ echo $this->getData('nav')->render(); ?>
                                 $element->createdAt->format('Y-m-d H:i')
                             ); ?>
                             <span class="tag task-priority-<?= $element->getPriority(); ?>">
-                                <?= $this->getHtml('P' . $element->getPriority()); ?>
+                                <?= $this->getHtml('P' . $element->getPriority(), 'Tasks'); ?>
                             </span>
                         </div>
                     </section>
@@ -265,7 +265,7 @@ echo $this->getData('nav')->render(); ?>
                                     ) : ?>
                                     <?= $this->getHtml('Due'); ?>: <?= $this->printHtml($element->due->format('Y/m/d H:i')); ?>
                                 <?php elseif ($previous !== null && $previous->getPriority() !== $element->getPriority()) : ?>
-                                    <?= $this->getHtml('Priority'); ?>: <?= $this->getHtml('P' . $element->getPriority()); ?>
+                                    <?= $this->getHtml('Priority'); ?>: <?= $this->getHtml('P' . $element->getPriority(), 'Tasks'); ?>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
@@ -358,12 +358,12 @@ echo $this->getData('nav')->render(); ?>
                             <div class="form-group">
                                 <label for="iPriority"><?= $this->getHtml('Priority'); ?></label>
                                 <select id="iPriority" name="priority">
-                                        <option value="<?= TaskPriority::NONE; ?>"<?= $task->getPriority() === TaskPriority::NONE ? ' selected' : '';?>><?= $this->getHtml('P0'); ?>
-                                        <option value="<?= TaskPriority::VLOW; ?>"<?= $task->getPriority() === TaskPriority::VLOW ? ' selected' : '';?>><?= $this->getHtml('P1'); ?>
-                                        <option value="<?= TaskPriority::LOW; ?>"<?= $task->getPriority() === TaskPriority::LOW ? ' selected' : '';?>><?= $this->getHtml('P2'); ?>
-                                        <option value="<?= TaskPriority::MEDIUM; ?>"<?= $task->getPriority() === TaskPriority::MEDIUM ? ' selected' : '';?>><?= $this->getHtml('P3'); ?>
-                                        <option value="<?= TaskPriority::HIGH; ?>"<?= $task->getPriority() === TaskPriority::HIGH ? ' selected' : '';?>><?= $this->getHtml('P4'); ?>
-                                        <option value="<?= TaskPriority::VHIGH; ?>"<?= $task->getPriority() === TaskPriority::VHIGH ? ' selected' : '';?>><?= $this->getHtml('P5'); ?>
+                                        <option value="<?= TaskPriority::NONE; ?>"<?= $task->getPriority() === TaskPriority::NONE ? ' selected' : '';?>><?= $this->getHtml('P0', 'Tasks'); ?>
+                                        <option value="<?= TaskPriority::VLOW; ?>"<?= $task->getPriority() === TaskPriority::VLOW ? ' selected' : '';?>><?= $this->getHtml('P1', 'Tasks'); ?>
+                                        <option value="<?= TaskPriority::LOW; ?>"<?= $task->getPriority() === TaskPriority::LOW ? ' selected' : '';?>><?= $this->getHtml('P2', 'Tasks'); ?>
+                                        <option value="<?= TaskPriority::MEDIUM; ?>"<?= $task->getPriority() === TaskPriority::MEDIUM ? ' selected' : '';?>><?= $this->getHtml('P3', 'Tasks'); ?>
+                                        <option value="<?= TaskPriority::HIGH; ?>"<?= $task->getPriority() === TaskPriority::HIGH ? ' selected' : '';?>><?= $this->getHtml('P4', 'Tasks'); ?>
+                                        <option value="<?= TaskPriority::VHIGH; ?>"<?= $task->getPriority() === TaskPriority::VHIGH ? ' selected' : '';?>><?= $this->getHtml('P5', 'Tasks'); ?>
                                     </select>
                             </div>
 

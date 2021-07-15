@@ -45,6 +45,14 @@ class Ticket
     public ?Account $for = null;
 
     /**
+     * Attributes.
+     *
+     * @var int[]|ItemAttribute[]
+     * @since 1.0.0
+     */
+    private array $attributes = [];
+
+    /**
      * Constructor.
      *
      * @since 1.0.0
@@ -144,5 +152,31 @@ class Ticket
     public function getTicketElement(int $id) : TicketElement
     {
         return $this->ticketElements[$id] ?? new NullTicketElement();
+    }
+
+    /**
+     * Add attribute to item
+     *
+     * @param ItemAttribute $attribute Note
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addAttribute(ItemAttribute $attribute) : void
+    {
+        $this->attributes[] = $attribute;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return ItemAttribute[]
+     *
+     * @since 1.0.0
+     */
+    public function getAttributes() : array
+    {
+        return $this->attributes;
     }
 }

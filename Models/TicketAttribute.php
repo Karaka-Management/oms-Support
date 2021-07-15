@@ -14,17 +14,17 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use Modules\Tasks\Models\TaskElement;
+use phpOMS\Contract\ArrayableInterface;
 
 /**
- * Ticket element class.
+ * Ticket class.
  *
  * @package Modules\Support\Models
  * @license OMS License 1.0
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-class TicketElement implements \JsonSerializable
+class TicketAttribute implements \JsonSerializable, ArrayableInterface
 {
     /**
      * Id.
@@ -32,18 +32,10 @@ class TicketElement implements \JsonSerializable
      * @var int
      * @since 1.0.0
      */
-    private int $id = 0;
+    protected int $id = 0;
 
     /**
-     * Ticket element time
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $time = 0;
-
-    /**
-     * Ticket.
+     * Ticket this attribute belongs to
      *
      * @var int
      * @since 1.0.0
@@ -51,21 +43,20 @@ class TicketElement implements \JsonSerializable
     public int $ticket = 0;
 
     /**
-     * Task element
+     * Attribute type the attribute belongs to
      *
-     * @var TaskElement
+     * @var TicketAttributeType
      * @since 1.0.0
      */
-    public TaskElement $taskElement;
+    public TicketAttributeType $type;
 
     /**
-	 * Constructor.
-	 * @since 1.0.0
-	 */
-    public function __construct(TaskElement $taskElement = null)
-    {
-        $this->taskElement = $taskElement ?? new TaskElement();
-    }
+     * Attribute value the attribute belongs to
+     *
+     * @var TicketAttributeValue
+     * @since 1.0.0
+     */
+    public TicketAttributeValue $value;
 
     /**
      * Get id
@@ -84,7 +75,7 @@ class TicketElement implements \JsonSerializable
      */
     public function toArray() : array
     {
-        return $this->taskElement->toArray();
+        return [];
     }
 
     /**

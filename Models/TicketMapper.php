@@ -67,6 +67,13 @@ final class TicketMapper extends DataMapperAbstract
             'self'         => 'support_ticket_element_ticket',
             'external'     => null,
         ],
+        'attributes' => [
+            'mapper'      => TicketAttributeMapper::class,
+            'table'       => 'support_ticket_attr',
+            'self'        => 'support_ticket_attr_ticket',
+            'conditional' => true,
+            'external'    => null,
+        ],
     ];
 
     /**
