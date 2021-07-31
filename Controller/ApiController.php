@@ -253,8 +253,8 @@ final class ApiController extends Controller
     {
         $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
-        $ticketElement = new TicketElement($taskElement);
-        $ticketElement->time = (int) $request->getData('time') ?? 0;
+        $ticketElement         = new TicketElement($taskElement);
+        $ticketElement->time   = (int) $request->getData('time') ?? 0;
         $ticketElement->ticket = $ticket->getId();
 
         return $ticketElement;
@@ -313,11 +313,11 @@ final class ApiController extends Controller
      */
     private function updateTicketElementFromRequest(RequestAbstract $request) : TicketElementMapper
     {
-        $element = TicketElementMapper::get((int) ($request->getData('id')));
-        $element->taskElement->due = new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s')));
-        $element->taskElement->setStatus((int) ($request->getData('status') ?? $element->taskElement->getStatus()));
+        $element                              = TicketElementMapper::get((int) ($request->getData('id')));
+        $element->taskElement->due            = new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s')));
         $element->taskElement->description    = Markdown::parse((string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw));
         $element->taskElement->descriptionRaw = (string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw);
+        $element->taskElement->setStatus((int) ($request->getData('status') ?? $element->taskElement->getStatus()));
 
         $tos = $request->getData('to') ?? $request->header->account;
         if (!\is_array($tos)) {
@@ -450,10 +450,10 @@ final class ApiController extends Controller
      */
     private function createTicketAttributeFromRequest(RequestAbstract $request) : TicketAttribute
     {
-        $attribute        = new TicketAttribute();
-        $attribute->ticket  = (int) $request->getData('ticket');
-        $attribute->type  = new NullTicketAttributeType((int) $request->getData('type'));
-        $attribute->value = new NullTicketAttributeValue((int) $request->getData('value'));
+        $attribute         = new TicketAttribute();
+        $attribute->ticket = (int) $request->getData('ticket');
+        $attribute->type   = new NullTicketAttributeType((int) $request->getData('type'));
+        $attribute->value  = new NullTicketAttributeValue((int) $request->getData('value'));
 
         return $attribute;
     }

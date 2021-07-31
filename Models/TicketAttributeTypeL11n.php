@@ -41,9 +41,7 @@ class TicketAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
      * @var int|TicketAttributeType
      * @since 1.0.0
      */
-    protected int |
-
-TicketAttributeType $type = 0;
+    protected int|TicketAttributeType $type = 0;
 
     /**
      * Language.
@@ -65,8 +63,8 @@ TicketAttributeType $type = 0;
      * Constructor.
      *
      * @param int|TicketAttributeType $type     Attribute type
-     * @param string                $title    Localized title
-     * @param string                $language Language
+     * @param string                  $title    Localized title
+     * @param string                  $language Language
      *
      * @since 1.0.0
      */

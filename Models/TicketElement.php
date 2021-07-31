@@ -32,7 +32,7 @@ class TicketElement implements \JsonSerializable
      * @var int
      * @since 1.0.0
      */
-    private int $id = 0;
+    protected int $id = 0;
 
     /**
      * Ticket element time
@@ -59,9 +59,12 @@ class TicketElement implements \JsonSerializable
     public TaskElement $taskElement;
 
     /**
-	 * Constructor.
-	 * @since 1.0.0
-	 */
+     * Constructor.
+     *
+     * @param null|TaskElement $taskElement Task element
+     *
+     * @since 1.0.0
+     */
     public function __construct(TaskElement $taskElement = null)
     {
         $this->taskElement = $taskElement ?? new TaskElement();
