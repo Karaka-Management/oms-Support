@@ -95,7 +95,10 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Support/Theme/Backend/support-ticket');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
 
-        $ticket = TicketMapper::get((int) $request->getData('id'));
+        $ticket = $request->getData('for') !== null
+            ? TicketMapper::getFor((int) $request->getData('for'), 'task')
+            : TicketMapper::get((int) $request->getData('id'));
+
         $view->addData('ticket', $ticket);
 
         $accGrpSelector = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
