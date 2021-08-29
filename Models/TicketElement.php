@@ -61,7 +61,7 @@ class TicketElement implements \JsonSerializable
     /**
      * Constructor.
      *
-     * @param null|TaskElement $taskElement Task element
+     * @param null|TaskElement $taskElement Creates a ticket elmenet from a task element
      *
      * @since 1.0.0
      */

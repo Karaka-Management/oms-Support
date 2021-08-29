@@ -36,12 +36,39 @@ class Ticket
      */
     protected int $id = 0;
 
+    /**
+     * The ticket is using a task.
+     *
+     * @var Task
+     * @since 1.0.0
+     */
     public Task $task;
 
+    /**
+     * App this ticket belongs to.
+     *
+     * @var SupportApp
+     * @since 1.0.0
+     */
     public SupportApp $app;
 
+    /**
+     * Ticket elements.
+     *
+     * @var TicketElement[]
+     * @since 1.0.0
+     */
     private array $ticketElements = [];
 
+    /**
+     * Account this ticket is for
+     *
+     * This is not the person who is working on the ticket but the person who needs help.
+     * This can be different from the person who created it.
+     *
+     * @var null|Account
+     * @since 1.0.0
+     */
     public ?Account $for = null;
 
     /**
@@ -54,6 +81,8 @@ class Ticket
 
     /**
      * Constructor.
+     *
+     * @param null|Task $task Creates the ticket from a task
      *
      * @since 1.0.0
      */
