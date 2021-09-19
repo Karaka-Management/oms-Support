@@ -14,6 +14,9 @@ declare(strict_types=1);
 
 namespace Modules\Support\Controller;
 
+use Model\NullSetting;
+use Model\SettingMapper;
+use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\TicketMapper;
 use Modules\Support\Views\TicketView;
 use phpOMS\Contract\RenderableInterface;
@@ -21,6 +24,7 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
 use phpOMS\Asset\AssetType;
+use Modules\Support\Models\SupportAppMapper;
 
 /**
  * Support controller class.
@@ -32,6 +36,22 @@ use phpOMS\Asset\AssetType;
  */
 final class BackendController extends Controller
 {
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+    }
+
     /**
      * Routing end-point for application behaviour.
      *
@@ -190,6 +210,41 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/user-support-dashboard');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+
+        return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+
+        $id = $request->getData('id') ?? '';
+
+        $settings = SettingMapper::getFor($id, 'module');
+        if (!($settings instanceof NullSetting)) {
+            $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
+        }
+
+        $applications = SupportAppMapper::getAll();
+        $view->setData('applications', $applications);
+
+        if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
+            $view->setTemplate('/Modules/' . static::MODULE_NAME . '/Admin/Settings/Theme/Backend/settings');
+        } else {
+            $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
+        }
 
         return $view;
     }

@@ -1,4 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * Orange Management
+ *
+ * PHP Version 8.0
+ *
+ * @package   Modules
+ * @copyright Dennis Eichhorn
+ * @license   OMS License 1.0
+ * @version   1.0.0
+ * @link      https://orange-management.org
+ */
+declare(strict_types=1);
 
 use Modules\Support\Controller\BackendController;
 use Modules\Support\Models\PermissionState;
@@ -6,6 +18,17 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
+    '^.*/admin/module/settings\?id=Support.*$' => [
+        [
+            'dest'       => '\Modules\Support\Controller\BackendController:viewModuleSettings',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => \Modules\Admin\Models\PermissionState::MODULE,
+            ],
+        ],
+    ],
     '^.*/support/list.*$' => [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportList',
