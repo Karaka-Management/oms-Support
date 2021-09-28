@@ -23,7 +23,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskCreate',
     //         'verb'       => RouteVerb::PUT,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::CREATE,
     //             'state'  => PermissionState::TICKET,
     //         ],
@@ -32,7 +32,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskSet',
     //         'verb'       => RouteVerb::SET,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::MODIFY,
     //             'state'  => PermissionState::TICKET,
     //         ],
@@ -41,7 +41,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskGet',
     //         'verb'       => RouteVerb::GET,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::READ,
     //             'state'  => PermissionState::TICKET,
     //         ],
@@ -52,7 +52,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskElementCreate',
     //         'verb'       => RouteVerb::PUT,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::CREATE,
     //             'state'  => PermissionState::ELEMENT,
     //         ],
@@ -61,7 +61,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskElementSet',
     //         'verb'       => RouteVerb::SET,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::MODIFY,
     //             'state'  => PermissionState::ELEMENT,
     //         ],
@@ -70,7 +70,7 @@ return [
     //         'dest'       => '\Modules\Support\Controller\ApiController:apiTaskElementGet',
     //         'verb'       => RouteVerb::GET,
     //         'permission' => [
-    //             'module' => ApiController::MODULE_NAME,
+    //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::READ,
     //             'state'  => PermissionState::TICKET,
     //         ],
