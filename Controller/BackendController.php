@@ -51,6 +51,9 @@ final class BackendController extends Controller
      */
     public function viewSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
+        $view = new View($this->app->l11nManager, $request, $response);
+
+        return $view;
     }
 
     /**

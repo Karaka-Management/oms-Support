@@ -380,7 +380,7 @@ final class ApiController extends Controller
      */
     public function createSupportAppFromRequest(RequestAbstract $request) : SupportApp
     {
-        $app = new SupportApp();
+        $app       = new SupportApp();
         $app->name = $request->getData('name') ?? '';
 
         return $app;
