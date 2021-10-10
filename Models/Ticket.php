@@ -74,7 +74,7 @@ class Ticket
     /**
      * Attributes.
      *
-     * @var int[]|ItemAttribute[]
+     * @var int[]|TicketAttribute[]
      * @since 1.0.0
      */
     private array $attributes = [];
@@ -186,13 +186,13 @@ class Ticket
     /**
      * Add attribute to item
      *
-     * @param ItemAttribute $attribute Note
+     * @param TicketAttribute $attribute Note
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function addAttribute(ItemAttribute $attribute) : void
+    public function addAttribute(TicketAttribute $attribute) : void
     {
         $this->attributes[] = $attribute;
     }
@@ -200,7 +200,7 @@ class Ticket
     /**
      * Get attributes
      *
-     * @return ItemAttribute[]
+     * @return int[]|TicketAttribute[]
      *
      * @since 1.0.0
      */
