@@ -33,10 +33,10 @@ final class TicketAttributeMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'support_ticket_attr_id'    => ['name' => 'support_ticket_attr_id',    'type' => 'int', 'internal' => 'id'],
+        'support_ticket_attr_id'      => ['name' => 'support_ticket_attr_id',    'type' => 'int', 'internal' => 'id'],
         'support_ticket_attr_ticket'  => ['name' => 'support_ticket_attr_ticket',  'type' => 'int', 'internal' => 'ticket'],
-        'support_ticket_attr_type'  => ['name' => 'support_ticket_attr_type',  'type' => 'int', 'internal' => 'type'],
-        'support_ticket_attr_value' => ['name' => 'support_ticket_attr_value', 'type' => 'int', 'internal' => 'value'],
+        'support_ticket_attr_type'    => ['name' => 'support_ticket_attr_type',  'type' => 'int', 'internal' => 'type'],
+        'support_ticket_attr_value'   => ['name' => 'support_ticket_attr_value', 'type' => 'int', 'internal' => 'value'],
     ];
 
     /**

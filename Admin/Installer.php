@@ -16,10 +16,10 @@ namespace Modules\Support\Admin;
 
 use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
-use phpOMS\Module\InstallerAbstract;
-use phpOMS\DataStorage\Database\DatabasePool;
-use phpOMS\Module\ModuleInfo;
 use phpOMS\Config\SettingsInterface;
+use phpOMS\DataStorage\Database\DatabasePool;
+use phpOMS\Module\InstallerAbstract;
+use phpOMS\Module\ModuleInfo;
 
 /**
  * Installer class.

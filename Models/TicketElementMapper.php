@@ -34,10 +34,10 @@ final class TicketElementMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'support_ticket_element_id'   => ['name' => 'support_ticket_element_id',   'type' => 'int', 'internal' => 'id'],
+        'support_ticket_element_id'           => ['name' => 'support_ticket_element_id',   'type' => 'int', 'internal' => 'id'],
         'support_ticket_element_task_element' => ['name' => 'support_ticket_element_task_element', 'type' => 'int', 'internal' => 'taskElement'],
-        'support_ticket_element_time' => ['name' => 'support_ticket_element_time', 'type' => 'int', 'internal' => 'time'],
-        'support_ticket_element_ticket' => ['name' => 'support_ticket_element_ticket', 'type' => 'int', 'internal' => 'ticket'],
+        'support_ticket_element_time'         => ['name' => 'support_ticket_element_time', 'type' => 'int', 'internal' => 'time'],
+        'support_ticket_element_ticket'       => ['name' => 'support_ticket_element_ticket', 'type' => 'int', 'internal' => 'ticket'],
     ];
 
     /**

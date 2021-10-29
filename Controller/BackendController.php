@@ -16,15 +16,14 @@ namespace Modules\Support\Controller;
 
 use Model\NullSetting;
 use Model\SettingMapper;
-use Modules\Support\Models\SupportApp;
+use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\TicketMapper;
 use Modules\Support\Views\TicketView;
+use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
-use phpOMS\Asset\AssetType;
-use Modules\Support\Models\SupportAppMapper;
 
 /**
  * Support controller class.

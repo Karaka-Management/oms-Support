@@ -23,11 +23,11 @@ use phpOMS\Uri\UriFactory;
  * @var \Modules\Support\Models\Ticket $ticket
  */
 $ticket      = $this->getData('ticket');
-$task      = $ticket->task;
-$taskMedia = $task->getMedia();
-$elements  = $task->invertTaskElements();
-$cElements = \count($elements);
-$color     = 'red'; //$this->getStatus($task->getStatus());
+$task        = $ticket->task;
+$taskMedia   = $task->getMedia();
+$elements    = $task->invertTaskElements();
+$cElements   = \count($elements);
+$color       = 'red'; //$this->getStatus($task->getStatus());
 
 echo $this->getData('nav')->render(); ?>
 
