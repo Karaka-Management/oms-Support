@@ -19,8 +19,8 @@ use Modules\Tasks\Models\TaskStatus;
 use phpOMS\Uri\UriFactory;
 
 /**
- * @var \phpOMS\Views\View             $this
- * @var \Modules\Support\Models\Ticket $ticket
+ * @var \Modules\Support\Vies\TicketView $this
+ * @var \Modules\Support\Models\Ticket   $ticket
  */
 $ticket      = $this->getData('ticket');
 $task        = $ticket->task;

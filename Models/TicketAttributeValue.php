@@ -21,7 +21,7 @@ use phpOMS\Localization\ISO639x1Enum;
 /**
  * Ticket attribute value class.
  *
- * The relation with the type/ticket is defined in the TicketAttribute class.
+ * The relation with the type/supplier is defined in the TicketAttribute class.
  *
  * @package Modules\Support\Models
  * @license OMS License 1.0
@@ -190,6 +190,18 @@ class TicketAttributeValue implements \JsonSerializable, ArrayableInterface
     }
 
     /**
+     * Get language
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getLanguage() : string
+    {
+        return $this->language;
+    }
+
+    /**
      * Set country
      *
      * @param string $country Country
@@ -204,11 +216,33 @@ class TicketAttributeValue implements \JsonSerializable, ArrayableInterface
     }
 
     /**
+     * Get country
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getCountry() : string
+    {
+        return $this->country;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toArray() : array
     {
-        return [];
+        return [
+            'id'        => $this->id,
+            'type'      => $this->type,
+            'valueInt'  => $this->valueInt,
+            'valueStr'  => $this->valueStr,
+            'valueDec'  => $this->valueDec,
+            'valueDat'  => $this->valueDat,
+            'isDefault' => $this->isDefault,
+            'language'  => $this->language,
+            'country'   => $this->country,
+        ];
     }
 
     /**

@@ -87,7 +87,12 @@ class TicketElement implements \JsonSerializable
      */
     public function toArray() : array
     {
-        return $this->taskElement->toArray();
+        return [
+            'id'          => $this->id,
+            'time'        => $this->time,
+            'ticket'      => $this->ticket,
+            'taskElement' => $this->taskElement,
+        ];
     }
 
     /**

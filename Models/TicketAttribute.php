@@ -59,6 +59,17 @@ class TicketAttribute implements \JsonSerializable, ArrayableInterface
     public TicketAttributeValue $value;
 
     /**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+        $this->type  = new TicketAttributeType();
+        $this->value = new TicketAttributeValue();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -75,7 +86,12 @@ class TicketAttribute implements \JsonSerializable, ArrayableInterface
      */
     public function toArray() : array
     {
-        return [];
+        return [
+            'id'      => $this->id,
+            'ticket'  => $this->ticket,
+            'type'    => $this->type,
+            'value'   => $this->value,
+        ];
     }
 
     /**

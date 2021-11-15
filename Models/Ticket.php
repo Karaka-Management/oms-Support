@@ -208,4 +208,27 @@ class Ticket
     {
         return $this->attributes;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray() : array
+    {
+        return [
+            'id'                => $this->id,
+            'task'              => $this->task,
+            'app'               => $this->app,
+            'for'               => $this->for,
+            'ticketElements'    => $this->ticketElements,
+            'attributes'        => $this->attributes,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
 }

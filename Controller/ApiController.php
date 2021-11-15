@@ -40,7 +40,6 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Utils\Parser\Markdown\Markdown;
 
 /**
  * Api controller for the tickets module.
@@ -294,7 +293,7 @@ final class ApiController extends Controller
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         $old = clone TicketElementMapper::get((int) $request->getData('id'));
-        $new = $this->updateTicketElementFromRequest($request);
+        $new = $this->updateTicketElementFromRequest($request, $response);
         $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
 
         //$this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
@@ -310,31 +309,12 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateTicketElementFromRequest(RequestAbstract $request) : TicketElementMapper
+    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response) : TicketElementMapper
     {
-        $element                              = TicketElementMapper::get((int) ($request->getData('id')));
-        $element->taskElement->due            = new \DateTime((string) ($request->getData('due') ?? $element->getDue()->format('Y-m-d H:i:s')));
-        $element->taskElement->description    = Markdown::parse((string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw));
-        $element->taskElement->descriptionRaw = (string) ($request->getData('plain') ?? $element->taskElement->descriptionRaw);
-        $element->taskElement->setStatus((int) ($request->getData('status') ?? $element->taskElement->getStatus()));
+        $element = TicketElementMapper::get((int) ($request->getData('id')));
 
-        $tos = $request->getData('to') ?? $request->header->account;
-        if (!\is_array($tos)) {
-            $tos = [$tos];
-        }
-
-        $ccs = $request->getData('cc') ?? [];
-        if (!\is_array($ccs)) {
-            $ccs = [$ccs];
-        }
-
-        foreach ($tos as $to) {
-            $element->taskElement->addTo($to);
-        }
-
-        foreach ($ccs as $cc) {
-            $element->taskElement->addCC($cc);
-        }
+        $request->setData('id', $element->task, true);
+        $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
 
         return $element;
     }
@@ -517,8 +497,8 @@ final class ApiController extends Controller
      */
     private function createTicketAttributeTypeL11nFromRequest(RequestAbstract $request) : TicketAttributeTypeL11n
     {
-        $attrL11n = new TicketAttributeTypeL11n();
-        $attrL11n->setType((int) ($request->getData('type') ?? 0));
+        $attrL11n       = new TicketAttributeTypeL11n();
+        $attrL11n->type = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
@@ -571,7 +551,6 @@ final class ApiController extends Controller
         }
 
         $attrType = $this->createTicketAttributeTypeFromRequest($request);
-        $attrType->setL11n($request->getData('title'), $request->getData('language'));
         $this->createModel($request->header->account, $attrType, TicketAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
@@ -589,9 +568,9 @@ final class ApiController extends Controller
     private function createTicketAttributeTypeFromRequest(RequestAbstract $request) : TicketAttributeType
     {
         $attrType       = new TicketAttributeType();
-        $attrType->name = (string) ($request->getData('name') ?? '');
-        $attrType->setFields((int) ($request->getData('fields') ?? 0));
-        $attrType->setCustom((bool) ($request->getData('custom') ?? false));
+        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
+        $attrType->fields = (int) ($request->getData('fields') ?? 0);
+        $attrType->custom = (bool) ($request->getData('custom') ?? false);
 
         return $attrType;
     }
@@ -608,8 +587,7 @@ final class ApiController extends Controller
     private function validateTicketAttributeTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))
-            || ($val['title'] = empty($request->getData('title')))
+        if (($val['title'] = empty($request->getData('title')))
         ) {
             return $val;
         }

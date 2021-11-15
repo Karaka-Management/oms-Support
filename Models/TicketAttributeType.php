@@ -49,7 +49,7 @@ class TicketAttributeType implements \JsonSerializable, ArrayableInterface
      * @var int
      * @since 1.0.0
      */
-    protected int $fields = 0;
+    public int $fields = 0;
 
     /**
      * Is a custom value allowed (e.g. custom string)
@@ -57,7 +57,7 @@ class TicketAttributeType implements \JsonSerializable, ArrayableInterface
      * @var bool
      * @since 1.0.0
      */
-    protected bool $custom = false;
+    public bool $custom = false;
 
     public string $validationPattern = '';
 
@@ -66,9 +66,9 @@ class TicketAttributeType implements \JsonSerializable, ArrayableInterface
     /**
      * Localization
      *
-     * @var TicketAttributeTypeL11n
+     * @var string | TicketAttributeTypeL11n
      */
-    protected string|TicketAttributeTypeL11n $l11n;
+    protected string | TicketAttributeTypeL11n $l11n;
 
     /**
      * Possible default attribute values
@@ -135,39 +135,18 @@ class TicketAttributeType implements \JsonSerializable, ArrayableInterface
     }
 
     /**
-     * Set fields
-     *
-     * @param int $fields Fields
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setFields(int $fields) : void
-    {
-        $this->fields = $fields;
-    }
-
-    /**
-     * Set custom
-     *
-     * @param bool $custom FieldsCustom
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setCustom(bool $custom) : void
-    {
-        $this->custom = $custom;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array
     {
-        return [];
+        return [
+            'id'                => $this->id,
+            'name'              => $this->name,
+            'fields'            => $this->fields,
+            'custom'            => $this->custom,
+            'validationPattern' => $this->validationPattern,
+            'isRequired'        => $this->isRequired,
+        ];
     }
 
     /**
