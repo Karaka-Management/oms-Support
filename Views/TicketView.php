@@ -16,8 +16,12 @@ namespace Modules\Support\Views;
 
 use Modules\Media\Models\Media;
 use Modules\Media\Models\NullMedia;
+use Modules\Profile\Models\NullProfile;
 use Modules\Profile\Models\ProfileMapper;
 use Modules\Tasks\Models\TaskStatus;
+use phpOMS\Localization\L11nManager;
+use phpOMS\Message\RequestAbstract;
+use phpOMS\Message\ResponseAbstract;
 use phpOMS\Uri\UriFactory;
 use phpOMS\Views\View;
 
@@ -44,9 +48,10 @@ class TicketView extends View
      *
      * @since 1.0.0
      */
-    public function __construct()
+    public function __construct(L11nManager $l11n = null, RequestAbstract $request = null, ResponseAbstract $response = null)
     {
         $this->defaultProfileImage = new NullMedia();
+        parent::__construct($l11n, $request, $response);
     }
 
     /**
