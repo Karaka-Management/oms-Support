@@ -25,7 +25,7 @@ use phpOMS\Uri\UriFactory;
 $ticket      = $this->getData('ticket');
 $task        = $ticket->task;
 $taskMedia   = $task->getMedia();
-$elements    = $task->invertTaskElements();
+$elements    = $ticket->invertTicketElements();
 $cElements   = \count($elements);
 $color       = 'red'; //$this->getStatus($task->getStatus());
 

@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Modules\Support\Models;
 
 use Modules\Tasks\Models\TaskElementMapper;
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Mapper class.
@@ -25,7 +25,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class TicketElementMapper extends DataMapperAbstract
+final class TicketElementMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -33,7 +33,7 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'support_ticket_element_id'           => ['name' => 'support_ticket_element_id',   'type' => 'int', 'internal' => 'id'],
         'support_ticket_element_task_element' => ['name' => 'support_ticket_element_task_element', 'type' => 'int', 'internal' => 'taskElement'],
         'support_ticket_element_time'         => ['name' => 'support_ticket_element_time', 'type' => 'int', 'internal' => 'time'],
@@ -46,7 +46,7 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'taskElement' => [
             'mapper'     => TaskElementMapper::class,
             'external'   => 'support_ticket_element_task_element',
@@ -59,7 +59,7 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'support_ticket_element';
+    public const TABLE = 'support_ticket_element';
 
     /**
      * Primary field name.
@@ -67,5 +67,5 @@ final class TicketElementMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'support_ticket_element_id';
+    public const PRIMARYFIELD ='support_ticket_element_id';
 }

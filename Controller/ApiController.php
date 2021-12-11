@@ -35,6 +35,7 @@ use Modules\Support\Models\TicketElementMapper;
 use Modules\Support\Models\TicketMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
+use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
@@ -140,7 +141,7 @@ final class ApiController extends Controller
      */
     public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $ticket = TicketMapper::get((int) $request->getData('id'));
+        $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully returned.', $ticket);
     }
 
@@ -159,7 +160,7 @@ final class ApiController extends Controller
      */
     public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $old = clone TicketMapper::get((int) $request->getData('id'));
+        $old = clone TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateTicketFromRequest($request);
         $this->updateModel($request->header->account, $old, $new, TicketMapper::class, 'ticket', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully updated.', $new);
@@ -176,7 +177,8 @@ final class ApiController extends Controller
      */
     private function updateTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $ticket = TicketMapper::get((int) ($request->getData('id')));
+        /** @var Ticket $ticket */
+        $ticket = TicketMapper::get()->where('id', (int) ($request->getData('id')))->execute();
 
         return $ticket;
     }
@@ -226,7 +228,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $ticket  = TicketMapper::get((int) ($request->getData('ticket')));
+        $ticket  = TicketMapper::get()->where('id', (int) ($request->getData('ticket')))->execute();
         $element = $this->createTicketElementFromRequest($request, $ticket);
         $ticket->task->setStatus($element->taskElement->getStatus());
         $ticket->task->setPriority($element->taskElement->getPriority());
@@ -273,7 +275,7 @@ final class ApiController extends Controller
      */
     public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $ticket = TicketElementMapper::get((int) $request->getData('id'));
+        $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully returned.', $ticket);
     }
 
@@ -292,7 +294,7 @@ final class ApiController extends Controller
      */
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $old = clone TicketElementMapper::get((int) $request->getData('id'));
+        $old = clone TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateTicketElementFromRequest($request, $response);
         $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
 
@@ -311,7 +313,8 @@ final class ApiController extends Controller
      */
     private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response) : TicketElementMapper
     {
-        $element = TicketElementMapper::get((int) ($request->getData('id')));
+        /** @var TicketElementMapper $element */
+        $element = TicketElementMapper::get()->where('id', (int) ($request->getData('id')))->execute();
 
         $request->setData('id', $element->task, true);
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);

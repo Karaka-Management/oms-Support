@@ -49,6 +49,6 @@ final class Installer extends InstallerAbstract
         $app       = new SupportApp();
         $app->name = 'Backend';
 
-        $id = SupportAppMapper::create($app);
+        $id = SupportAppMapper::create()->execute($app);
     }
 }

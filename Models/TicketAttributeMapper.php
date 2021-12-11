@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Ticket mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class TicketAttributeMapper extends DataMapperAbstract
+final class TicketAttributeMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class TicketAttributeMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'support_ticket_attr_id'      => ['name' => 'support_ticket_attr_id',    'type' => 'int', 'internal' => 'id'],
         'support_ticket_attr_ticket'  => ['name' => 'support_ticket_attr_ticket',  'type' => 'int', 'internal' => 'ticket'],
         'support_ticket_attr_type'    => ['name' => 'support_ticket_attr_type',  'type' => 'int', 'internal' => 'type'],
@@ -45,7 +45,7 @@ final class TicketAttributeMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'type' => [
             'mapper'            => TicketAttributeTypeMapper::class,
             'external'          => 'support_ticket_attr_type',
@@ -62,7 +62,7 @@ final class TicketAttributeMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'support_ticket_attr';
+    public const TABLE = 'support_ticket_attr';
 
     /**
      * Primary field name.
@@ -70,5 +70,5 @@ final class TicketAttributeMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'support_ticket_attr_id';
+    public const PRIMARYFIELD ='support_ticket_attr_id';
 }

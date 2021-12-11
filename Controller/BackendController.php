@@ -76,23 +76,24 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Support/Theme/Backend/support-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
 
+        $mapperQuery = TicketMapper::getAll()
+            ->with('task')
+            ->with('task/createdBy')
+            ->with('for')
+            ->with('app')
+            ->limit(25);
+
         if ($request->getData('ptype') === 'p') {
             $view->setData('tickets',
-                TicketMapper::with('language', $response->getLanguage())
-                    ::with('ticketElements', models: null)
-                    ::getBeforePivot((int) ($request->getData('id') ?? 0), limit: 25)
+                $mapperQuery->where('id', (int) ($request->getData('id') ?? 0), '<')->execute()
             );
         } elseif ($request->getData('ptype') === 'n') {
             $view->setData('tickets',
-                TicketMapper::with('language', $response->getLanguage())
-                    ::with('ticketElements', models: null)
-                    ::getAfterPivot((int) ($request->getData('id') ?? 0), limit: 25)
+                $mapperQuery->where('id', (int) ($request->getData('id') ?? 0), '>')->execute()
             );
         } else {
             $view->setData('tickets',
-                TicketMapper::with('language', $response->getLanguage())
-                    ::with('ticketElements', models: null)
-                    ::getAfterPivot(0, limit: 25)
+                $mapperQuery->where('id', 0, '>')->execute()
             );
         }
 
@@ -118,9 +119,18 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Support/Theme/Backend/support-ticket');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
 
+        $mapperQuery = TicketMapper::get()
+            ->with('task')
+            ->with('task/createdBy')
+            ->with('ticketElements')
+            ->with('ticketElements/taskElement')
+            ->with('attributes')
+            ->with('for')
+            ->with('app');
+
         $ticket = $request->getData('for') !== null
-            ? TicketMapper::getFor((int) $request->getData('for'), 'task')
-            : TicketMapper::get((int) $request->getData('id'));
+            ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
+            : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
 
         $view->addData('ticket', $ticket);
 
@@ -235,12 +245,12 @@ final class BackendController extends Controller
 
         $id = $request->getData('id') ?? '';
 
-        $settings = SettingMapper::getFor($id, 'module');
+        $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if (!($settings instanceof NullSetting)) {
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 
-        $applications = SupportAppMapper::getAll();
+        $applications = SupportAppMapper::getAll()->execute();
         $view->setData('applications', $applications);
 
         if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
