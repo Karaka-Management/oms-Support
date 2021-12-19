@@ -307,16 +307,16 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return TicketElementMapper Returns the updated ticket element from the request
+     * @return TicketElement Returns the updated ticket element from the request
      *
      * @since 1.0.0
      */
-    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response) : TicketElementMapper
+    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response) : TicketElement
     {
-        /** @var TicketElementMapper $element */
-        $element = TicketElementMapper::get()->where('id', (int) ($request->getData('id')))->execute();
+        /** @var TicketElement $element */
+        $element = TicketElementMapper::get()->with('taskElement')->where('id', (int) ($request->getData('id')))->execute();
 
-        $request->setData('id', $element->task, true);
+        $request->setData('id', $element->taskElement->task, true);
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
 
         return $element;
@@ -570,7 +570,7 @@ final class ApiController extends Controller
      */
     private function createTicketAttributeTypeFromRequest(RequestAbstract $request) : TicketAttributeType
     {
-        $attrType       = new TicketAttributeType();
+        $attrType = new TicketAttributeType();
         $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
         $attrType->fields = (int) ($request->getData('fields') ?? 0);
         $attrType->custom = (bool) ($request->getData('custom') ?? false);
