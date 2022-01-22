@@ -124,6 +124,8 @@ final class BackendController extends Controller
             ->with('task/createdBy')
             ->with('ticketElements')
             ->with('ticketElements/taskElement')
+            ->with('ticketElements/taskElement/createdBy')
+            ->with('ticketElements/taskElement/media')
             ->with('attributes')
             ->with('for')
             ->with('app');

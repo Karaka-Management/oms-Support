@@ -43,7 +43,10 @@ echo $this->getData('nav')->render(); ?>
                     $url = UriFactory::build('{/prefix}support/ticket?{?}&id=' . $ticket->getId());
                 ?>
                     <tr data-href="<?= $url; ?>">
-                        <td><a href="<?= $url; ?>"><span class="tag <?= $this->printHtml('task-status-' . $ticket->task->getStatus()); ?>"><?= $this->getHtml('S' . $ticket->task->getStatus(), 'Tasks'); ?></span></a>
+                        <td><a href="<?= $url; ?>">
+                            <span class="tag <?= $this->printHtml('task-status-' . $ticket->task->getStatus()); ?>">
+                                <?= $this->getHtml('S' . $ticket->task->getStatus(), 'Tasks'); ?>
+                            </span></a>
                         <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->getPriority(), 'Tasks'); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
                         <td><a class="content" href="<?= UriFactory::build('{/prefix}profile/single?for=' . $ticket->task->createdBy->getId()); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
