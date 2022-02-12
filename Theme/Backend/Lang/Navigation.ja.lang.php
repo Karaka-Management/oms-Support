@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 return ['Navigation' => [
-    'Support' => 'Support',
-    'Ticket'  => 'Ticket',
-    'Tickets' => 'Tickets',
+    'Support' => 'サポート',
+    'Ticket'  => 'チケット',
+    'Tickets' => '切符売場',
 ]];

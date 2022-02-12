@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 return ['Navigation' => [
-    'Support' => 'Support',
-    'Ticket'  => 'Ticket',
-    'Tickets' => 'Tickets',
+    'Support' => 'Υποστήριξη',
+    'Ticket'  => 'Εισιτήριο',
+    'Tickets' => 'Εισιτήρια',
 ]];
