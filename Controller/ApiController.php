@@ -33,6 +33,7 @@ use Modules\Support\Models\TicketAttributeValueMapper;
 use Modules\Support\Models\TicketElement;
 use Modules\Support\Models\TicketElementMapper;
 use Modules\Support\Models\TicketMapper;
+use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
 use phpOMS\Localization\ISO639x1Enum;
@@ -228,14 +229,17 @@ final class ApiController extends Controller
             return;
         }
 
-        $ticket  = TicketMapper::get()->where('id', (int) ($request->getData('ticket')))->execute();
+        $ticket  = TicketMapper::get()->with('task')->where('id', (int) ($request->getData('ticket')))->execute();
         $element = $this->createTicketElementFromRequest($request, $ticket);
+
+        $old = clone $ticket->task;
+
         $ticket->task->setStatus($element->taskElement->getStatus());
         $ticket->task->setPriority($element->taskElement->getPriority());
         $ticket->task->due = $element->taskElement->due;
 
         $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
-        $this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully created.', $element);
     }
 
