@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 use Modules\Support\Controller\ApiController;
-use Modules\Support\Models\PermissionState;
+use Modules\Support\Models\PermissionCategory;
 use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
@@ -25,7 +25,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::CREATE,
-    //             'state'  => PermissionState::TICKET,
+    //             'state'  => PermissionCategory::TICKET,
     //         ],
     //     ],
     //     [
@@ -34,7 +34,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::MODIFY,
-    //             'state'  => PermissionState::TICKET,
+    //             'state'  => PermissionCategory::TICKET,
     //         ],
     //     ],
     //     [
@@ -43,7 +43,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::READ,
-    //             'state'  => PermissionState::TICKET,
+    //             'state'  => PermissionCategory::TICKET,
     //         ],
     //     ],
     // ],
@@ -54,7 +54,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::CREATE,
-    //             'state'  => PermissionState::ELEMENT,
+    //             'state'  => PermissionCategory::ELEMENT,
     //         ],
     //     ],
     //     [
@@ -63,7 +63,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::MODIFY,
-    //             'state'  => PermissionState::ELEMENT,
+    //             'state'  => PermissionCategory::ELEMENT,
     //         ],
     //     ],
     //     [
@@ -72,7 +72,7 @@ return [
     //         'permission' => [
     //             'module' => ApiController::NAME,
     //             'type'   => PermissionType::READ,
-    //             'state'  => PermissionState::TICKET,
+    //             'state'  => PermissionCategory::TICKET,
     //         ],
     //     ],
     // ],

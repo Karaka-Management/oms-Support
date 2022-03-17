@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 use Modules\Support\Controller\BackendController;
-use Modules\Support\Models\PermissionState;
+use Modules\Support\Models\PermissionCategory;
 use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
@@ -25,7 +25,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => \Modules\Admin\Models\PermissionState::MODULE,
+                'state'  => \Modules\Admin\Models\PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -36,7 +36,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::TICKET,
+                'state'  => PermissionCategory::TICKET,
             ],
         ],
     ],
@@ -47,7 +47,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::TICKET,
+                'state'  => PermissionCategory::TICKET,
             ],
         ],
     ],
@@ -58,7 +58,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::TICKET,
+                'state'  => PermissionCategory::TICKET,
             ],
         ],
     ],
@@ -69,7 +69,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ANALYSIS,
+                'state'  => PermissionCategory::ANALYSIS,
             ],
         ],
     ],
@@ -80,7 +80,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SETTINGS,
+                'state'  => PermissionCategory::SETTINGS,
             ],
         ],
     ],
@@ -91,7 +91,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::DASHBOARD,
+                'state'  => PermissionCategory::DASHBOARD,
             ],
         ],
     ],
