@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use phpOMS\Contract\ArrayableInterface;
 use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 
@@ -28,7 +27,7 @@ use phpOMS\Localization\ISO639x1Enum;
  * @link    https://karaka.app
  * @since   1.0.0
  */
-class TicketAttributeValue implements \JsonSerializable, ArrayableInterface
+class TicketAttributeValue implements \JsonSerializable
 {
     /**
      * Id

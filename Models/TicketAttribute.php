@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use phpOMS\Contract\ArrayableInterface;
 
 /**
  * Ticket class.
@@ -24,7 +23,7 @@ use phpOMS\Contract\ArrayableInterface;
  * @link    https://karaka.app
  * @since   1.0.0
  */
-class TicketAttribute implements \JsonSerializable, ArrayableInterface
+class TicketAttribute implements \JsonSerializable
 {
     /**
      * Id.
