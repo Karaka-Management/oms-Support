@@ -258,7 +258,7 @@ final class ApiController extends Controller
         $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
         $ticketElement         = new TicketElement($taskElement);
-        $ticketElement->time   = (int) $request->getData('time') ?? 0;
+        $ticketElement->time   = (int) ($request->getData('time') ?? 0);
         $ticketElement->ticket = $ticket->getId();
 
         return $ticketElement;
