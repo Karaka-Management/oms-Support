@@ -2,7 +2,7 @@
 /**
  * Karaka
  *
- * PHP Version 8.0
+ * PHP Version 8.1
  *
  * @package   Modules\Support
  * @copyright Dennis Eichhorn
@@ -142,6 +142,7 @@ final class ApiController extends Controller
      */
     public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully returned.', $ticket);
     }
@@ -229,6 +230,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket  = TicketMapper::get()->with('task')->where('id', (int) ($request->getData('ticket')))->execute();
         $element = $this->createTicketElementFromRequest($request, $ticket);
 
@@ -279,6 +281,7 @@ final class ApiController extends Controller
      */
     public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var \Modules\Support\Models\TicketElement $ticket */
         $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully returned.', $ticket);
     }
@@ -298,6 +301,7 @@ final class ApiController extends Controller
      */
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var \Modules\Support\Models\TicketElement $old */
         $old = clone TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateTicketElementFromRequest($request, $response);
         $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
@@ -412,13 +416,14 @@ final class ApiController extends Controller
             return;
         }
 
-        /**
+        /*
         @todo: If value data is in attribute create, create attribute value
 
         if () {
             $attrValue = $this->createTicketAttributeValueFromRequest($request);
             $this->createModel($request->header->account, $attrValue, TicketAttributeValueMapper::class, 'attr_value', $request->getOrigin());
-        }*/
+        }
+        */
 
         $attribute = $this->createTicketAttributeFromRequest($request);
         $this->createModel($request->header->account, $attribute, TicketAttributeMapper::class, 'attribute', $request->getOrigin());
