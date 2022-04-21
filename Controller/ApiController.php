@@ -87,7 +87,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketCreate($request))) {
             $response->set($request->uri->__toString(), new FormValidation($val));
@@ -140,7 +140,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -160,7 +160,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $old = clone TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateTicketFromRequest($request);
@@ -221,7 +221,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketElementCreate($request))) {
             $response->set('ticket_element_create', new FormValidation($val));
@@ -279,7 +279,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Support\Models\TicketElement $ticket */
         $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -299,7 +299,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Support\Models\TicketElement $old */
         $old = clone TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -343,7 +343,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateSupportAppCreate($request))) {
             $response->set('qa_app_create', new FormValidation($val));
@@ -407,7 +407,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeCreate($request))) {
             $response->set('attribute_create', new FormValidation($val));
@@ -484,7 +484,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeL11nCreate($request))) {
             $response->set('attr_type_l11n_create', new FormValidation($val));
@@ -553,7 +553,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeCreate($request))) {
             $response->set('attr_type_create', new FormValidation($val));
@@ -620,7 +620,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeValueCreate($request))) {
             $response->set('attr_value_create', new FormValidation($val));

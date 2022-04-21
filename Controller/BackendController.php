@@ -48,7 +48,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
@@ -67,7 +67,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSupportList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSupportList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $head = $response->get('Content')->getData('head');
         $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css');
@@ -112,7 +112,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSupportTicket(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSupportTicket(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new TicketView($this->app->l11nManager, $request, $response);
 
@@ -130,6 +130,7 @@ final class BackendController extends Controller
             ->with('for')
             ->with('app');
 
+        /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = $request->getData('for') !== null
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
@@ -157,7 +158,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSupportCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSupportCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/ticket-create');
@@ -178,7 +179,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSupportAnalysis(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSupportAnalysis(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-analysis');
@@ -199,7 +200,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewSupportSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewSupportSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-settings');
@@ -220,7 +221,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewPrivateSupportDashboard(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewPrivateSupportDashboard(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/user-support-dashboard');
@@ -240,7 +241,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
@@ -252,6 +253,7 @@ final class BackendController extends Controller
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 
+        /** @var \Modules\Support\Models\SupportApp[] $applications */
         $applications = SupportAppMapper::getAll()->execute();
         $view->setData('applications', $applications);
 
