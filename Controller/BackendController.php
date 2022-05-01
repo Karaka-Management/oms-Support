@@ -257,11 +257,7 @@ final class BackendController extends Controller
         $applications = SupportAppMapper::getAll()->execute();
         $view->setData('applications', $applications);
 
-        if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
-        } else {
-            $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
-        }
+        $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
 
         return $view;
     }

@@ -18,17 +18,6 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/admin/module/settings\?id=Support.*$' => [
-        [
-            'dest'       => '\Modules\Support\Controller\BackendController:viewModuleSettings',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::READ,
-                'state'  => \Modules\Admin\Models\PermissionCategory::MODULE,
-            ],
-        ],
-    ],
     '^.*/support/list.*$' => [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportList',
