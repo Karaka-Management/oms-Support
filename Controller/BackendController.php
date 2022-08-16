@@ -70,7 +70,7 @@ final class BackendController extends Controller
     public function viewSupportList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $head = $response->get('Content')->getData('head');
-        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css');
+        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=1.0.0');
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-list');
