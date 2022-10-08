@@ -25,17 +25,17 @@ echo $this->getData('nav')->render(); ?>
                 <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template'); ?>" method="post">
                     <table class="layout wf-100">
                         <tbody>
-                        <tr><td><label for="iTitle"><?= $this->getHtml('Department'); ?></label>
-                        <tr><td><select></select>
-                        <tr><td><label for="iTitle"><?= $this->getHtml('Topic'); ?></label>
-                        <tr><td><select></select>
+                        <tr><td><label for="iDepartment"><?= $this->getHtml('Department'); ?></label>
+                        <tr><td><select id="iDepartment" name="department"></select>
+                        <tr><td><label for="iTopic"><?= $this->getHtml('Topic'); ?></label>
+                        <tr><td><select id="iTopic" name="topic"></select>
                         <tr><td><label for="iTitle"><?= $this->getHtml('Title'); ?></label>
-                        <tr><td><input id="iTitle" name="name" type="text" required>
-                        <tr><td><label for="iTitle"><?= $this->getHtml('Description'); ?></label>
+                        <tr><td><input id="iDescription" name="name" type="text" required>
+                        <tr><td><label for="iDescription"><?= $this->getHtml('Description'); ?></label>
                         <tr><td><textarea required></textarea>
                         <tr><td><label for="iFile"><?= $this->getHtml('Files'); ?></label>
                         <tr><td><input id="iFile" name="fileVisual" type="file" multiple><input id="iFileHidden" name="files" type="hidden">
-                        <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                        <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-ticket">
                     </table>
                 </form>
             </div>
