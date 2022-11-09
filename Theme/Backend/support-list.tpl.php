@@ -40,7 +40,7 @@ echo $this->getData('nav')->render(); ?>
                 <?php
                     $c = 0;
                 foreach ($tickets as $key => $ticket) : ++$c;
-                    $url = UriFactory::build('{/prefix}support/ticket?{?}&id=' . $ticket->getId());
+                    $url = UriFactory::build('support/ticket?{?}&id=' . $ticket->getId());
                 ?>
                     <tr data-href="<?= $url; ?>">
                         <td><a href="<?= $url; ?>">
@@ -49,9 +49,9 @@ echo $this->getData('nav')->render(); ?>
                             </span></a>
                         <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->getPriority(), 'Tasks'); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
-                        <td><a class="content" href="<?= UriFactory::build('{/prefix}profile/single?for=' . $ticket->task->createdBy->getId()); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('profile/single?for=' . $ticket->task->createdBy->getId()); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
                         <td><a class="content" href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
-                        <td><a class="content" href="<?= UriFactory::build('{/prefix}profile/single?for=' . $ticket->for->getId()); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('profile/single?for=' . $ticket->for->getId()); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
                     <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

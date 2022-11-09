@@ -113,7 +113,7 @@ final class ApiController extends Controller
      */
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $request->setData('redirect', '{/prefix}support/ticket?for={?id}');
+        $request->setData('redirect', 'support/ticket?for={?id}');
         $task = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
         $task->setType(TaskType::HIDDEN);
 
