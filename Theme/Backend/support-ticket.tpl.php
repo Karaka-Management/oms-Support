@@ -88,7 +88,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php if (!empty($taskMedia)) : ?>
                             <div>
                                 <?php foreach ($taskMedia as $media) : ?>
-                                     <span><a class="content" href="<?= UriFactory::build('media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
+                                     <span><a class="content" href="<?= UriFactory::build('{/lang}/{/app}/media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -245,7 +245,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php if (!empty($elementMedia)) : ?>
                             <div>
                                 <?php foreach ($elementMedia as $media) : ?>
-                                     <span><a class="content" href="<?= UriFactory::build('media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
+                                     <span><a class="content" href="<?= UriFactory::build('{/lang}/{/app}/media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -291,10 +291,10 @@ echo $this->getData('nav')->render(); ?>
                     ) : ?>
                     <section class="portlet wf-100">
                         <div class="portlet-body">
-                            <a href="<?= UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->getId()); ?>"><?= $this->printHtml($element->taskElement->createdBy->name1); ?></a> <?= $this->getHtml('forwarded_to'); ?>
+                            <a href="<?= UriFactory::build('{/lang}/{/app}/profile/single?{?}&for=' . $element->taskElement->createdBy->getId()); ?>"><?= $this->printHtml($element->taskElement->createdBy->name1); ?></a> <?= $this->getHtml('forwarded_to'); ?>
                             <?php foreach ($tos as $to) : ?>
                                 <?php if ($to instanceof AccountRelation) : ?>
-                                    <a href="<?= UriFactory::build('profile/single?{?}&for=' . $to->getRelation()->getId()); ?>"><?= $this->printHtml($to->getRelation()->name1); ?></a>
+                                    <a href="<?= UriFactory::build('{/lang}/{/app}/profile/single?{?}&for=' . $to->getRelation()->getId()); ?>"><?= $this->printHtml($to->getRelation()->name1); ?></a>
                                 <?php elseif ($to instanceof GroupRelation) : ?>
                                     <?= $this->printHtml($to->getRelation()->name); ?>
                                 <?php endif; ?>

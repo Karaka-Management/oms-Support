@@ -70,10 +70,10 @@ class TicketView extends View
         $profile = ProfileMapper::get()->with('image')->where('account', $account)->execute();
 
         if (($profile instanceof NullProfile) || $profile->image->getPath() === '') {
-            return UriFactory::build('' . $this->defaultProfileImage->getPath());
+            return UriFactory::build('{/lang}/{/app}/' . $this->defaultProfileImage->getPath());
         }
 
-        return UriFactory::build('' . $profile->image->getPath());
+        return UriFactory::build('{/lang}/{/app}/' . $profile->image->getPath());
     }
 
     /**
