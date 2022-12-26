@@ -67,6 +67,7 @@ class TicketView extends View
      */
     public function getAccountImage(int $account) : string
     {
+        /** @var \Modules\Profile\Models\Profile $profile */
         $profile = ProfileMapper::get()->with('image')->where('account', $account)->execute();
 
         if (($profile instanceof NullProfile) || $profile->image->getPath() === '') {

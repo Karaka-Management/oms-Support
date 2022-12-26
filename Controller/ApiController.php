@@ -162,7 +162,9 @@ final class ApiController extends Controller
      */
     public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $old = clone TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        /** @var \Modules\Support\Models\Ticket $old */
+        $old = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = clone $old;
         $new = $this->updateTicketFromRequest($request);
         $this->updateModel($request->header->account, $old, $new, TicketMapper::class, 'ticket', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully updated.', $new);
@@ -302,7 +304,8 @@ final class ApiController extends Controller
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Support\Models\TicketElement $old */
-        $old = clone TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = clone $old;
         $new = $this->updateTicketElementFromRequest($request, $response);
         $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
 
@@ -370,7 +373,7 @@ final class ApiController extends Controller
     public function createSupportAppFromRequest(RequestAbstract $request) : SupportApp
     {
         $app       = new SupportApp();
-        $app->name = $request->getData('name') ?? '';
+        $app->name = (string) ($request->getData('name') ?? '');
 
         return $app;
     }
@@ -657,15 +660,15 @@ final class ApiController extends Controller
     {
         $attrValue = new TicketAttributeValue();
 
-        $type = $request->getData('type') ?? 0;
+        $type = (int) ($request->getData('type') ?? 0);
         if ($type === AttributeValueType::_INT) {
-            $attrValue->valueInt = (int) $request->getData('value');
+            $attrValue->valueInt = $request->hasData('value') ? (int) $request->getData('value') : null;
         } elseif ($type === AttributeValueType::_STRING) {
-            $attrValue->valueStr = (string) $request->getData('value');
+            $attrValue->valueStr = $request->hasData('value') ? (string) $request->getData('value') : null;
         } elseif ($type === AttributeValueType::_FLOAT) {
-            $attrValue->valueDec = (float) $request->getData('value');
+            $attrValue->valueDec = $request->hasData('value') ? (float) $request->getData('value') : null;
         } elseif ($type === AttributeValueType::_DATETIME) {
-            $attrValue->valueDat = new \DateTime($request->getData('value') ?? '');
+            $attrValue->valueDat = $request->hasData('value') ? new \DateTime((string) ($request->getData('value') ?? '')) : null;
         }
 
         $attrValue->type      = $type;
