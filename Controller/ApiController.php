@@ -374,6 +374,7 @@ final class ApiController extends Controller
     {
         $app       = new SupportApp();
         $app->name = (string) ($request->getData('name') ?? '');
+        $app->unit = $request->getData('unit', 'int');
 
         return $app;
     }
@@ -662,13 +663,13 @@ final class ApiController extends Controller
 
         $type = (int) ($request->getData('type') ?? 0);
         if ($type === AttributeValueType::_INT) {
-            $attrValue->valueInt = $request->hasData('value') ? (int) $request->getData('value') : null;
+            $attrValue->valueInt = $request->getData('value', 'int');
         } elseif ($type === AttributeValueType::_STRING) {
-            $attrValue->valueStr = $request->hasData('value') ? (string) $request->getData('value') : null;
+            $attrValue->valueStr = $request->getData('value', 'string');
         } elseif ($type === AttributeValueType::_FLOAT) {
-            $attrValue->valueDec = $request->hasData('value') ? (float) $request->getData('value') : null;
+            $attrValue->valueDec = $request->getData('value', 'float');
         } elseif ($type === AttributeValueType::_DATETIME) {
-            $attrValue->valueDat = $request->hasData('value') ? new \DateTime((string) ($request->getData('value') ?? '')) : null;
+            $attrValue->valueDat = $request->getData('value', 'DateTime');
         }
 
         $attrValue->type      = $type;

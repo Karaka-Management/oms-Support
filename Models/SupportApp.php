@@ -41,6 +41,14 @@ class SupportApp implements \JsonSerializable
     public string $name = '';
 
     /**
+     * Unit
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $unit = null;
+
+    /**
      * Get id.
      *
      * @return int Model id

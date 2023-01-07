@@ -35,6 +35,7 @@ final class SupportAppMapper extends DataMapperFactory
     public const COLUMNS = [
         'support_app_id'   => ['name' => 'support_app_id',   'type' => 'int',    'internal' => 'id'],
         'support_app_name' => ['name' => 'support_app_name', 'type' => 'string', 'internal' => 'name'],
+        'support_app_unit' => ['name' => 'support_app_unit', 'type' => 'int', 'internal' => 'unit'],
     ];
 
     /**
