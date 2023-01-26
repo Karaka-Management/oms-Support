@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
+use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 
@@ -38,12 +39,20 @@ class TicketAttributeValue implements \JsonSerializable
     protected int $id = 0;
 
     /**
-     * Type of the attribute
+     * Depending attribute type
      *
-     * @var int
+     * @var null|int
      * @since 1.0.0
      */
-    public int $type = 0;
+    public ?int $dependingAttributeType = null;
+
+    /**
+     * Depending attribute value
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $dependingAttributeValue = null;
 
     /**
      * Int value
@@ -86,37 +95,19 @@ class TicketAttributeValue implements \JsonSerializable
     public bool $isDefault = false;
 
     /**
-     * Language
+     * Unit of the value
      *
      * @var string
      * @since 1.0.0
      */
-    protected string $language = ISO639x1Enum::_EN;
+    public string $unit = '';
 
     /**
-     * Country
+     * Localization
      *
-     * @var string
-     * @since 1.0.0
+     * @var null|BaseStringL11n
      */
-    protected string $country = ISO3166TwoEnum::_USA;
-
-    /**
-     * Constructor.
-     *
-     * @param int    $type     Type
-     * @param mixed  $value    Value
-     * @param string $language Language
-     *
-     * @since 1.0.0
-     */
-    public function __construct(int $type = 0, $value = '', string $language = ISO639x1Enum::_EN)
-    {
-        $this->type     = $type;
-        $this->language = $language;
-
-        $this->setValue($value);
-    }
+    private ?BaseStringL11n $l11n = null;
 
     /**
      * Get id
@@ -175,55 +166,39 @@ class TicketAttributeValue implements \JsonSerializable
     }
 
     /**
-     * Set language
+     * Set l11n
      *
-     * @param string $language Language
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setLanguage(string $language) : void
-    {
-        $this->language = $language;
-    }
-
-    /**
-     * Get language
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getLanguage() : string
-    {
-        return $this->language;
-    }
-
-    /**
-     * Set country
-     *
-     * @param string $country Country
+     * @param string|BaseStringL11n $l11n Tag article l11n
+     * @param string                        $lang Language
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function setCountry(string $country) : void
+    public function setL11n(string | BaseStringL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
     {
-        $this->country = $country;
+        if ($l11n instanceof BaseStringL11n) {
+            $this->l11n = $l11n;
+        } elseif (isset($this->l11n) && $this->l11n instanceof BaseStringL11n) {
+            $this->l11n->content = $l11n;
+        } else {
+            $this->l11n        = new BaseStringL11n();
+            $this->l11n->content = $l11n;
+            $this->l11n->ref = $this->id;
+            $this->l11n->setLanguage($lang);
+        }
     }
 
     /**
-     * Get country
+     * Get localization
      *
-     * @return string
+     * @return null|string
      *
      * @since 1.0.0
      */
-    public function getCountry() : string
+    public function getL11n() : ?string
     {
-        return $this->country;
+        return $this->l11n instanceof BaseStringL11n ? $this->l11n->content : $this->l11n;
     }
 
     /**
@@ -233,14 +208,11 @@ class TicketAttributeValue implements \JsonSerializable
     {
         return [
             'id'        => $this->id,
-            'type'      => $this->type,
             'valueInt'  => $this->valueInt,
             'valueStr'  => $this->valueStr,
             'valueDec'  => $this->valueDec,
             'valueDat'  => $this->valueDat,
             'isDefault' => $this->isDefault,
-            'language'  => $this->language,
-            'country'   => $this->country,
         ];
     }
 

@@ -35,14 +35,29 @@ final class TicketAttributeValueMapper extends DataMapperFactory
     public const COLUMNS = [
         'support_attr_value_id'       => ['name' => 'support_attr_value_id',       'type' => 'int',    'internal' => 'id'],
         'support_attr_value_default'  => ['name' => 'support_attr_value_default',  'type' => 'bool', 'internal' => 'isDefault'],
-        'support_attr_value_type'     => ['name' => 'support_attr_value_type',     'type' => 'int',    'internal' => 'type'],
         'support_attr_value_valueStr' => ['name' => 'support_attr_value_valueStr', 'type' => 'string', 'internal' => 'valueStr'],
         'support_attr_value_valueInt' => ['name' => 'support_attr_value_valueInt', 'type' => 'int', 'internal' => 'valueInt'],
         'support_attr_value_valueDec' => ['name' => 'support_attr_value_valueDec', 'type' => 'float', 'internal' => 'valueDec'],
         'support_attr_value_valueDat' => ['name' => 'support_attr_value_valueDat', 'type' => 'DateTime', 'internal' => 'valueDat'],
-        'support_attr_value_lang'     => ['name' => 'support_attr_value_lang',     'type' => 'string', 'internal' => 'language'],
-        'support_attr_value_country'  => ['name' => 'support_attr_value_country',  'type' => 'string', 'internal' => 'country'],
     ];
+
+    /**
+     * Has many relation.
+     *
+     * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
+     * @since 1.0.0
+     */
+    /*
+    public const HAS_MANY = [
+        'l11n' => [
+            'mapper'   => EventAttributeValueL11nMapper::class,
+            'table'    => 'task_attr_value_l11n',
+            'self'     => 'task_attr_value_l11n_value',
+            'column'   => 'content',
+            'external' => null,
+        ],
+    ];
+    */
 
     /**
      * Primary table.

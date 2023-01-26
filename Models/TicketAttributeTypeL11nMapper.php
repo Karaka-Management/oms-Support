@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\Support\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Localization\BaseStringL11n;
 
 /**
  * Ticket mapper class.
@@ -34,8 +35,8 @@ final class TicketAttributeTypeL11nMapper extends DataMapperFactory
      */
     public const COLUMNS = [
         'support_attr_type_l11n_id'        => ['name' => 'support_attr_type_l11n_id',       'type' => 'int',    'internal' => 'id'],
-        'support_attr_type_l11n_title'     => ['name' => 'support_attr_type_l11n_title',    'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
-        'support_attr_type_l11n_type'      => ['name' => 'support_attr_type_l11n_type',      'type' => 'int',    'internal' => 'type'],
+        'support_attr_type_l11n_title'     => ['name' => 'support_attr_type_l11n_title',    'type' => 'string', 'internal' => 'content', 'autocomplete' => true],
+        'support_attr_type_l11n_type'      => ['name' => 'support_attr_type_l11n_type',      'type' => 'int',    'internal' => 'ref'],
         'support_attr_type_l11n_lang'      => ['name' => 'support_attr_type_l11n_lang', 'type' => 'string', 'internal' => 'language'],
     ];
 
@@ -54,4 +55,12 @@ final class TicketAttributeTypeL11nMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const PRIMARYFIELD ='support_attr_type_l11n_id';
+
+    /**
+     * Model to use by the mapper.
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public const MODEL = BaseStringL11n::class;
 }

@@ -52,7 +52,7 @@ final class TicketAttributeTypeMapper extends DataMapperFactory
             'mapper'            => TicketAttributeTypeL11nMapper::class,
             'table'             => 'support_attr_type_l11n',
             'self'              => 'support_attr_type_l11n_type',
-            'column'            => 'title',
+            'column'            => 'content',
             'external'          => null,
         ],
         'defaults' => [
