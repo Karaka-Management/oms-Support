@@ -36,6 +36,7 @@ use Modules\Support\Models\TicketMapper;
 use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
+use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
@@ -507,18 +508,18 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return TicketAttributeTypeL11n
+     * @return BaseStringL11n
      *
      * @since 1.0.0
      */
-    private function createTicketAttributeTypeL11nFromRequest(RequestAbstract $request) : TicketAttributeTypeL11n
+    private function createTicketAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $attrL11n       = new TicketAttributeTypeL11n();
-        $attrL11n->type = (int) ($request->getData('type') ?? 0);
+        $attrL11n      = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
-        $attrL11n->title = (string) ($request->getData('title') ?? '');
+        $attrL11n->content = (string) ($request->getData('title') ?? '');
 
         return $attrL11n;
     }
@@ -639,7 +640,7 @@ final class ApiController extends Controller
         if ($attrValue->isDefault) {
             $this->createModelRelation(
                 $request->header->account,
-                (int) $request->getData('attributetype'),
+                (int) $request->getData('type'),
                 $attrValue->getId(),
                 TicketAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
             );
@@ -659,28 +660,17 @@ final class ApiController extends Controller
      */
     private function createTicketAttributeValueFromRequest(RequestAbstract $request) : TicketAttributeValue
     {
-        $attrValue = new TicketAttributeValue();
+        /** @var TicketAttributeType $type */
+        $type = TicketAttributeTypeMapper::get()
+            ->where('id', (int) ($request->getData('type') ?? 0))
+            ->execute();
 
-        $type = (int) ($request->getData('type') ?? 0);
-        if ($type === AttributeValueType::_INT) {
-            $attrValue->valueInt = $request->getData('value', 'int');
-        } elseif ($type === AttributeValueType::_STRING) {
-            $attrValue->valueStr = $request->getData('value', 'string');
-        } elseif ($type === AttributeValueType::_FLOAT) {
-            $attrValue->valueDec = $request->getData('value', 'float');
-        } elseif ($type === AttributeValueType::_DATETIME) {
-            $attrValue->valueDat = $request->getData('value', 'DateTime');
-        }
-
-        $attrValue->type      = $type;
+        $attrValue            = new TicketAttributeValue();
         $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
+        $attrValue->setValue($request->getData('value'), $type->datatype);
 
-        if ($request->hasData('language')) {
-            $attrValue->setLanguage((string) ($request->getData('language') ?? $request->getLanguage()));
-        }
-
-        if ($request->hasData('country')) {
-            $attrValue->setCountry((string) ($request->getData('country') ?? $request->header->l11n->getCountry()));
+        if ($request->getData('title') !== null) {
+            $attrValue->setL11n($request->getData('title'), $request->getData('language') ?? ISO639x1Enum::_EN);
         }
 
         return $attrValue;

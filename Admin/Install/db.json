@@ -174,11 +174,6 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
-            "support_attr_value_type": {
-                "name": "support_attr_value_type",
-                "type": "INT(11)",
-                "null": false
-            },
             "support_attr_value_valueStr": {
                 "name": "support_attr_value_valueStr",
                 "type": "VARCHAR(255)",
@@ -202,22 +197,6 @@
                 "type": "DATETIME",
                 "null": true,
                 "default": null
-            },
-            "support_attr_value_lang": {
-                "name": "support_attr_value_lang",
-                "type": "VARCHAR(2)",
-                "null": true,
-                "default": null,
-                "foreignTable": "language",
-                "foreignKey": "language_639_1"
-            },
-            "support_attr_value_country": {
-                "name": "support_attr_value_country",
-                "type": "VARCHAR(2)",
-                "null": true,
-                "default": null,
-                "foreignTable": "country",
-                "foreignKey": "country_code2"
             }
         }
     },

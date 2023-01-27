@@ -124,22 +124,26 @@ class TicketAttributeValue implements \JsonSerializable
     /**
      * Set value
      *
-     * @param int|string|float|\DateTimeInterface $value Value
+     * @param int|string|float $value    Value
+     * @param int              $datatype Datatype
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function setValue($value) : void
+    public function setValue(mixed $value, int $datatype) : void
     {
-        if (\is_string($value)) {
-            $this->valueStr = $value;
-        } elseif (\is_int($value)) {
-            $this->valueInt = $value;
-        } elseif (\is_float($value)) {
-            $this->valueDec = $value;
-        } elseif ($value instanceof \DateTimeInterface) {
-            $this->valueDat = $value;
+        if ($datatype === AttributeValueType::_STRING) {
+            $this->valueStr = (string) $value;
+        } elseif ($datatype === AttributeValueType::_INT
+            || $datatype === AttributeValueType::_FLOAT_INT
+            || $datatype === AttributeValueType::_BOOL
+        ) {
+            $this->valueInt = (int) $value;
+        } elseif ($datatype === AttributeValueType::_FLOAT) {
+            $this->valueDec = (float) $value;
+        } elseif ($datatype === AttributeValueType::_DATETIME) {
+            $this->valueDat = new \DateTime((string) $value);
         }
     }
 
@@ -169,7 +173,7 @@ class TicketAttributeValue implements \JsonSerializable
      * Set l11n
      *
      * @param string|BaseStringL11n $l11n Tag article l11n
-     * @param string                        $lang Language
+     * @param string                $lang Language
      *
      * @return void
      *
@@ -180,11 +184,12 @@ class TicketAttributeValue implements \JsonSerializable
         if ($l11n instanceof BaseStringL11n) {
             $this->l11n = $l11n;
         } elseif (isset($this->l11n) && $this->l11n instanceof BaseStringL11n) {
-            $this->l11n->content = $l11n;
+            $this->l11n->content  = $l11n;
+            $this->l11n->setLanguage($lang);
         } else {
-            $this->l11n        = new BaseStringL11n();
+            $this->l11n          = new BaseStringL11n();
             $this->l11n->content = $l11n;
-            $this->l11n->ref = $this->id;
+            $this->l11n->ref     = $this->id;
             $this->l11n->setLanguage($lang);
         }
     }

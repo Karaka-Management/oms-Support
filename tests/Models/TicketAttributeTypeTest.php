@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Support\tests\Models;
 
 use Modules\Support\Models\TicketAttributeType;
-use Modules\Support\Models\TicketAttributeTypeL11n;
 
 /**
  * @internal
@@ -50,9 +49,6 @@ final class TicketAttributeTypeTest extends \PHPUnit\Framework\TestCase
     {
         $this->type->setL11n('Test');
         self::assertEquals('Test', $this->type->getL11n());
-
-        $this->type->setL11n(new TicketAttributeTypeL11n(0, 'NewTest'));
-        self::assertEquals('NewTest', $this->type->getL11n());
     }
 
     /**
