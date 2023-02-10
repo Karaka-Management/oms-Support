@@ -29,6 +29,7 @@ use Modules\Support\Models\TicketAttributeTypeL11n;
 use Modules\Support\Models\TicketAttributeTypeL11nMapper;
 use Modules\Support\Models\TicketAttributeTypeMapper;
 use Modules\Support\Models\TicketAttributeValue;
+use Modules\Support\Models\TicketAttributeValueL11nMapper;
 use Modules\Support\Models\TicketAttributeValueMapper;
 use Modules\Support\Models\TicketElement;
 use Modules\Support\Models\TicketElementMapper;
@@ -114,7 +115,7 @@ final class ApiController extends Controller
      */
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $request->setData('redirect', 'support/ticket?for={?id}');
+        $request->setData('redirect', 'support/ticket?for={$id}');
         $task = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
         $task->setType(TaskType::HIDDEN);
 
@@ -689,6 +690,75 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['type'] = empty($request->getData('type')))
+            || ($val['value'] = empty($request->getData('value')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create ticket attribute l11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiTicketAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateTicketAttributeValueL11nCreate($request))) {
+            $response->set('attr_value_l11n_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrL11n = $this->createTicketAttributeValueL11nFromRequest($request);
+        $this->createModel($request->header->account, $attrL11n, TicketAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+    }
+
+    /**
+     * Method to create ticket attribute l11n from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return BaseStringL11n
+     *
+     * @since 1.0.0
+     */
+    private function createTicketAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
+    {
+        $attrL11n      = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
+        $attrL11n->setLanguage((string) (
+            $request->getData('language') ?? $request->getLanguage()
+        ));
+        $attrL11n->content = (string) ($request->getData('title') ?? '');
+
+        return $attrL11n;
+    }
+
+    /**
+     * Validate ticket attribute l11n create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateTicketAttributeValueL11nCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = empty($request->getData('title')))
             || ($val['value'] = empty($request->getData('value')))
         ) {
             return $val;

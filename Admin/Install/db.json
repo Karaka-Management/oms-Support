@@ -200,6 +200,37 @@
             }
         }
     },
+    "support_attr_value_l11n": {
+        "name": "support_attr_value_l11n",
+        "fields": {
+            "support_attr_value_l11n_id": {
+                "name": "support_attr_value_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_attr_value_l11n_title": {
+                "name": "support_attr_value_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "support_attr_value_l11n_value": {
+                "name": "support_attr_value_l11n_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "support_attr_value",
+                "foreignKey": "support_attr_value_id"
+            },
+            "support_attr_value_l11n_lang": {
+                "name": "support_attr_value_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
     "support_ticket_attr_default": {
         "name": "support_ticket_attr_default",
         "fields": {

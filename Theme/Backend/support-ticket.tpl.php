@@ -179,7 +179,7 @@ echo $this->getData('nav')->render(); ?>
                 ) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
-                            <?= \sprintf($this->getHtml('status_change'),
+                            <?= \sprintf($this->getHtml('status_change', 'Tasks', 'Backend'),
                                 '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->getId()) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
                                 $element->taskElement->createdAt->format('Y-m-d H:i')
                             ); ?>
@@ -195,7 +195,7 @@ echo $this->getData('nav')->render(); ?>
                 ) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
-                            <?= \sprintf($this->getHtml('priority_change'),
+                            <?= \sprintf($this->getHtml('priority_change', 'Tasks', 'Backend'),
                                 '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->getId()) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
                                 $element->taskElement->createdAt->format('Y-m-d H:i')
                             ); ?>

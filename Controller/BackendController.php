@@ -122,13 +122,16 @@ final class BackendController extends Controller
         $mapperQuery = TicketMapper::get()
             ->with('task')
             ->with('task/createdBy')
+            ->with('task/tags')
+            ->with('task/tags/title')
             ->with('ticketElements')
             ->with('ticketElements/taskElement')
             ->with('ticketElements/taskElement/createdBy')
             ->with('ticketElements/taskElement/media')
             ->with('attributes')
             ->with('for')
-            ->with('app');
+            ->with('app')
+            ->where('task/tags/title/language', $request->getLanguage());
 
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = $request->getData('for') !== null
