@@ -52,5 +52,5 @@ final class SupportAppMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='support_app_id';
+    public const PRIMARYFIELD = 'support_app_id';
 }

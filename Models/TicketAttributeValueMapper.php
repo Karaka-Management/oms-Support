@@ -73,5 +73,5 @@ final class TicketAttributeValueMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='support_attr_value_id';
+    public const PRIMARYFIELD = 'support_attr_value_id';
 }

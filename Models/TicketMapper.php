@@ -107,5 +107,5 @@ final class TicketMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='support_ticket_id';
+    public const PRIMARYFIELD = 'support_ticket_id';
 }

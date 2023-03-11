@@ -501,7 +501,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createTicketAttributeTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, TicketAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
 
     /**
@@ -722,7 +722,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createTicketAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, TicketAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
 
     /**
