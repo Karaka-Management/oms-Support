@@ -6,7 +6,7 @@
  *
  * @package   Modules\Support
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -29,7 +29,7 @@ use phpOMS\Views\View;
  * Support controller class.
  *
  * @package Modules\Support
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  * @codeCoverageIgnore
@@ -85,11 +85,11 @@ final class BackendController extends Controller
 
         if ($request->getData('ptype') === 'p') {
             $view->setData('tickets',
-                $mapperQuery->where('id', (int) ($request->getData('id') ?? 0), '<')->execute()
+                $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<')->execute()
             );
         } elseif ($request->getData('ptype') === 'n') {
             $view->setData('tickets',
-                $mapperQuery->where('id', (int) ($request->getData('id') ?? 0), '>')->execute()
+                $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>')->execute()
             );
         } else {
             $view->setData('tickets',
@@ -134,7 +134,7 @@ final class BackendController extends Controller
             ->where('task/tags/title/language', $request->getLanguage());
 
         /** @var \Modules\Support\Models\Ticket $ticket */
-        $ticket = $request->getData('for') !== null
+        $ticket = $request->hasData('for')
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
 
@@ -249,7 +249,7 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $id = $request->getData('id') ?? '';
+        $id = $request->getDataString('id') ?? '';
 
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if (!($settings instanceof NullSetting)) {

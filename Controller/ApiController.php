@@ -6,7 +6,7 @@
  *
  * @package   Modules\Support
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -49,7 +49,7 @@ use phpOMS\Model\Message\FormValidation;
  * Api controller for the tickets module.
  *
  * @package Modules\Support
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -120,9 +120,9 @@ final class ApiController extends Controller
         $task->setType(TaskType::HIDDEN);
 
         $ticket      = new Ticket($task);
-        $ticket->app = new NullSupportApp((int) ($request->getData('app') ?? 1));
+        $ticket->app = new NullSupportApp($request->getDataInt('app') ?? 1);
 
-        if ($request->getData('for') !== null) {
+        if ($request->hasData('for')) {
             $ticket->for = new NullAccount((int) $request->getData('for'));
         }
 
@@ -264,7 +264,7 @@ final class ApiController extends Controller
         $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
         $ticketElement         = new TicketElement($taskElement);
-        $ticketElement->time   = (int) ($request->getData('time') ?? 0);
+        $ticketElement->time   = $request->getDataInt('time') ?? 0;
         $ticketElement->ticket = $ticket->getId();
 
         return $ticketElement;
@@ -375,8 +375,8 @@ final class ApiController extends Controller
     public function createSupportAppFromRequest(RequestAbstract $request) : SupportApp
     {
         $app       = new SupportApp();
-        $app->name = (string) ($request->getData('name') ?? '');
-        $app->unit = $request->getData('unit', 'int');
+        $app->name = $request->getDataString('name') ?? '';
+        $app->unit = $request->getDataInt('unit');
 
         return $app;
     }
@@ -516,11 +516,11 @@ final class ApiController extends Controller
     private function createTicketAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n      = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
-        $attrL11n->setLanguage((string) (
-            $request->getData('language') ?? $request->getLanguage()
-        ));
-        $attrL11n->content = (string) ($request->getData('title') ?? '');
+        $attrL11n->ref = $request->getDataInt('type') ?? 0;
+        $attrL11n->setLanguage(
+            $request->getDataString('language') ?? $request->getLanguage()
+        );
+        $attrL11n->content = $request->getDataString('title') ?? '';
 
         return $attrL11n;
     }
@@ -586,9 +586,9 @@ final class ApiController extends Controller
     private function createTicketAttributeTypeFromRequest(RequestAbstract $request) : TicketAttributeType
     {
         $attrType = new TicketAttributeType();
-        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
-        $attrType->fields = (int) ($request->getData('fields') ?? 0);
-        $attrType->custom = (bool) ($request->getData('custom') ?? false);
+        $attrType->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+        $attrType->fields = $request->getDataInt('fields') ?? 0;
+        $attrType->custom = $request->getDataBool('custom') ?? false;
 
         return $attrType;
     }
@@ -663,15 +663,15 @@ final class ApiController extends Controller
     {
         /** @var TicketAttributeType $type */
         $type = TicketAttributeTypeMapper::get()
-            ->where('id', (int) ($request->getData('type') ?? 0))
+            ->where('id', $request->getDataInt('type') ?? 0)
             ->execute();
 
         $attrValue            = new TicketAttributeValue();
-        $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
+        $attrValue->isDefault = $request->getDataBool('default') ?? false;
         $attrValue->setValue($request->getData('value'), $type->datatype);
 
-        if ($request->getData('title') !== null) {
-            $attrValue->setL11n($request->getData('title'), $request->getData('language') ?? ISO639x1Enum::_EN);
+        if ($request->hasData('title')) {
+            $attrValue->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
         }
 
         return $attrValue;
@@ -737,11 +737,11 @@ final class ApiController extends Controller
     private function createTicketAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n      = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
-        $attrL11n->setLanguage((string) (
-            $request->getData('language') ?? $request->getLanguage()
-        ));
-        $attrL11n->content = (string) ($request->getData('title') ?? '');
+        $attrL11n->ref = $request->getDataInt('value') ?? 0;
+        $attrL11n->setLanguage(
+            $request->getDataString('language') ?? $request->getLanguage()
+        );
+        $attrL11n->content = $request->getDataString('title') ?? '';
 
         return $attrL11n;
     }
