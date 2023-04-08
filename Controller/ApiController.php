@@ -67,8 +67,8 @@ final class ApiController extends Controller
     private function validateTicketCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['plain'] = empty($request->getData('plain')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['plain'] = !$request->hasData('plain'))
         ) {
             return $val;
         }
@@ -204,7 +204,7 @@ final class ApiController extends Controller
         if (($val['status'] = !TaskStatus::isValidValue((int) $request->getData('status')))
             || ($val['due'] = !((bool) \strtotime((string) $request->getData('due'))))
             || ($val['ticket'] = !(\is_numeric($request->getData('ticket'))))
-            || ($val['forward'] = !(\is_numeric(empty($request->getData('forward')) ? $request->header->account : $request->getData('forward'))))
+            || ($val['forward'] = !(\is_numeric(!$request->hasData('forward') ? $request->header->account : $request->getData('forward'))))
         ) {
             return $val;
         }
@@ -393,7 +393,7 @@ final class ApiController extends Controller
     private function validateSupportAppCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))) {
+        if (($val['name'] = !$request->hasData('name'))) {
             return $val;
         }
 
@@ -467,9 +467,9 @@ final class ApiController extends Controller
     private function validateTicketAttributeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['type'] = empty($request->getData('type')))
-            || ($val['value'] = empty($request->getData('value')))
-            || ($val['ticket'] = empty($request->getData('ticket')))
+        if (($val['type'] = !$request->hasData('type'))
+            || ($val['value'] = !$request->hasData('value'))
+            || ($val['ticket'] = !$request->hasData('ticket'))
         ) {
             return $val;
         }
@@ -537,8 +537,8 @@ final class ApiController extends Controller
     private function validateTicketAttributeTypeL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['type'] = empty($request->getData('type')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['type'] = !$request->hasData('type'))
         ) {
             return $val;
         }
@@ -605,7 +605,7 @@ final class ApiController extends Controller
     private function validateTicketAttributeTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
+        if (($val['title'] = !$request->hasData('title'))
         ) {
             return $val;
         }
@@ -689,8 +689,8 @@ final class ApiController extends Controller
     private function validateTicketAttributeValueCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['type'] = empty($request->getData('type')))
-            || ($val['value'] = empty($request->getData('value')))
+        if (($val['type'] = !$request->hasData('type'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
@@ -758,8 +758,8 @@ final class ApiController extends Controller
     private function validateTicketAttributeValueL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['value'] = empty($request->getData('value')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
