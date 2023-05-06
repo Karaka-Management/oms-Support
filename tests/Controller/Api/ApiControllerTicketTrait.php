@@ -35,7 +35,7 @@ trait ApiControllerTicketTrait
         $request->setData('name', 'TestSupportApp');
 
         $this->module->apiSupportAppCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -70,7 +70,7 @@ trait ApiControllerTicketTrait
         $request->setData('for', '1');
 
         $this->module->apiTicketCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -86,7 +86,7 @@ trait ApiControllerTicketTrait
         $request->setData('id', '1');
 
         $this->module->apiTicketGet($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -121,7 +121,7 @@ trait ApiControllerTicketTrait
         $request->setData('due', (new \DateTime('now'))->format('Y-m-d H:i:s'));
 
         $this->module->apiTicketElementCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -137,7 +137,7 @@ trait ApiControllerTicketTrait
         $request->setData('id', '1');
 
         $this->module->apiTicketElementGet($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**

@@ -61,7 +61,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="portlet-head">
                 <div class="row middle-xs">
                     <span class="col-xs-0">
-                        <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($task->createdBy->getId()); ?>">
+                        <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($task->createdBy->id); ?>">
                     </span>
                     <span>
                         <?= $this->printHtml($task->createdBy->name1); ?> - <?= $this->printHtml($task->createdAt->format('Y/m/d H:i')); ?>
@@ -88,7 +88,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php if (!empty($taskMedia)) : ?>
                             <div>
                                 <?php foreach ($taskMedia as $media) : ?>
-                                     <span><a class="content" href="<?= UriFactory::build('{/base}/media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
+                                     <span><a class="content" href="<?= UriFactory::build('{/base}/media/single?id=' . $media->id);?>"><?= $media->name; ?></a></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -106,7 +106,7 @@ echo $this->getData('nav')->render(); ?>
                         </div>
                     </div>
                     <div class="col-xs-0 end-xs plain-grid">
-                        <?php if ($task->isEditable && $this->request->header->account === $task->createdBy->getId()) : ?>
+                        <?php if ($task->isEditable && $this->request->header->account === $task->createdBy->id) : ?>
                             <div class="col-xs end-xs plain-grid">
                                 <button class="save hidden"><?= $this->getHtml('Save', '0', '0'); ?></button>
                                 <button class="cancel hidden"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
@@ -180,7 +180,7 @@ echo $this->getData('nav')->render(); ?>
                     <section class="portlet">
                         <div class="portlet-body">
                             <?= \sprintf($this->getHtml('status_change', 'Tasks', 'Backend'),
-                                '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->getId()) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
+                                '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->id) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
                                 $element->taskElement->createdAt->format('Y-m-d H:i')
                             ); ?>
                             <span class="tag task-status-<?= $element->taskElement->getStatus(); ?>">
@@ -196,7 +196,7 @@ echo $this->getData('nav')->render(); ?>
                     <section class="portlet">
                         <div class="portlet-body">
                             <?= \sprintf($this->getHtml('priority_change', 'Tasks', 'Backend'),
-                                '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->getId()) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
+                                '<a href="' . UriFactory::build('profile/single?{?}&for=' . $element->taskElement->createdBy->id) . '">' . $this->printHtml($element->taskElement->createdBy->name1) . '</a>',
                                 $element->taskElement->createdAt->format('Y-m-d H:i')
                             ); ?>
                             <span class="tag task-priority-<?= $element->taskElement->getPriority(); ?>">
@@ -207,18 +207,18 @@ echo $this->getData('nav')->render(); ?>
                 <?php endif; ?>
 
                 <?php if ($element->taskElement->description !== '') : ?>
-                <section id="taskelmenet-<?= $element->taskElement->getId(); ?>" class="portlet taskElement"
+                <section id="taskelmenet-<?= $element->taskElement->id; ?>" class="portlet taskElement"
                     data-update-content="#elements"
                     data-update-element=".taskElement .taskElement-content"
                     data-update-tpl="#taskElementContentTpl"
                     data-tag="form"
                     data-method="POST"
-                    data-id="<?= $element->taskElement->getId(); ?>"
-                    data-uri="<?= UriFactory::build('{/api}task/element?id=' . $element->taskElement->getId() .'&csrf={$CSRF}'); ?>">
+                    data-id="<?= $element->taskElement->id; ?>"
+                    data-uri="<?= UriFactory::build('{/api}task/element?id=' . $element->taskElement->id .'&csrf={$CSRF}'); ?>">
                     <div class="portlet-head">
                         <div class="row middle-xs">
                             <span class="col-xs-0">
-                                <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($element->taskElement->createdBy->getId()); ?>">
+                                <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($element->taskElement->createdBy->id); ?>">
                             </span>
                             <span class="col-xs">
                                 <?= $this->printHtml($element->taskElement->createdBy->name1); ?> - <?= $this->printHtml($element->taskElement->createdAt->format('Y-m-d H:i')); ?>
@@ -239,13 +239,13 @@ echo $this->getData('nav')->render(); ?>
                     <?php $elementMedia = $element->taskElement->getMedia();
                         if (!empty($elementMedia)
                             || ($task->isEditable
-                                && $this->request->header->account === $element->taskElement->createdBy->getId())
+                                && $this->request->header->account === $element->taskElement->createdBy->id)
                         ) : ?>
                     <div class="portlet-foot row middle-xs">
                         <?php if (!empty($elementMedia)) : ?>
                             <div>
                                 <?php foreach ($elementMedia as $media) : ?>
-                                     <span><a class="content" href="<?= UriFactory::build('{/base}/media/single?id=' . $media->getId());?>"><?= $media->name; ?></a></span>
+                                     <span><a class="content" href="<?= UriFactory::build('{/base}/media/single?id=' . $media->id);?>"><?= $media->name; ?></a></span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -270,10 +270,10 @@ echo $this->getData('nav')->render(); ?>
                         <?php endif; ?>
 
                         <?php if ($task->isEditable
-                            && $this->request->header->account === $element->taskElement->createdBy->getId()
+                            && $this->request->header->account === $element->taskElement->createdBy->id
                         ) : ?>
                             <div class="col-xs end-xs plain-grid">
-                                <input type="hidden" value="<?= $element->taskElement->getId(); ?>" name="id">
+                                <input type="hidden" value="<?= $element->taskElement->id; ?>" name="id">
                                 <button class="save hidden"><?= $this->getHtml('Save', '0', '0'); ?></button>
                                 <button class="cancel hidden"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
                                 <button class="update"><?= $this->getHtml('Edit', '0', '0'); ?></button>
@@ -287,14 +287,14 @@ echo $this->getData('nav')->render(); ?>
                 <?php
                     $tos = $element->taskElement->getTo();
                     if (\count($tos) > 1
-                        || (!empty($tos) && $tos[0]->getRelation()->getId() !== $element->taskElement->createdBy->getId())
+                        || (!empty($tos) && $tos[0]->getRelation()->id !== $element->taskElement->createdBy->id)
                     ) : ?>
                     <section class="portlet wf-100">
                         <div class="portlet-body">
-                            <a href="<?= UriFactory::build('{/base}/profile/single?{?}&for=' . $element->taskElement->createdBy->getId()); ?>"><?= $this->printHtml($element->taskElement->createdBy->name1); ?></a> <?= $this->getHtml('forwarded_to'); ?>
+                            <a href="<?= UriFactory::build('{/base}/profile/single?{?}&for=' . $element->taskElement->createdBy->id); ?>"><?= $this->printHtml($element->taskElement->createdBy->name1); ?></a> <?= $this->getHtml('forwarded_to'); ?>
                             <?php foreach ($tos as $to) : ?>
                                 <?php if ($to instanceof AccountRelation) : ?>
-                                    <a href="<?= UriFactory::build('{/base}/profile/single?{?}&for=' . $to->getRelation()->getId()); ?>"><?= $this->printHtml($to->getRelation()->name1); ?></a>
+                                    <a href="<?= UriFactory::build('{/base}/profile/single?{?}&for=' . $to->getRelation()->id); ?>"><?= $this->printHtml($to->getRelation()->name1); ?></a>
                                 <?php elseif ($to instanceof GroupRelation) : ?>
                                     <?= $this->printHtml($to->getRelation()->name); ?>
                                 <?php endif; ?>

@@ -38,7 +38,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_EN);
 
         $this->module->apiTicketAttributeTypeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -56,7 +56,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
 
         $this->module->apiTicketAttributeTypeL11nCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -76,7 +76,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiTicketAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -95,7 +95,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiTicketAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -114,7 +114,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiTicketAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -133,7 +133,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiTicketAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -151,7 +151,7 @@ trait ApiControllerAttributeTrait
         $request->setData('type', '1');
 
         $this->module->apiTicketAttributeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**

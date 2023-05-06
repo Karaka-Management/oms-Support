@@ -118,7 +118,7 @@ echo $this->getData('nav')->render(); ?>
                                 ?>
                                 <tr tabindex="0">
                                     <td><i class="fa fa-cogs"></i>
-                                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $application->getId(); ?>
+                                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $application->id; ?>
                                     <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($application->name); ?>
                                 <?php endforeach; ?>
                                 <?php if ($count === 0) : ?>
@@ -197,7 +197,7 @@ echo $this->getData('nav')->render(); ?>
                             ?>
                             <tr tabindex="0">
                                 <td><i class="fa fa-cogs"></i>
-                                <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
+                                <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->id; ?>
                                 <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
                                 <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
                                 <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml($setting->group); ?>

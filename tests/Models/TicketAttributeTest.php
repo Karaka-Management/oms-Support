@@ -37,7 +37,7 @@ final class TicketAttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->attribute->getId());
+        self::assertEquals(0, $this->attribute->id);
         self::assertInstanceOf('\Modules\Support\Models\TicketAttributeType', $this->attribute->type);
         self::assertInstanceOf('\Modules\Support\Models\TicketAttributeValue', $this->attribute->value);
     }

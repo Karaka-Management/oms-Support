@@ -40,6 +40,6 @@ class TicketViewTest extends \PHPUnit\Framework\TestCase
     {
         $view = new TicketView();
 
-        self::assertEquals('Web/Backend/img/default-user.jpg', $view->getAccountImage(1));
+        self::assertEquals('/Web/Backend/img/default-user.jpg', $view->getAccountImage(1));
     }
 }

@@ -38,7 +38,7 @@ final class TicketAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->value->getId());
+        self::assertEquals(0, $this->value->id);
         self::assertNull($this->value->getValue());
         self::assertFalse($this->value->isDefault);
     }

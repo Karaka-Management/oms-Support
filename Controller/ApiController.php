@@ -265,7 +265,7 @@ final class ApiController extends Controller
 
         $ticketElement         = new TicketElement($taskElement);
         $ticketElement->time   = $request->getDataInt('time') ?? 0;
-        $ticketElement->ticket = $ticket->getId();
+        $ticketElement->ticket = $ticket->id;
 
         return $ticketElement;
     }
@@ -642,7 +642,7 @@ final class ApiController extends Controller
             $this->createModelRelation(
                 $request->header->account,
                 (int) $request->getData('type'),
-                $attrValue->getId(),
+                $attrValue->id,
                 TicketAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
             );
         }

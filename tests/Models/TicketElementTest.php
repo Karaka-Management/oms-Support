@@ -37,7 +37,7 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->element->getId());
+        self::assertEquals(0, $this->element->id);
         self::assertEquals(0, $this->element->time);
         self::assertEquals(0, $this->element->ticket);
     }
