@@ -82,7 +82,7 @@ echo $this->getData('nav')->render(); ?>
 
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Applications'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Applications'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                             <table id="settingsList" class="default sticky">
                                 <thead>
@@ -136,7 +136,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                         <table id="settingsList" class="default sticky">
                             <thead>
