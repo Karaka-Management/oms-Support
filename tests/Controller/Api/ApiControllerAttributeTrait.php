@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\tests\Controller\Api;
 
-use Modules\Support\Models\AttributeValueType;
 use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\HttpRequest;

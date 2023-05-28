@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Support\Controller;
 
 use Modules\Admin\Models\NullAccount;
-use Modules\Support\Models\AttributeValueType;
 use Modules\Support\Models\NullSupportApp;
 use Modules\Support\Models\NullTicketAttributeType;
 use Modules\Support\Models\NullTicketAttributeValue;
@@ -25,7 +24,6 @@ use Modules\Support\Models\Ticket;
 use Modules\Support\Models\TicketAttribute;
 use Modules\Support\Models\TicketAttributeMapper;
 use Modules\Support\Models\TicketAttributeType;
-use Modules\Support\Models\TicketAttributeTypeL11n;
 use Modules\Support\Models\TicketAttributeTypeL11nMapper;
 use Modules\Support\Models\TicketAttributeTypeMapper;
 use Modules\Support\Models\TicketAttributeValue;

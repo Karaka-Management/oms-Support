@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Controller;
 
-use Model\NullSetting;
 use Model\SettingMapper;
 use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\TicketMapper;

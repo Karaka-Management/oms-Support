@@ -62,7 +62,7 @@ final class TicketAttributeTypeMapper extends DataMapperFactory
             'mapper'            => TicketAttributeValueMapper::class,
             'table'             => 'support_ticket_attr_default',
             'self'              => 'support_ticket_attr_default_type',
-            'external'          => 'support_ticket_attr_default_value'
+            'external'          => 'support_ticket_attr_default_value',
         ],
     ];
 

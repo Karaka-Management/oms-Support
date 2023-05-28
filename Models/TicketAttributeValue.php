@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Support\Models;
 
 use phpOMS\Localization\BaseStringL11n;
-use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 
 /**

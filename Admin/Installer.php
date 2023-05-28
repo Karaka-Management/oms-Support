@@ -18,7 +18,6 @@ use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
-use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
 
