@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 use phpOMS\Uri\UriFactory;
 
-$settings     = $this->getData('settings') ?? [];
-$applications = $this->getData('applications') ?? [];
+$settings     = $this->data['settings'] ?? [];
+$applications = $this->data['applications'] ?? [];
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div id="iSettings" class="tabview tab-2 url-rewrite">
     <div class="box wf-100 col-xs-12">
