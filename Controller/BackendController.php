@@ -130,7 +130,7 @@ final class BackendController extends Controller
             ->with('attributes')
             ->with('for')
             ->with('app')
-            ->where('task/tags/title/language', $request->getLanguage());
+            ->where('task/tags/title/language', $request->header->l11n->language);
 
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = $request->hasData('for')
