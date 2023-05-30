@@ -68,12 +68,12 @@ final class BackendController extends Controller
      */
     public function viewSupportList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $head = $response->get('Content')->getData('head');
+        $head = $response->get('Content')->head;
         $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=1.0.0');
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         $mapperQuery = TicketMapper::getAll()
             ->with('task')
@@ -83,17 +83,11 @@ final class BackendController extends Controller
             ->limit(25);
 
         if ($request->getData('ptype') === 'p') {
-            $view->setData('tickets',
-                $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<')->execute()
-            );
+            $view->data['tickets'] = $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<')->execute();
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('tickets',
-                $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>')->execute()
-            );
+            $view->data['tickets'] = $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>')->execute();
         } else {
-            $view->setData('tickets',
-                $mapperQuery->where('id', 0, '>')->execute()
-            );
+            $view->data['tickets'] = $mapperQuery->where('id', 0, '>')->execute();
         }
 
         return $view;
@@ -116,7 +110,7 @@ final class BackendController extends Controller
         $view = new TicketView($this->app->l11nManager, $request, $response);
 
         $view->setTemplate('/Modules/Support/Theme/Backend/support-ticket');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         $mapperQuery = TicketMapper::get()
             ->with('task')
@@ -137,13 +131,13 @@ final class BackendController extends Controller
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
 
-        $view->addData('ticket', $ticket);
+        $view->data['ticket'] = $ticket;
 
         $accGrpSelector = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
-        $view->addData('accGrpSelector', $accGrpSelector);
+        $view->data['accGrpSelector'] = $accGrpSelector;
 
         $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
-        $view->addData('editor', $editor);
+        $view->data['editor'] = $editor;
 
         return $view;
     }
@@ -164,7 +158,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/ticket-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         return $view;
     }
@@ -185,7 +179,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-analysis');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         return $view;
     }
@@ -206,7 +200,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-settings');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         return $view;
     }
@@ -227,7 +221,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/user-support-dashboard');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         return $view;
     }
@@ -246,16 +240,16 @@ final class BackendController extends Controller
     public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $id = $request->getDataString('id') ?? '';
 
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
-        $view->setData('settings', $settings);
+        $view->data['settings'] = $settings;
 
         /** @var \Modules\Support\Models\SupportApp[] $applications */
         $applications = SupportAppMapper::getAll()->execute();
-        $view->setData('applications', $applications);
+        $view->data['applications'] = $applications;
 
         $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
 

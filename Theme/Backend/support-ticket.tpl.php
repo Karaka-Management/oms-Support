@@ -22,14 +22,14 @@ use phpOMS\Uri\UriFactory;
  * @var \Modules\Support\Vies\TicketView $this
  * @var \Modules\Support\Models\Ticket   $ticket
  */
-$ticket      = $this->getData('ticket');
+$ticket      = $this->data['ticket'];
 $task        = $ticket->task;
 $taskMedia   = $task->getMedia();
 $elements    = $ticket->invertTicketElements();
 $cElements   = \count($elements);
 $color       = 'red'; //$this->getStatus($task->getStatus());
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-md-6 col-xs-12">
