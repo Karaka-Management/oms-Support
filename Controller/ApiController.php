@@ -91,7 +91,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketCreate($request))) {
             $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                    = RequestStatusCode::R_400;
 
             return;
         }
@@ -227,7 +227,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketElementCreate($request))) {
             $response->data['ticket_element_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                = RequestStatusCode::R_400;
 
             return;
         }
@@ -350,7 +350,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateSupportAppCreate($request))) {
             $response->data['qa_app_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status        = RequestStatusCode::R_400;
 
             return;
         }
@@ -415,7 +415,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketAttributeCreate($request))) {
             $response->data['attribute_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status           = RequestStatusCode::R_400;
 
             return;
         }
@@ -492,7 +492,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketAttributeTypeL11nCreate($request))) {
             $response->data['attr_type_l11n_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                = RequestStatusCode::R_400;
 
             return;
         }
@@ -561,7 +561,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketAttributeTypeCreate($request))) {
             $response->data['attr_type_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status           = RequestStatusCode::R_400;
 
             return;
         }
@@ -628,7 +628,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketAttributeValueCreate($request))) {
             $response->data['attr_value_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
@@ -713,7 +713,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateTicketAttributeValueL11nCreate($request))) {
             $response->data['attr_value_l11n_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status                 = RequestStatusCode::R_400;
 
             return;
         }

@@ -133,10 +133,10 @@ final class BackendController extends Controller
 
         $view->data['ticket'] = $ticket;
 
-        $accGrpSelector = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
+        $accGrpSelector               = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
         $view->data['accGrpSelector'] = $accGrpSelector;
 
-        $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
+        $editor               = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
         $view->data['editor'] = $editor;
 
         return $view;
@@ -239,16 +239,16 @@ final class BackendController extends Controller
      */
     public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = new View($this->app->l11nManager, $request, $response);
+        $view              = new View($this->app->l11nManager, $request, $response);
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $id = $request->getDataString('id') ?? '';
 
-        $settings = SettingMapper::getAll()->where('module', $id)->execute();
+        $settings               = SettingMapper::getAll()->where('module', $id)->execute();
         $view->data['settings'] = $settings;
 
         /** @var \Modules\Support\Models\SupportApp[] $applications */
-        $applications = SupportAppMapper::getAll()->execute();
+        $applications               = SupportAppMapper::getAll()->execute();
         $view->data['applications'] = $applications;
 
         $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
