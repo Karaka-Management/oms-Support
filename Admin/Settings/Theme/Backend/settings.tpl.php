@@ -20,7 +20,7 @@ $applications = $this->data['applications'] ?? [];
 echo $this->data['nav']->render(); ?>
 
 <div id="iSettings" class="tabview tab-2 url-rewrite">
-    <div class="box wf-100 col-xs-12">
+    <div class="box">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Applications'); ?></label></li>
             <li><label for="c-tab-2"><?= $this->getHtml('List'); ?></label></li>
