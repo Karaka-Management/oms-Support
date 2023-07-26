@@ -38,10 +38,8 @@ use Modules\Tasks\Models\TaskType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use phpOMS\Model\Message\FormValidation;
 
 /**
  * Api controller for the tickets module.
@@ -90,16 +88,15 @@ final class ApiController extends Controller
     public function apiTicketCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketCreate($request))) {
-            $response->data[$request->uri->__toString()] = new FormValidation($val);
-            $response->header->status                    = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $ticket = $this->createTicketFromRequest($request);
-
         $this->createModel($request->header->account, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully created.', $ticket);
+        $this->createStandardCreateResponse($request, $response, $ticket);
     }
 
     /**
@@ -144,7 +141,7 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully returned.', $ticket);
+        $this->createStandardReturnResponse($request, $response, $ticket);
     }
 
     /**
@@ -164,10 +161,10 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Support\Models\Ticket $old */
         $old = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $old = clone $old;
-        $new = $this->updateTicketFromRequest($request);
+        $new = $this->updateTicketFromRequest($request, clone $old);
+
         $this->updateModel($request->header->account, $old, $new, TicketMapper::class, 'ticket', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket', 'Ticket successfully updated.', $new);
+        $this->createStandardUpdateResponse($request, $response, $new);
     }
 
     /**
@@ -179,12 +176,9 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateTicketFromRequest(RequestAbstract $request) : Ticket
+    private function updateTicketFromRequest(RequestAbstract $request, Ticket $new) : Ticket
     {
-        /** @var Ticket $ticket */
-        $ticket = TicketMapper::get()->where('id', (int) ($request->getData('id')))->execute();
-
-        return $ticket;
+        return $new;
     }
 
     /**
@@ -226,8 +220,8 @@ final class ApiController extends Controller
     public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketElementCreate($request))) {
-            $response->data['ticket_element_create'] = new FormValidation($val);
-            $response->header->status                = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -244,7 +238,7 @@ final class ApiController extends Controller
 
         $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
         $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully created.', $element);
+        $this->createStandardCreateResponse($request, $response, $element);
     }
 
     /**
@@ -285,7 +279,7 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Support\Models\TicketElement $ticket */
         $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully returned.', $ticket);
+        $this->createStandardReturnResponse($request, $response, $ticket);
     }
 
     /**
@@ -305,12 +299,11 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Support\Models\TicketElement $old */
         $old = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $old = clone $old;
-        $new = $this->updateTicketElementFromRequest($request, $response);
+        $new = $this->updateTicketElementFromRequest($request, $response, clone $old);
         $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
 
         //$this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Ticket element', 'Ticket element successfully updated.', $new);
+        $this->createStandardUpdateResponse($request, $response, $new);
     }
 
     /**
@@ -322,15 +315,12 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response) : TicketElement
+    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response, TicketElement $new) : TicketElement
     {
-        /** @var TicketElement $element */
-        $element = TicketElementMapper::get()->with('taskElement')->where('id', (int) ($request->getData('id')))->execute();
-
-        $request->setData('id', $element->taskElement->task, true);
+        $request->setData('id', $new->taskElement->task, true);
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
 
-        return $element;
+        return $new;
     }
 
     /**
@@ -349,16 +339,15 @@ final class ApiController extends Controller
     public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateSupportAppCreate($request))) {
-            $response->data['qa_app_create'] = new FormValidation($val);
-            $response->header->status        = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $app = $this->createSupportAppFromRequest($request);
         $this->createModel($request->header->account, $app, SupportAppMapper::class, 'app', $request->getOrigin());
-
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'App', 'App successfully created.', $app);
+        $this->createStandardCreateResponse($request, $response, $app);
     }
 
     /**
@@ -414,8 +403,8 @@ final class ApiController extends Controller
     public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeCreate($request))) {
-            $response->data['attribute_create'] = new FormValidation($val);
-            $response->header->status           = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -431,7 +420,7 @@ final class ApiController extends Controller
 
         $attribute = $this->createTicketAttributeFromRequest($request);
         $this->createModel($request->header->account, $attribute, TicketAttributeMapper::class, 'attribute', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully created', $attribute);
+        $this->createStandardCreateResponse($request, $response, $attribute);
     }
 
     /**
@@ -491,15 +480,15 @@ final class ApiController extends Controller
     public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeL11nCreate($request))) {
-            $response->data['attr_type_l11n_create'] = new FormValidation($val);
-            $response->header->status                = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $attrL11n = $this->createTicketAttributeTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, TicketAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
+        $this->createStandardCreateResponse($request, $response, $attrL11n);
     }
 
     /**
@@ -560,16 +549,15 @@ final class ApiController extends Controller
     public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeCreate($request))) {
-            $response->data['attr_type_create'] = new FormValidation($val);
-            $response->header->status           = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $attrType = $this->createTicketAttributeTypeFromRequest($request);
         $this->createModel($request->header->account, $attrType, TicketAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
-
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
+        $this->createStandardCreateResponse($request, $response, $attrType);
     }
 
     /**
@@ -627,8 +615,8 @@ final class ApiController extends Controller
     public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeValueCreate($request))) {
-            $response->data['attr_value_create'] = new FormValidation($val);
-            $response->header->status            = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
@@ -645,7 +633,7 @@ final class ApiController extends Controller
             );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute value', 'Attribute value successfully created', $attrValue);
+        $this->createStandardCreateResponse($request, $response, $attrValue);
     }
 
     /**
@@ -712,15 +700,15 @@ final class ApiController extends Controller
     public function apiTicketAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateTicketAttributeValueL11nCreate($request))) {
-            $response->data['attr_value_l11n_create'] = new FormValidation($val);
-            $response->header->status                 = RequestStatusCode::R_400;
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
 
             return;
         }
 
         $attrL11n = $this->createTicketAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, TicketAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
+        $this->createStandardCreateResponse($request, $response, $attrL11n);
     }
 
     /**
