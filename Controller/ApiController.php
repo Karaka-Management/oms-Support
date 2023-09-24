@@ -196,7 +196,7 @@ final class ApiController extends Controller
         if (($val['status'] = !TaskStatus::isValidValue((int) $request->getData('status')))
             || ($val['due'] = !((bool) \strtotime((string) $request->getData('due'))))
             || ($val['ticket'] = !(\is_numeric($request->getData('ticket'))))
-            || ($val['forward'] = !(\is_numeric(!$request->hasData('forward') ? $request->header->account : $request->getData('forward'))))
+            || ($val['forward'] = !(\is_numeric($request->hasData('forward') ? $request->getData('forward') : $request->header->account)))
         ) {
             return $val;
         }
