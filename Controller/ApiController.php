@@ -654,7 +654,7 @@ final class ApiController extends Controller
 
         $attrValue            = new TicketAttributeValue();
         $attrValue->isDefault = $request->getDataBool('default') ?? false;
-        $attrValue->setValue($request->getData('value'), $type->datatype);
+        $attrValue->setValue($request->getDataString('value'), $type->datatype);
 
         if ($request->hasData('title')) {
             $attrValue->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
