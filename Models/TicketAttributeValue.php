@@ -111,7 +111,7 @@ class TicketAttributeValue implements \JsonSerializable
     /**
      * Set value
      *
-     * @param int|string|float $value    Value
+     * @param null|int|string|float $value    Value
      * @param int              $datatype Datatype
      *
      * @return void
