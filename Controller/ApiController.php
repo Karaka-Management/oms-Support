@@ -77,7 +77,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -85,7 +85,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -129,7 +129,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -137,7 +137,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -149,7 +149,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -157,7 +157,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\Ticket $old */
         $old = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -209,7 +209,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -217,7 +217,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketElementCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketElementCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -267,7 +267,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -275,7 +275,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\TicketElement $ticket */
         $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -287,7 +287,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -295,7 +295,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\TicketElement $old */
         $old = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -328,7 +328,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -336,7 +336,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSupportAppCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateSupportAppCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -392,7 +392,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -400,7 +400,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketAttributeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketAttributeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -469,7 +469,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -477,7 +477,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeL11nCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -538,7 +538,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -546,7 +546,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketAttributeTypeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -604,7 +604,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -612,7 +612,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketAttributeValueCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -689,7 +689,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -697,7 +697,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiTicketAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiTicketAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateTicketAttributeValueL11nCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
