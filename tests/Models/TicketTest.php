@@ -42,7 +42,6 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(0, $this->ticket->id);
         self::assertNull($this->ticket->for);
         self::assertEquals([], $this->ticket->getTicketElements());
-        self::assertEquals([], $this->ticket->getAttributes());
         self::assertInstanceOf('\Modules\Tasks\Models\Task', $this->ticket->task);
         self::assertInstanceOf('\Modules\Support\Models\TicketElement', $this->ticket->getTicketElement(999));
         self::assertInstanceOf('\Modules\Support\Models\SupportApp', $this->ticket->app);
@@ -54,11 +53,8 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
      */
     public function testElementInputOutput() : void
     {
-        $element1              = new TicketElement();
-        $element1->description = '1';
-
-        $element2              = new TicketElement();
-        $element2->description = '2';
+        $element1 = new TicketElement();
+        $element2 = new TicketElement();
 
         self::assertEquals(0, $this->ticket->addElement($element1));
         self::assertEquals(1, $this->ticket->addElement($element2));
@@ -73,26 +69,13 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
      */
     public function testElementRemove() : void
     {
-        $element1              = new TicketElement();
-        $element1->description = '1';
+        $element1 = new TicketElement();
 
         $this->ticket->addElement($element1);
         self::assertCount(1, $this->ticket->getTicketElements());
         self::assertTrue($this->ticket->removeElement(0));
         self::assertCount(0, $this->ticket->getTicketElements());
         self::assertFalse($this->ticket->removeElement(0));
-    }
-
-    /**
-     * @covers Modules\Support\Models\Ticket
-     * @group module
-     */
-    public function testAttributeInputOutput() : void
-    {
-        $attr = new TicketAttribute();
-        $this->ticket->addAttribute($attr);
-
-        self::assertCount(1, $this->ticket->getAttributes());
     }
 
     /**
@@ -107,10 +90,9 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             [
-                'id'                      => 0,
-                'for'                     => null,
-                'ticketElements'          => [],
-                'attributes'              => [],
+                'id'             => 0,
+                'for'            => null,
+                'ticketElements' => [],
             ],
             $serialized
         );

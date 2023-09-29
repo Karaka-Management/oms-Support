@@ -72,14 +72,6 @@ class Ticket
     public ?Account $for = null;
 
     /**
-     * Attributes.
-     *
-     * @var int[]|TicketAttribute[]
-     * @since 1.0.0
-     */
-    private array $attributes = [];
-
-    /**
      * Constructor.
      *
      * @param null|Task $task Creates the ticket from a task
@@ -184,32 +176,6 @@ class Ticket
     }
 
     /**
-     * Add attribute to item
-     *
-     * @param TicketAttribute $attribute Note
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function addAttribute(TicketAttribute $attribute) : void
-    {
-        $this->attributes[] = $attribute;
-    }
-
-    /**
-     * Get attributes
-     *
-     * @return int[]|TicketAttribute[]
-     *
-     * @since 1.0.0
-     */
-    public function getAttributes() : array
-    {
-        return $this->attributes;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array
@@ -220,7 +186,6 @@ class Ticket
             'app'               => $this->app,
             'for'               => $this->for,
             'ticketElements'    => $this->ticketElements,
-            'attributes'        => $this->attributes,
         ];
     }
 

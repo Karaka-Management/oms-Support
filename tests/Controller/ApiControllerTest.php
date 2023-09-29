@@ -16,7 +16,6 @@ namespace Modules\Support\tests\Controller;
 
 use Model\CoreSettings;
 use Modules\Admin\Models\AccountPermission;
-use Modules\Support\tests\Controller\Api\ApiControllerAttributeTrait;
 use Modules\Support\tests\Controller\Api\ApiControllerTicketTrait;
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
@@ -91,5 +90,4 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
     }
 
     use ApiControllerTicketTrait;
-    use ApiControllerAttributeTrait;
 }
