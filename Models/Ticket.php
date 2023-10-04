@@ -58,7 +58,7 @@ class Ticket
      * @var TicketElement[]
      * @since 1.0.0
      */
-    private array $ticketElements = [];
+    public array $ticketElements = [];
 
     /**
      * Account this ticket is for
