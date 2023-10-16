@@ -28,7 +28,7 @@ class TicketViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\Support\Views\TicketView
-     * @group framework
+     * @group module
      */
     public function testDefault() : void
     {
@@ -39,7 +39,7 @@ class TicketViewTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers Modules\Support\Views\TicketView
-     * @group framework
+     * @group module
      */
     public function testAccountImageUrl() : void
     {

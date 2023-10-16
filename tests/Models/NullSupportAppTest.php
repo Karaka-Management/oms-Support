@@ -23,7 +23,7 @@ final class NullSupportAppTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\Support\Models\NullSupportApp
-     * @group framework
+     * @group module
      */
     public function testNull() : void
     {
@@ -32,11 +32,21 @@ final class NullSupportAppTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers Modules\Support\Models\NullSupportApp
-     * @group framework
+     * @group module
      */
     public function testId() : void
     {
         $null = new NullSupportApp(2);
         self::assertEquals(2, $null->id);
+    }
+
+    /**
+     * @covers Modules\Support\Models\NullSupportApp
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullSupportApp(2);
+        self::assertEquals(['id' => 2], $null);
     }
 }

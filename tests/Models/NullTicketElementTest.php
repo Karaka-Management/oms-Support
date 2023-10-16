@@ -23,7 +23,7 @@ final class NullTicketElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\Support\Models\NullTicketElement
-     * @group framework
+     * @group module
      */
     public function testNull() : void
     {
@@ -32,11 +32,21 @@ final class NullTicketElementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers Modules\Support\Models\NullTicketElement
-     * @group framework
+     * @group module
      */
     public function testId() : void
     {
         $null = new NullTicketElement(2);
         self::assertEquals(2, $null->id);
+    }
+
+    /**
+     * @covers Modules\Support\Models\NullTicketElement
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullTicketElement(2);
+        self::assertEquals(['id' => 2], $null);
     }
 }
