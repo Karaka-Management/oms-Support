@@ -351,7 +351,7 @@ echo $this->data['nav']->render(); ?>
                         <input id="more-customer-sales" type="checkbox" name="more-container">
                         <label for="more-customer-sales">
                             <span>Advanced</span>
-                            <i class="fa fa-chevron-right expand"></i>
+                            <i class="g-icon expand">chevron_right</i>
                         </label>
                         <div>
                             <div class="form-group">
