@@ -16,7 +16,9 @@ namespace Modules\Support\Models;
 
 use Modules\Admin\Models\AccountMapper;
 use Modules\Tasks\Models\TaskMapper;
+use Modules\Tasks\Models\TaskStatus;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Stdlib\Base\SmartDateTime;
 
 /**
  * Mapper class.
@@ -104,4 +106,17 @@ final class TicketMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const PRIMARYFIELD = 'support_ticket_id';
+
+    public static function getStatOverview(int $account) : array
+    {
+        $start = SmartDateTime::startOfMonth();
+
+        return [
+            'total' => TicketMapper::count()->with('task')->where('task/createdAt', $start, '>=')->execute(),
+            'unassigned' => TicketMapper::count()->with('task')->where('for', null)->execute(),
+            'open' => TicketMapper::count()->with('task')->where('task/status', TaskStatus::OPEN)->execute(),
+            'closed' => TicketMapper::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->execute(),
+            'inprogress' => TicketMapper::count()->with('task')->where('task/status', TaskStatus::WORKING)->execute(),
+        ];
+    }
 }

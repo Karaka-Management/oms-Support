@@ -49,6 +49,7 @@ return ['Support' => [
     'Settings'           => 'Einstellungen',
     'Size'               => 'Größe',
     'Statistics'         => 'Statistiken',
+    'Stats'              => 'Stats',
     'Status'             => 'Status',
     'Support'            => 'Unterstützung',
     'Ticket'             => 'Fahrkarte',
@@ -63,4 +64,6 @@ return ['Support' => [
     'Upload'             => 'Hochladen',
     'Week'               => 'Woche',
     'Year'               => 'Jahr',
+    'Total'               => 'Gesamt',
+    'InProgress'               => 'In Bearbeitung',
 ]];

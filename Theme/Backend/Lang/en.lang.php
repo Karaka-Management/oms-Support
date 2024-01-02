@@ -49,6 +49,7 @@ return ['Support' => [
     'Settings'           => 'Settings',
     'Size'               => 'Size',
     'Statistics'         => 'Statistics',
+    'Stats'              => 'Stats',
     'Status'             => 'Status',
     'Support'            => 'Support',
     'Ticket'             => 'Ticket',
@@ -63,4 +64,6 @@ return ['Support' => [
     'Upload'             => 'Upload',
     'Week'               => 'Week',
     'Year'               => 'Year',
+    'Total'               => 'Total',
+    'InProgress'               => 'In Progress',
 ]];

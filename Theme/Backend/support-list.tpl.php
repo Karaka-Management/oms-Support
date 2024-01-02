@@ -62,6 +62,7 @@ echo $this->data['nav']->render(); ?>
     </div>
 
     <div class="col-xs-12 col-md-3">
+        <!-- @todo necessary?
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
             <div class="portlet-body">
@@ -79,17 +80,17 @@ echo $this->data['nav']->render(); ?>
                 </form>
             </div>
         </section>
+        -->
 
         <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
+            <div class="portlet-head"><?= $this->getHtml('Stats'); ?></div>
             <div class="portlet-body">
                 <table class="list">
-                    <tr><th><?= $this->getHtml('All'); ?><td>0
-                    <tr><th><?= $this->getHtml('Unassigned'); ?><td>0
-                    <tr><th><?= $this->getHtml('Open'); ?><td>0
-                    <tr><th><?= $this->getHtml('Unsolved'); ?><td>0
-                    <tr><th><?= $this->getHtml('Closed'); ?><td>0
-                    <tr><th><?= $this->getHtml('InTime'); ?><td>0
+                    <tr><th><?= $this->getHtml('Unassigned'); ?><td><?= $this->data['stats']['unassigned']; ?>
+                    <tr><th><?= $this->getHtml('Open'); ?><td><?= $this->data['stats']['open']; ?>
+                    <tr><th><?= $this->getHtml('InProgress'); ?><td><?= $this->data['stats']['inprogress']; ?>
+                    <tr><th><?= $this->getHtml('Closed'); ?><td><?= $this->data['stats']['closed']; ?>
+                    <tr><th><?= $this->getHtml('Total'); ?><td><?= $this->data['stats']['total']; ?>
                 </table>
             </div>
         </section>

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Support\tests\Models;
 
 use Modules\Support\Models\Ticket;
-use Modules\Support\Models\TicketAttribute;
 use Modules\Support\Models\TicketElement;
 
 /**
