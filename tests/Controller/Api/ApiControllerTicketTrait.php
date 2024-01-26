@@ -18,7 +18,6 @@ use Modules\Tasks\Models\TaskStatus;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerTicketTrait
 {
@@ -29,7 +28,7 @@ trait ApiControllerTicketTrait
     public function testApiSupportAppCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('name', 'TestSupportApp');
@@ -45,7 +44,7 @@ trait ApiControllerTicketTrait
     public function testApiSupportAppCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -61,7 +60,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('title', 'Test Ticket');
@@ -80,7 +79,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', '1');
@@ -96,7 +95,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -112,7 +111,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketElementCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('ticket', '1');
@@ -131,7 +130,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketElementGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', '1');
@@ -147,7 +146,7 @@ trait ApiControllerTicketTrait
     public function testApiTicketElementCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');

@@ -41,14 +41,6 @@
                 "foreignTable": "task",
                 "foreignKey": "task_id"
             },
-            "support_ticket_for": {
-                "name": "support_ticket_for",
-                "type": "INT",
-                "null": true,
-                "default": null,
-                "foreignTable": "account",
-                "foreignKey": "account_id"
-            },
             "support_ticket_app": {
                 "name": "support_ticket_app",
                 "type": "INT",
@@ -67,11 +59,6 @@
                 "null": false,
                 "primary": true,
                 "autoincrement": true
-            },
-            "support_ticket_element_time": {
-                "name": "support_ticket_element_time",
-                "type": "INT",
-                "null": false
             },
             "support_ticket_element_task_element": {
                 "name": "support_ticket_element_task_element",

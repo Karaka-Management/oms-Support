@@ -44,14 +44,14 @@ echo $this->data['nav']->render(); ?>
                 ?>
                     <tr data-href="<?= $url; ?>">
                         <td><a href="<?= $url; ?>">
-                            <span class="tag <?= $this->printHtml('task-status-' . $ticket->task->getStatus()); ?>">
-                                <?= $this->getHtml('S' . $ticket->task->getStatus(), 'Tasks'); ?>
+                            <span class="tag <?= $this->printHtml('task-status-' . $ticket->task->status); ?>">
+                                <?= $this->getHtml('S' . $ticket->task->status, 'Tasks'); ?>
                             </span></a>
-                        <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->getPriority(), 'Tasks'); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->priority, 'Tasks'); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
-                        <td><a class="content" href="<?= UriFactory::build('{/base}/profile/single?for=' . $ticket->task->createdBy->id); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $ticket->task->createdBy->id); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
                         <td><a class="content" href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
-                        <td><a class="content" href="<?= UriFactory::build('{/base}/profile/single?for=' . $ticket->for->id); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
+                        <td><a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $ticket->for->id); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
                     <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

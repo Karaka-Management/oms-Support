@@ -39,7 +39,6 @@ final class TicketElementMapper extends DataMapperFactory
     public const COLUMNS = [
         'support_ticket_element_id'           => ['name' => 'support_ticket_element_id',   'type' => 'int', 'internal' => 'id'],
         'support_ticket_element_task_element' => ['name' => 'support_ticket_element_task_element', 'type' => 'int', 'internal' => 'taskElement'],
-        'support_ticket_element_time'         => ['name' => 'support_ticket_element_time', 'type' => 'int', 'internal' => 'time'],
         'support_ticket_element_ticket'       => ['name' => 'support_ticket_element_ticket', 'type' => 'int', 'internal' => 'ticket'],
     ];
 
@@ -51,8 +50,8 @@ final class TicketElementMapper extends DataMapperFactory
      */
     public const OWNS_ONE = [
         'taskElement' => [
-            'mapper'     => TaskElementMapper::class,
-            'external'   => 'support_ticket_element_task_element',
+            'mapper'   => TaskElementMapper::class,
+            'external' => 'support_ticket_element_task_element',
         ],
     ];
 

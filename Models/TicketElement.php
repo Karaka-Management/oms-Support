@@ -35,14 +35,6 @@ class TicketElement implements \JsonSerializable
     public int $id = 0;
 
     /**
-     * Ticket element time
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $time = 0;
-
-    /**
      * Ticket.
      *
      * @var int
@@ -65,7 +57,7 @@ class TicketElement implements \JsonSerializable
      *
      * @since 1.0.0
      */
-    public function __construct(TaskElement $taskElement = null)
+    public function __construct(?TaskElement $taskElement = null)
     {
         $this->taskElement = $taskElement ?? new TaskElement();
     }
@@ -77,7 +69,6 @@ class TicketElement implements \JsonSerializable
     {
         return [
             'id'          => $this->id,
-            'time'        => $this->time,
             'ticket'      => $this->ticket,
             'taskElement' => $this->taskElement,
         ];

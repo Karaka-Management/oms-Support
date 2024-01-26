@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Controller;
 
-use Modules\Admin\Models\NullAccount;
 use Modules\Support\Models\NullSupportApp;
 use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
@@ -99,15 +98,11 @@ final class ApiController extends Controller
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
         $request->setData('redirect', 'support/ticket?for={$id}');
-        $task = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
-        $task->setType(TaskType::HIDDEN);
+        $task       = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
+        $task->type = TaskType::HIDDEN;
 
         $ticket      = new Ticket($task);
         $ticket->app = new NullSupportApp($request->getDataInt('app') ?? 1);
-
-        if ($request->hasData('for')) {
-            $ticket->for = new NullAccount((int) $request->getData('for'));
-        }
 
         return $ticket;
     }
@@ -220,9 +215,9 @@ final class ApiController extends Controller
 
         $old = clone $ticket->task;
 
-        $ticket->task->setStatus($element->taskElement->getStatus());
-        $ticket->task->setPriority($element->taskElement->getPriority());
-        $ticket->task->due = $element->taskElement->due;
+        $ticket->task->status   = $element->taskElement->status;
+        $ticket->task->priority = $element->taskElement->priority;
+        $ticket->task->due      = $element->taskElement->due;
 
         $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
         $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
@@ -244,7 +239,6 @@ final class ApiController extends Controller
         $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
         $ticketElement         = new TicketElement($taskElement);
-        $ticketElement->time   = $request->getDataInt('time') ?? 0;
         $ticketElement->ticket = $ticket->id;
 
         return $ticketElement;

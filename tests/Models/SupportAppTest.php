@@ -53,8 +53,8 @@ final class SupportAppTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             [
-                'id'          => 0,
-                'name'        => 'Test Title',
+                'id'   => 0,
+                'name' => 'Test Title',
             ],
             $serialized
         );

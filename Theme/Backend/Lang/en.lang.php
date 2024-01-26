@@ -64,6 +64,6 @@ return ['Support' => [
     'Upload'             => 'Upload',
     'Week'               => 'Week',
     'Year'               => 'Year',
-    'Total'               => 'Total',
-    'InProgress'               => 'In Progress',
+    'Total'              => 'Total',
+    'InProgress'         => 'In Progress',
 ]];

@@ -56,9 +56,9 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             [
-                'id'      => 0,
-                'time'    => 10,
-                'ticket'  => 2,
+                'id'     => 0,
+                'time'   => 10,
+                'ticket' => 2,
             ],
             $serialized
         );

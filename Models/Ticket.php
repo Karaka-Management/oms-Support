@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use Modules\Admin\Models\Account;
 use Modules\Tasks\Models\Task;
 use Modules\Tasks\Models\TaskType;
 
@@ -61,40 +60,17 @@ class Ticket
     public array $ticketElements = [];
 
     /**
-     * Account this ticket is for
-     *
-     * This is not the person who is working on the ticket but the person who needs help.
-     * This can be different from the person who created it.
-     *
-     * @var null|Account
-     * @since 1.0.0
-     */
-    public ?Account $for = null;
-
-    /**
      * Constructor.
      *
      * @param null|Task $task Creates the ticket from a task
      *
      * @since 1.0.0
      */
-    public function __construct(Task $task = null)
+    public function __construct(?Task $task = null)
     {
-        $this->task = $task ?? new Task();
-        $this->task->setType(TaskType::HIDDEN);
-        $this->app = new SupportApp();
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int Model id
-     *
-     * @since 1.0.0
-     */
-    public function getId() : int
-    {
-        return $this->id;
+        $this->task       = $task ?? new Task();
+        $this->task->type = TaskType::HIDDEN;
+        $this->app        = new SupportApp();
     }
 
     /**
@@ -181,11 +157,10 @@ class Ticket
     public function toArray() : array
     {
         return [
-            'id'                => $this->id,
-            'task'              => $this->task,
-            'app'               => $this->app,
-            'for'               => $this->for,
-            'ticketElements'    => $this->ticketElements,
+            'id'             => $this->id,
+            'task'           => $this->task,
+            'app'            => $this->app,
+            'ticketElements' => $this->ticketElements,
         ];
     }
 

@@ -42,7 +42,6 @@ final class TicketMapper extends DataMapperFactory
     public const COLUMNS = [
         'support_ticket_id'   => ['name' => 'support_ticket_id',   'type' => 'int', 'internal' => 'id'],
         'support_ticket_task' => ['name' => 'support_ticket_task', 'type' => 'int', 'internal' => 'task'],
-        'support_ticket_for'  => ['name' => 'support_ticket_for', 'type' => 'int', 'internal' => 'for'],
         'support_ticket_app'  => ['name' => 'support_ticket_app', 'type' => 'int', 'internal' => 'app'],
     ];
 
@@ -54,8 +53,8 @@ final class TicketMapper extends DataMapperFactory
      */
     public const OWNS_ONE = [
         'task' => [
-            'mapper'     => TaskMapper::class,
-            'external'   => 'support_ticket_task',
+            'mapper'   => TaskMapper::class,
+            'external' => 'support_ticket_task',
         ],
     ];
 
@@ -67,10 +66,10 @@ final class TicketMapper extends DataMapperFactory
      */
     public const HAS_MANY = [
         'ticketElements' => [
-            'mapper'       => TicketElementMapper::class,
-            'table'        => 'support_ticket_element',
-            'self'         => 'support_ticket_element_ticket',
-            'external'     => null,
+            'mapper'   => TicketElementMapper::class,
+            'table'    => 'support_ticket_element',
+            'self'     => 'support_ticket_element_ticket',
+            'external' => null,
         ],
     ];
 
@@ -112,11 +111,11 @@ final class TicketMapper extends DataMapperFactory
         $start = SmartDateTime::startOfMonth();
 
         return [
-            'total' => TicketMapper::count()->with('task')->where('task/createdAt', $start, '>=')->execute(),
-            'unassigned' => TicketMapper::count()->with('task')->where('for', null)->execute(),
-            'open' => TicketMapper::count()->with('task')->where('task/status', TaskStatus::OPEN)->execute(),
-            'closed' => TicketMapper::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->execute(),
-            'inprogress' => TicketMapper::count()->with('task')->where('task/status', TaskStatus::WORKING)->execute(),
+            'total'      => self::count()->with('task')->where('task/createdAt', $start, '>=')->execute(),
+            'unassigned' => self::count()->with('task')->where('for', null)->execute(),
+            'open'       => self::count()->with('task')->where('task/status', TaskStatus::OPEN)->execute(),
+            'closed'     => self::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->execute(),
+            'inprogress' => self::count()->with('task')->where('task/status', TaskStatus::WORKING)->execute(),
         ];
     }
 }
