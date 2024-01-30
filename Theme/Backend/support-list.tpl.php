@@ -51,7 +51,7 @@ echo $this->data['nav']->render(); ?>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
                         <td><a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $ticket->task->createdBy->id); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
                         <td><a class="content" href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
-                        <td><a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $ticket->for->id); ?>"><?= $this->printHtml($ticket->for->name1); ?> <?= $this->printHtml($ticket->for->name2); ?></a>
+                        <td><a class="content"><?= $this->printHtml($ticket->task->for->name1); ?> <?= $this->printHtml($ticket->task->for->name2); ?>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>
                     <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

@@ -83,11 +83,7 @@ final class TicketMapper extends DataMapperFactory
         'app' => [
             'mapper'   => SupportAppMapper::class,
             'external' => 'support_ticket_app',
-        ],
-        'for' => [
-            'mapper'   => AccountMapper::class,
-            'external' => 'support_ticket_for',
-        ],
+        ]
     ];
 
     /**

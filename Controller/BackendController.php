@@ -76,17 +76,19 @@ final class BackendController extends Controller
         $mapperQuery = TicketMapper::getAll()
             ->with('task')
             ->with('task/createdBy')
-            ->with('for')
+            ->with('task/for')
             ->with('app')
             ->limit(25);
 
         if ($request->getData('ptype') === 'p') {
-            $view->data['tickets'] = $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<')->execute();
+            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<');
         } elseif ($request->getData('ptype') === 'n') {
-            $view->data['tickets'] = $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>')->execute();
+            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>');
         } else {
-            $view->data['tickets'] = $mapperQuery->where('id', 0, '>')->execute();
+            $mapperQuery->where('id', 0, '>');
         }
+
+        $view->data['tickets'] = $mapperQuery->execute();
 
         $view->data['stats'] = TicketMapper::getStatOverview($request->header->account);
 
@@ -122,7 +124,7 @@ final class BackendController extends Controller
             ->with('ticketElements/taskElement/createdBy')
             ->with('ticketElements/taskElement/media')
             ->with('attributes')
-            ->with('for')
+            ->with('task/for')
             ->with('app')
             ->where('task/tags/title/language', $request->header->l11n->language);
 
