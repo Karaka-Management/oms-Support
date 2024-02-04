@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Support\Controller;
 
+use Modules\Admin\Models\AccountMapper;
+use Modules\Admin\Models\ContactType;
 use Modules\Support\Models\NullSupportApp;
 use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
@@ -27,6 +29,9 @@ use Modules\Tasks\Models\TaskType;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
+use Modules\Admin\Models\SettingsEnum as AdminSettingsEnum;
+use Modules\Messages\Models\EmailMapper;
+use Modules\Support\Models\SettingsEnum;
 
 /**
  * Api controller for the tickets module.
@@ -83,7 +88,131 @@ final class ApiController extends Controller
 
         $ticket = $this->createTicketFromRequest($request);
         $this->createModel($request->header->account, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
+
+        $this->notifyEmail($ticket, $response->header->l11n->language);
+
         $this->createStandardCreateResponse($request, $response, $ticket);
+    }
+
+    public function notifyEmail(Ticket $ticket, string $language) : void
+    {
+        // @todo decide what to send via email
+        // status changes, redirects, answers?
+        // Careful, don't notify own changes and internal changes (e.g. internal note)
+
+        $email = '';
+
+        $account = null;
+
+        if ($this->app->moduleManager->isActive('ClientManagement')) {
+            $client = \Modules\ClientManagement\Models\ClientMapper::get()
+                ->with('attributes')
+                ->with('attributes/types')
+                ->with('attributes/value')
+                ->with('account/contacts')
+                ->where('account', $ticket->task->for->id)
+                ->where('attributes/types/name', ['support_emails', 'support_email_address'], 'IN')
+                ->execute();
+
+            if ($client->getAttribute('support_emails')->value->getValue() === false) {
+                return;
+            }
+
+            // @todo should this really be a string? Shouldn't this be a contact element? Same goes for billing.
+            $email = $client->getAttribute('support_email_address')->value->getValue();
+            $account = $client->account;
+        }
+
+        if ($email === '' || $email === null) {
+            $supplier = null;
+
+            if ($this->app->moduleManager->isActive('SupplierManagement')) {
+                $supplier = \Modules\SupplierManagement\Models\SupplierMapper::get()
+                    ->with('attributes')
+                    ->with('attributes/types')
+                    ->with('attributes/value')
+                    ->with('account/contacts')
+                    ->where('account', $ticket->task->for->id)
+                    ->where('attributes/types/name', ['support_emails', 'support_email_address'], 'IN')
+                    ->execute();
+            }
+
+            if ($supplier->getAttribute('support_emails')->value->getValue() === false) {
+                return;
+            }
+
+            // @todo should this really be a string? Shouldn't this be a contact element? Same goes for billing.
+            $email = $supplier->getAttribute('support_email_address')->value->getValue();
+            $account = $supplier->account;
+        }
+
+        if ($email === '' || $email === null) {
+            $account = AccountMapper::get()
+                ->with('contacts')
+                ->where('id', $ticket->task->for->id)
+                ->execute();
+
+            $email = $account->getContactByType(ContactType::EMAIL)->content;
+        }
+
+        if ($email === '' || $email === null) {
+            return;
+        }
+
+        $handler = $this->app->moduleManager->get('Admin', 'Api')->setUpServerMailHandler();
+
+        /** @var \Model\Setting $emailFrom */
+        $emailFrom = $this->app->appSettings->get(
+            names: AdminSettingsEnum::MAIL_SERVER_ADDR,
+            module: 'Admin'
+        );
+
+        if (empty($emailFrom->content)) {
+            return;
+        }
+
+        /** @var \Model\Setting $billingTemplate */
+        $supportTemplate = $this->app->appSettings->get(
+            names: SettingsEnum::SUPPORT_EMAIL_TEMPLATE,
+            module: 'Support'
+        );
+
+        $baseEmail = EmailMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $supportTemplate->content)
+            ->execute();
+
+        $mail = clone $baseEmail;
+        $mail->setFrom($emailFrom->content);
+        $mail->addTo($email);
+
+        // @todo probably needs to be changed to messageId = \uniqid() . '-' . $ticket->id ?!
+        // Careful, uniqueid is overwritten in the email class, will need check for if empty
+        $mail->addCustomHeader('ticket_id', (string) $ticket->id);
+
+        $mailL11n = $baseEmail->getL11nByLanguage($language);
+        if ($mailL11n->id === 0) {
+            $mailL11n = $baseEmail->getL11nByLanguage($language = $this->app->l11nServer->language);
+        }
+
+        if ($mailL11n->id === 0) {
+            $mailL11n = $baseEmail->getL11nByLanguage($language = 'en');
+        }
+
+        $mail->subject = $mailL11n->subject;
+        $mail->body = $mailL11n->body;
+        $mail->bodyAlt = $mailL11n->bodyAlt;
+
+        $lang = include __DIR__ . '/../../Tasks/Theme/Backend/Lang/' . $language . '.lang.php';
+
+        $mail->template = [
+            '{user_name}' => $account->login,
+            '{ticket_id}' => $ticket->id,
+            '{ticket_status}' => $lang['Tasks']['S' . $ticket->task->status],
+            '{ticket_subject}' => $ticket->task->title,
+        ];
+
+        $handler->send($mail);
     }
 
     /**
@@ -143,10 +272,17 @@ final class ApiController extends Controller
     public function apiTicketSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\Ticket $old */
-        $old = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = TicketMapper::get()
+            ->with('task')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
         $new = $this->updateTicketFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, TicketMapper::class, 'ticket', $request->getOrigin());
+
+        $this->notifyEmail($new, $response->header->l11n->language);
+
         $this->createStandardUpdateResponse($request, $response, $new);
     }
 
@@ -210,7 +346,11 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Support\Models\Ticket $ticket */
-        $ticket  = TicketMapper::get()->with('task')->where('id', (int) ($request->getData('ticket')))->execute();
+        $ticket = TicketMapper::get()
+            ->with('task')
+            ->where('id', (int) ($request->getData('ticket')))
+            ->execute();
+
         $element = $this->createTicketElementFromRequest($request, $ticket);
 
         $old = clone $ticket->task;
@@ -219,8 +359,13 @@ final class ApiController extends Controller
         $ticket->task->priority = $element->taskElement->priority;
         $ticket->task->due      = $element->taskElement->due;
 
-        $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
+        $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticket_element', $request->getOrigin());
         $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
+
+        $ticket->task->taskElements[] = $element;
+
+        $this->notifyEmail($ticket, $response->header->l11n->language);
+
         $this->createStandardCreateResponse($request, $response, $element);
     }
 
@@ -282,7 +427,14 @@ final class ApiController extends Controller
         /** @var \Modules\Support\Models\TicketElement $old */
         $old = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateTicketElementFromRequest($request, $response, clone $old);
-        $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticketelement', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticket_element', $request->getOrigin());
+
+        $ticket = TicketMapper::get()
+            ->with('task')
+            ->where('task', $new->taskElement->task)
+            ->execute();
+
+        $this->notifyEmail($ticket, $response->header->l11n->language);
 
         //$this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
         $this->createStandardUpdateResponse($request, $response, $new);

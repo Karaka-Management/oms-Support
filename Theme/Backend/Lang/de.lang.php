@@ -20,6 +20,7 @@ return ['Support' => [
     'AverageProcessTime' => 'Durchschn. Prozess Zeit',
     'Closed'             => 'Geschlossen',
     'Completion'         => 'Abgeschlossen',
+    'Advanced'         => 'Fortgeschritten',
     'Created'            => 'Erstellt',
     'Creator'            => 'Ersteller',
     'Day'                => 'Tag',

@@ -1,0 +1,23 @@
+[
+    {
+        "type": "email_template",
+        "from": "",
+        "to": "",
+        "cc": "",
+        "bcc": "",
+        "ishtml": true,
+        "l11n": {
+            "en": {
+                "subject": "Ticket Notification #{ticket_id}",
+                "body": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Ticket Notification</title></head><body style=\"font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;\"><div class=\"container\" style=\"max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff;\"><h1 style=\"color: #333;\">Ticket Notification</h1><p>Hello {use_name},</p><p>Your ticket has been [created/updated] successfully. Below are the details:</p><div class=\"ticket-details\" style=\"margin-top: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;\"><h2 style=\"color: #333;\">Ticket Information</h2><p><strong>Ticket ID:</strong> {ticket_id}</p><p><strong>Status:</strong> {ticket_status}</p><p><strong>Subject:</strong> {ticket_subject}</p></div><p style=\"margin-top: 40px;\">Jingga e.K. - www.jingga.app - CEO Dennis Eichhorn - Amtsgericht Friedberg HRA 5058</p></td></tr></table></td></tr></table></body></html>",
+                "bodyalt": "Dear {user_name},\n\nYour ticket has been [created/updated] successfully. Below are the details:\n\nTicket ID: {ticket_id}\nStatus: {ticket_status}\nSubject: {ticket_subject}\n\n\nJingga e.K. - www.jingga.app - CEO Dennis Eichhorn - Amtsgericht Friedberg HRA 5058"
+            },
+            "de": {
+                "subject": "Ticket Benachrichtigung #{ticket_id}",
+                "body": "<!DOCTYPE html><html lang=\"de\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Ticket Benachrichtigung</title></head><body style=\"font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;\"><div class=\"container\" style=\"max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff;\"><h1 style=\"color: #333;\">Ticket Benachrichtigung</h1><p>Hallo {use_name},</p><p>Ihr Ticket wurde erfolgreich [erstellt/upgedated]. Im Folgenden finden Sie die Details:</p><div class=\"ticket-details\" style=\"margin-top: 20px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;\"><h2 style=\"color: #333;\">Ticket Information</h2><p><strong>Ticket ID:</strong> {ticket_id}</p><p><strong>Status:</strong> {ticket_status}</p><p><strong>Betreff:</strong> {ticket_subject}</p></div><p style=\"margin-top: 40px;\">Jingga e.K. - www.jingga.app - CEO Dennis Eichhorn - Amtsgericht Friedberg HRA 5058</p></td></tr></table></td></tr></table></body></html>",
+                "bodyalt": "Sehr geehrte/r {user_name},\n\nIhr Ticket wurde erfolgreich [erstellt/upgedated]. Im Folgenden finden Sie die Details:\n\nTicket ID: {ticket_id}\nStatus: {ticket_status}\nBetreff: {ticket_subject}\n\n\nJingga e.K. - www.jingga.app - CEO Dennis Eichhorn - Amtsgericht Friedberg HRA 5058"
+            }
+        },
+        "send": false
+    }
+]

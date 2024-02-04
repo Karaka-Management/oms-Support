@@ -62,26 +62,6 @@ echo $this->data['nav']->render(); ?>
     </div>
 
     <div class="col-xs-12 col-md-3">
-        <!-- @todo necessary?
-        <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
-            <div class="portlet-body">
-                <form>
-                    <table class="layout wf-100">
-                        <tr><td><label for="iIntervarl"><?= $this->getHtml('Interval'); ?></label>
-                        <tr><td><select id="iIntervarl" name="interval">
-                                    <option><?= $this->getHtml('All'); ?>
-                                    <option><?= $this->getHtml('Day'); ?>
-                                    <option><?= $this->getHtml('Week'); ?>
-                                    <option selected><?= $this->getHtml('Month'); ?>
-                                    <option><?= $this->getHtml('Year'); ?>
-                                </select>
-                    </table>
-                </form>
-            </div>
-        </section>
-        -->
-
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Stats'); ?></div>
             <div class="portlet-body">

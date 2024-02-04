@@ -58,20 +58,18 @@ echo $this->data['nav']->render(); ?>
                     </div>
                 </template>
             <?php endif; ?>
-            <div class="portlet-head">
-                <div class="row middle-xs">
-                    <span class="col-xs-0">
-                        <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($task->createdBy->id); ?>">
+            <div class="portlet-head middle-xs">
+                <span class="col-xs-0">
+                    <img class="profile-image" loading="lazy" alt="<?= $this->getHtml('User', '0', '0'); ?>" src="<?= $this->getAccountImage($task->createdBy->id); ?>">
+                </span>
+                <span>
+                    <?= $this->printHtml($task->createdBy->name1); ?> - <?= $this->printHtml($task->createdAt->format('Y/m/d H:i')); ?>
+                </span>
+                <span class="col-xs end-xs plain-grid">
+                    <span id="task-status-badge" class="nobreak tag task-status-<?= $task->status; ?>">
+                        <?= $this->getHtml('S' . $task->status, 'Tasks'); ?>
                     </span>
-                    <span>
-                        <?= $this->printHtml($task->createdBy->name1); ?> - <?= $this->printHtml($task->createdAt->format('Y/m/d H:i')); ?>
-                    </span>
-                    <span class="col-xs end-xs plain-grid">
-                        <span id="task-status-badge" class="nobreak tag task-status-<?= $task->status; ?>">
-                            <?= $this->getHtml('S' . $task->status, 'Tasks'); ?>
-                        </span>
-                    </span>
-                </div>
+                </span>
             </div>
             <div class="portlet-body">
                 <span class="task-title" data-tpl-text="/title" data-tpl-value="/title" data-value=""><?= $this->printHtml($task->title); ?></span>
@@ -347,37 +345,38 @@ echo $this->data['nav']->render(); ?>
                         <?= $this->getData('accGrpSelector')->render('iReceiver', 'to', true); ?>
                     </div>
 
-                    <div class="more-container">
+                    <div class="form-group wf-100">
+                    <div class="more-container wf-100">
                         <input id="more-customer-sales" type="checkbox" name="more-container">
                         <label for="more-customer-sales">
-                            <span>Advanced</span>
+                            <span><?= $this->getHtml('Advanced'); ?></span>
                             <i class="g-icon expand">chevron_right</i>
                         </label>
-                        <div>
-                            <div class="form-group">
-                                <label for="iPriority"><?= $this->getHtml('Priority'); ?></label>
-                                <select id="iPriority" name="priority">
-                                        <option value="<?= TaskPriority::NONE; ?>"<?= $task->priority === TaskPriority::NONE ? ' selected' : '';?>><?= $this->getHtml('P0', 'Tasks'); ?>
-                                        <option value="<?= TaskPriority::VLOW; ?>"<?= $task->priority === TaskPriority::VLOW ? ' selected' : '';?>><?= $this->getHtml('P1', 'Tasks'); ?>
-                                        <option value="<?= TaskPriority::LOW; ?>"<?= $task->priority === TaskPriority::LOW ? ' selected' : '';?>><?= $this->getHtml('P2', 'Tasks'); ?>
-                                        <option value="<?= TaskPriority::MEDIUM; ?>"<?= $task->priority === TaskPriority::MEDIUM ? ' selected' : '';?>><?= $this->getHtml('P3', 'Tasks'); ?>
-                                        <option value="<?= TaskPriority::HIGH; ?>"<?= $task->priority === TaskPriority::HIGH ? ' selected' : '';?>><?= $this->getHtml('P4', 'Tasks'); ?>
-                                        <option value="<?= TaskPriority::VHIGH; ?>"<?= $task->priority === TaskPriority::VHIGH ? ' selected' : '';?>><?= $this->getHtml('P5', 'Tasks'); ?>
-                                    </select>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="iDue"><?= $this->getHtml('Due'); ?></label>
-                                <input type="datetime-local" id="iDue" name="due" value="<?= $this->printHtml(
-                                        empty($elements) ? $task->due->format('Y-m-d\TH:i:s') : \end($elements)->taskElement->due->format('Y-m-d\TH:i:s')
-                                    ); ?>">
-                            </div>
+                        <div class="form-group">
+                            <label for="iPriority"><?= $this->getHtml('Priority'); ?></label>
+                            <select id="iPriority" name="priority">
+                                <option value="<?= TaskPriority::NONE; ?>"<?= $task->priority === TaskPriority::NONE ? ' selected' : '';?>><?= $this->getHtml('P0', 'Tasks'); ?>
+                                <option value="<?= TaskPriority::VLOW; ?>"<?= $task->priority === TaskPriority::VLOW ? ' selected' : '';?>><?= $this->getHtml('P1', 'Tasks'); ?>
+                                <option value="<?= TaskPriority::LOW; ?>"<?= $task->priority === TaskPriority::LOW ? ' selected' : '';?>><?= $this->getHtml('P2', 'Tasks'); ?>
+                                <option value="<?= TaskPriority::MEDIUM; ?>"<?= $task->priority === TaskPriority::MEDIUM ? ' selected' : '';?>><?= $this->getHtml('P3', 'Tasks'); ?>
+                                <option value="<?= TaskPriority::HIGH; ?>"<?= $task->priority === TaskPriority::HIGH ? ' selected' : '';?>><?= $this->getHtml('P4', 'Tasks'); ?>
+                                <option value="<?= TaskPriority::VHIGH; ?>"<?= $task->priority === TaskPriority::VHIGH ? ' selected' : '';?>><?= $this->getHtml('P5', 'Tasks'); ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="iDue"><?= $this->getHtml('Due'); ?></label>
+                            <input type="datetime-local" id="iDue" name="due" value="<?= $this->printHtml(
+                                    empty($elements) ? $task->due->format('Y-m-d\TH:i:s') : \end($elements)->taskElement->due->format('Y-m-d\TH:i:s')
+                                ); ?>">
                         </div>
 
                         <div class="form-group">
                             <label for="iCompletion"><?= $this->getHtml('Completion'); ?></label>
                             <input id="iCompletion" name="completion" type="number" min="0" max="100">
                         </div>
+                    </div>
                     </div>
 
                     <div class="form-group">
@@ -399,5 +398,57 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </form>
         </div>
+
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Tickets'); ?></div>
+            <div class="slider">
+                <table id="iTicketList" class="default sticky">
+                    <thead>
+                    <tr>
+                        <td class="wf-100"><?= $this->printHtml('Title'); ?>
+                        <td><?= $this->printHtml('Created'); ?>
+                    <tbody>
+                    <?php
+                        $count = 0;
+                        foreach ($this->data['tickets'] as $value) :
+                            ++$count;
+                    ?>
+                    <tr>
+                        <td><?= $this->printHtml($value->task->title); ?>
+                        <td><?= $value->task->createdAt->format('Y-m-d'); ?>
+                    <?php endforeach; ?>
+                    <?php if ($count === 0) : ?>
+                    <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </section>
+
+        <?php if ($this->data['hasContractManagement']) : ?>
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Contracts', 'ContractManagement'); ?></div>
+            <div class="slider">
+                <table id="iContractList" class="default sticky">
+                    <thead>
+                    <tr>
+                        <td class="wf-100"><?= $this->printHtml('Title'); ?>
+                        <td><?= $this->printHtml('Created'); ?>
+                    <tbody>
+                    <?php
+                        $count = 0;
+                        foreach ($this->data['contracts'] as $value) :
+                            ++$count;
+                    ?>
+                    <tr>
+                        <td><?= $this->printHtml($value->title); ?>
+                        <td><?= $value->createdAt->format('Y-m-d'); ?>
+                    <?php endforeach; ?>
+                    <?php if ($count === 0) : ?>
+                    <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </section>
+        <?php endif; ?>
     </div>
 </div>

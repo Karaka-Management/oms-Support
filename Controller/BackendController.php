@@ -15,14 +15,17 @@ declare(strict_types=1);
 namespace Modules\Support\Controller;
 
 use Model\SettingMapper;
+use Modules\Media\Models\MediaMapper;
 use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\TicketMapper;
 use Modules\Support\Views\TicketView;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
+use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
+use Modules\Profile\Models\SettingsEnum as ProfileSettingsEnum;
 
 /**
  * Support controller class.
@@ -128,18 +131,45 @@ final class BackendController extends Controller
             ->with('app')
             ->where('task/tags/title/language', $request->header->l11n->language);
 
-        /** @var \Modules\Support\Models\Ticket $ticket */
-        $ticket = $request->hasData('for')
+        /** @var \Modules\Support\Models\Ticket */
+        $view->data['ticket'] = $request->hasData('for')
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
 
-        $view->data['ticket'] = $ticket;
+        /** @var \Model\Setting $profileImage */
+        $profileImage = $this->app->appSettings->get(names: ProfileSettingsEnum::DEFAULT_PROFILE_IMAGE, module: 'Profile');
+
+        /** @var \Modules\Media\Models\Media $image */
+        $image                     = MediaMapper::get()->where('id', (int) $profileImage->content)->execute();
+        $view->defaultProfileImage = $image;
 
         $accGrpSelector               = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
         $view->data['accGrpSelector'] = $accGrpSelector;
 
         $editor               = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
         $view->data['editor'] = $editor;
+
+        $view->data['tickets'] = TicketMapper::getAll()
+            ->with('task')
+            ->where('task/for', $view->data['ticket']->task->for->id)
+            ->sort('createdAt', OrderType::DESC)
+            ->offset(1)
+            ->limit(5)
+            ->execute();
+
+        $dt = new \DateTime();
+
+        $view->data['hasContractManagement'] = $this->app->moduleManager->isActive('ContractManagement');
+        if ($view->data['hasContractManagement']) {
+            $view->data['contracts'] = \Modules\ContractManagement\Models\ContractMapper::getAll()
+                ->where('account', $view->data['ticket']->task->for->id)
+                ->where('end', $dt, '>=') // @todo consider to also allow $end === null
+                ->sort('createdAt', OrderType::DESC)
+                ->limit(5)
+                ->execute();
+        } else {
+            $view->data['contracts'] = [];
+        }
 
         return $view;
     }

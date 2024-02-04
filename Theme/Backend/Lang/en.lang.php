@@ -20,6 +20,7 @@ return ['Support' => [
     'AverageProcessTime' => 'Avg. Process Time',
     'Closed'             => 'Closed',
     'Completion'         => 'Completion',
+    'Advanced'         => 'Advanced',
     'Created'            => 'Created',
     'Creator'            => 'Creator',
     'Day'                => 'Day',
