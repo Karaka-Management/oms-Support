@@ -50,7 +50,12 @@ echo $this->data['nav']->render(); ?>
                         <td><a href="<?= $url; ?>"><?= $this->getHtml('P' . $ticket->task->priority, 'Tasks'); ?></a>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->title); ?></a>
                         <td><a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $ticket->task->createdBy->id); ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
-                        <td><a class="content" href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdBy->name1); ?> <?= $this->printHtml($ticket->task->createdBy->name2); ?></a>
+                        <td><?php $responsibles = $ticket->task->getResponsible();
+                            foreach ($responsibles as $responsible) : ?>
+                            <a class="content" href="<?= UriFactory::build('{/base}/profile/view?for=' . $responsible->id); ?>">
+                                <?= $this->printHtml($responsible->name1); ?> <?= $this->printHtml($responsible->name2); ?>
+                            </a>
+                            <?php endforeach; ?>
                         <td><a class="content"><?= $this->printHtml($ticket->task->for->name1); ?> <?= $this->printHtml($ticket->task->for->name2); ?>
                         <td><a href="<?= $url; ?>"><?= $this->printHtml($ticket->task->createdAt->format('Y-m-d H:i')); ?></a>
                 <?php endforeach; if ($c == 0) : ?>

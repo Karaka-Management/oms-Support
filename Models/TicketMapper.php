@@ -15,9 +15,14 @@ declare(strict_types=1);
 namespace Modules\Support\Models;
 
 use Modules\Admin\Models\AccountMapper;
+use Modules\Tasks\Models\AccountRelationMapper;
+use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
+use Modules\Tasks\Models\TaskType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\DataStorage\Database\Mapper\ReadMapper;
+use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Stdlib\Base\SmartDateTime;
 
 /**
@@ -113,5 +118,47 @@ final class TicketMapper extends DataMapperFactory
             'closed'     => self::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->execute(),
             'inprogress' => self::count()->with('task')->where('task/status', TaskStatus::WORKING)->execute(),
         ];
+    }
+
+    /**
+     * Get tasks that have something to do with the user
+     *
+     * @param int $user User
+     *
+     * @return ReadMapper
+     *
+     * @since 1.0.0
+     */
+    public static function getAnyRelatedToUser(int $user) : ReadMapper
+    {
+        $query = new Builder(self::$db, true);
+        $query->innerJoin(TaskMapper::TABLE, TaskMapper::TABLE . '_d2_task')
+            ->on(self::TABLE . '_d1.support_ticket_task', '=', TaskMapper::TABLE . '_d2_task.task_id')
+            ->innerJoin(TaskElementMapper::TABLE)
+                ->on(TaskMapper::TABLE . '_d2_task.task_id', '=', TaskElementMapper::TABLE . '.task_element_task')
+                ->on(TaskMapper::TABLE . '_d2_task.task_type', '!=', TaskType::TEMPLATE)
+            ->innerJoin(AccountRelationMapper::TABLE)
+                ->on(TaskElementMapper::TABLE . '.task_element_id', '=', AccountRelationMapper::TABLE . '.task_account_task_element')
+            ->where(AccountRelationMapper::TABLE . '.task_account_account', '=', $user)
+            ->orWhere(TaskMapper::TABLE . '_d2_task.task_created_by', '=', $user)
+            ->groupBy(self::PRIMARYFIELD);
+
+        // @todo Improving query performance by using raw queries and result arrays for large responses like this
+        $sql = <<<SQL
+        SELECT DISTINCT task.*, account.*
+        FROM task
+        INNER JOIN task_element ON task.task_id = task_element.task_element_task
+        INNER JOIN task_account ON task_element.task_element_id = task_account.task_account_task_element
+        INNER JOIN account ON task.task_created_by = account.account_id
+        WHERE
+            task.task_status != 1
+            AND (
+                task_account.task_account_account = {$user}
+                OR task.task_created_by = {$user}
+            )
+        LIMIT 25;
+        SQL;
+
+        return self::getAll()->query($query);
     }
 }
