@@ -106,8 +106,8 @@ echo $this->data['nav']->render(); ?>
                     <div class="col-xs-0 end-xs plain-grid">
                         <?php if ($task->isEditable && $this->request->header->account === $task->createdBy->id) : ?>
                             <div class="col-xs end-xs plain-grid">
-                                <button class="save hidden"><?= $this->getHtml('Save', '0', '0'); ?></button>
-                                <button class="cancel hidden"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
+                                <button class="save vh"><?= $this->getHtml('Save', '0', '0'); ?></button>
+                                <button class="cancel vh"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
                                 <button class="update"><?= $this->getHtml('Edit', '0', '0'); ?></button>
                             </div>
                         <?php endif; ?>
@@ -148,8 +148,8 @@ echo $this->data['nav']->render(); ?>
 
                         <div class="col-xs end-xs plain-grid">
                             <input type="hidden" value="" name="id">
-                            <button class="save hidden"><?= $this->getHtml('Save', '0', '0'); ?></button>
-                            <button class="cancel hidden"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
+                            <button class="save vh"><?= $this->getHtml('Save', '0', '0'); ?></button>
+                            <button class="cancel vh"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
                             <button class="update"><?= $this->getHtml('Edit', '0', '0'); ?></button>
                         </div>
                     </div>
@@ -272,8 +272,8 @@ echo $this->data['nav']->render(); ?>
                         ) : ?>
                             <div class="col-xs end-xs plain-grid">
                                 <input type="hidden" value="<?= $element->taskElement->id; ?>" name="id">
-                                <button class="save hidden"><?= $this->getHtml('Save', '0', '0'); ?></button>
-                                <button class="cancel hidden"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
+                                <button class="save vh"><?= $this->getHtml('Save', '0', '0'); ?></button>
+                                <button class="cancel vh"><?= $this->getHtml('Cancel', '0', '0'); ?></button>
                                 <button class="update"><?= $this->getHtml('Edit', '0', '0'); ?></button>
                             </div>
                         <?php endif; ?>

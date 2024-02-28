@@ -76,7 +76,7 @@ final class BackendController extends Controller
     public function viewSupportList(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $head = $response->data['Content']->head;
-        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=1.0.0');
+        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=' . self::VERSION);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/support-list');
@@ -261,7 +261,7 @@ final class BackendController extends Controller
     public function viewPrivateSupportDashboard(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $head = $response->data['Content']->head;
-        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=1.0.0');
+        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=' . self::VERSION);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/user-support-dashboard');

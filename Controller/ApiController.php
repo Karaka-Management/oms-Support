@@ -161,16 +161,6 @@ final class ApiController extends Controller
 
         $handler = $this->app->moduleManager->get('Admin', 'Api')->setUpServerMailHandler();
 
-        /** @var \Model\Setting $emailFrom */
-        $emailFrom = $this->app->appSettings->get(
-            names: AdminSettingsEnum::MAIL_SERVER_ADDR,
-            module: 'Admin'
-        );
-
-        if (empty($emailFrom->content)) {
-            return;
-        }
-
         /** @var \Model\Setting $billingTemplate */
         $supportTemplate = $this->app->appSettings->get(
             names: SettingsEnum::SUPPORT_EMAIL_TEMPLATE,
@@ -183,36 +173,43 @@ final class ApiController extends Controller
             ->execute();
 
         $mail = clone $baseEmail;
-        $mail->setFrom($emailFrom->content);
+
+        $status = false;
+        if ($mail->id !== 0) {
+            $status = $this->app->moduleManager->get('Admin', 'Api')->setupEmailDefaults($mail, $this->app->l11nServer->language);
+        }
+
         $mail->addTo($email);
 
         // @todo probably needs to be changed to messageId = \uniqid() . '-' . $ticket->id ?!
         // Careful, uniqueid is overwritten in the email class, will need check for if empty
         $mail->addCustomHeader('ticket_id', (string) $ticket->id);
 
-        $mailL11n = $baseEmail->getL11nByLanguage($language);
-        if ($mailL11n->id === 0) {
-            $mailL11n = $baseEmail->getL11nByLanguage($language = $this->app->l11nServer->language);
-        }
-
-        if ($mailL11n->id === 0) {
-            $mailL11n = $baseEmail->getL11nByLanguage($language = 'en');
-        }
-
-        $mail->subject = $mailL11n->subject;
-        $mail->body = $mailL11n->body;
-        $mail->bodyAlt = $mailL11n->bodyAlt;
-
         $lang = include __DIR__ . '/../../Tasks/Theme/Backend/Lang/' . $language . '.lang.php';
 
-        $mail->template = [
-            '{user_name}' => $account->login,
-            '{ticket_id}' => $ticket->id,
-            '{ticket_status}' => $lang['Tasks']['S' . $ticket->task->status],
-            '{ticket_subject}' => $ticket->task->title,
-        ];
+        $mail->template = \array_merge(
+            $mail->template,
+            [
+                '{user_name}' => $account->login,
+                '{ticket_id}' => $ticket->id,
+                '{ticket_status}' => $lang['Tasks']['S' . $ticket->task->status],
+                '{ticket_subject}' => $ticket->task->title,
+            ]
+        );
 
-        $handler->send($mail);
+        if ($status) {
+            $status = $handler->send($mail);
+        }
+
+        if (!$status) {
+            \phpOMS\Log\FileLogger::getInstance()->error(
+                \phpOMS\Log\FileLogger::MSG_FULL, [
+                    'message' => 'Couldn\'t send mail: ' . $mail->id,
+                    'line'    => __LINE__,
+                    'file'    => self::class,
+                ]
+            );
+        }
     }
 
     /**
