@@ -29,7 +29,6 @@ use Modules\Tasks\Models\TaskType;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use Modules\Admin\Models\SettingsEnum as AdminSettingsEnum;
 use Modules\Messages\Models\EmailMapper;
 use Modules\Support\Models\SettingsEnum;
 

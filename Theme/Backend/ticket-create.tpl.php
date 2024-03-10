@@ -19,26 +19,39 @@ echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-6">
-        <section class="box wf-100">
-            <header><h1><?= $this->getHtml('Ticket'); ?></h1></header>
-            <div class="inner">
-                <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template'); ?>" method="post">
-                    <table class="layout wf-100">
-                        <tbody>
-                        <tr><td><label for="iDepartment"><?= $this->getHtml('Department'); ?></label>
-                        <tr><td><select id="iDepartment" name="department"></select>
-                        <tr><td><label for="iTopic"><?= $this->getHtml('Topic'); ?></label>
-                        <tr><td><select id="iTopic" name="topic"></select>
-                        <tr><td><label for="iTitle"><?= $this->getHtml('Title'); ?></label>
-                        <tr><td><input id="iDescription" name="name" type="text" required>
-                        <tr><td><label for="iDescription"><?= $this->getHtml('Description'); ?></label>
-                        <tr><td><textarea required></textarea>
-                        <tr><td><label for="iFile"><?= $this->getHtml('Files'); ?></label>
-                        <tr><td><input id="iFile" name="fileVisual" type="file" multiple><input id="iFileHidden" name="files" type="hidden">
-                        <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-ticket">
-                    </table>
-                </form>
-            </div>
+        <section class="portlet">
+            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template'); ?>" method="post">
+                <div class="portlet-head"><?= $this->getHtml('Ticket'); ?></div>
+                <div class="portlet-body">
+                    <div class="form-group">
+                        <label for="iDepartment"><?= $this->getHtml('Department'); ?></label>
+                        <select id="iDepartment" name="department"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="iTopic"><?= $this->getHtml('Topic'); ?></label>
+                        <select id="iTopic" name="topic"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="iTitle"><?= $this->getHtml('Title'); ?></label>
+                        <input id="iTitle" name="name" type="text" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="iDescription"><?= $this->getHtml('Description'); ?></label>
+                        <textarea required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="iFile"><?= $this->getHtml('Files'); ?></label>
+                        <input id="iFile" name="fileVisual" type="file" multiple><input id="iFileHidden" name="files" type="hidden">
+                    </div>
+                </div>
+                <div class="portlet-foot">
+                    <input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-ticket">
+                </div>
+            </form>
         </section>
     </div>
 </div>
