@@ -16,7 +16,9 @@ namespace Modules\Support\Controller;
 
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\ContactType;
+use Modules\Messages\Models\EmailMapper;
 use Modules\Support\Models\NullSupportApp;
+use Modules\Support\Models\SettingsEnum;
 use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\Ticket;
@@ -29,8 +31,6 @@ use Modules\Tasks\Models\TaskType;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use Modules\Messages\Models\EmailMapper;
-use Modules\Support\Models\SettingsEnum;
 
 /**
  * Api controller for the tickets module.
@@ -93,6 +93,16 @@ final class ApiController extends Controller
         $this->createStandardCreateResponse($request, $response, $ticket);
     }
 
+    /**
+     * Create email notification regarding ticket
+     *
+     * @param Ticket $ticket   Ticket the notification is for
+     * @param string $language Language of the email (e.g. 'en', 'de')
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function notifyEmail(Ticket $ticket, string $language) : void
     {
         // @todo decide what to send via email
@@ -109,20 +119,16 @@ final class ApiController extends Controller
                 ->with('attributes/types')
                 ->with('attributes/value')
                 ->with('account/contacts')
-                ->where('account', $ticket->task->for->id)
+                ->where('account', $ticket->task->for?->id)
                 ->where('attributes/types/name', ['support_emails', 'support_email_address'], 'IN')
                 ->execute();
 
-            if ($client->getAttribute('support_emails')->value->getValue() === false) {
-                return;
-            }
-
             // @todo should this really be a string? Shouldn't this be a contact element? Same goes for billing.
-            $email = $client->getAttribute('support_email_address')->value->getValue();
+            $email   = $client->getAttribute('support_email_address')->value->valueStr;
             $account = $client->account;
         }
 
-        if ($email === '' || $email === null) {
+        if (empty($email)) {
             $supplier = null;
 
             if ($this->app->moduleManager->isActive('SupplierManagement')) {
@@ -131,36 +137,40 @@ final class ApiController extends Controller
                     ->with('attributes/types')
                     ->with('attributes/value')
                     ->with('account/contacts')
-                    ->where('account', $ticket->task->for->id)
+                    ->where('account', $ticket->task->for?->id)
                     ->where('attributes/types/name', ['support_emails', 'support_email_address'], 'IN')
                     ->execute();
+
+                if ($supplier->getAttribute('support_emails')->value->getValue() === false) {
+                    return;
+                }
             }
 
-            if ($supplier->getAttribute('support_emails')->value->getValue() === false) {
+            if ($supplier === null) {
                 return;
             }
 
             // @todo should this really be a string? Shouldn't this be a contact element? Same goes for billing.
-            $email = $supplier->getAttribute('support_email_address')->value->getValue();
+            $email   = $supplier->getAttribute('support_email_address')->value->valueStr;
             $account = $supplier->account;
         }
 
-        if ($email === '' || $email === null) {
+        if (empty($email)) {
             $account = AccountMapper::get()
                 ->with('contacts')
-                ->where('id', $ticket->task->for->id)
+                ->where('id', $ticket->task->for?->id)
                 ->execute();
 
             $email = $account->getContactByType(ContactType::EMAIL)->content;
         }
 
-        if ($email === '' || $email === null) {
+        if (empty($email)) {
             return;
         }
 
         $handler = $this->app->moduleManager->get('Admin', 'Api')->setUpServerMailHandler();
 
-        /** @var \Model\Setting $billingTemplate */
+        /** @var \Model\Setting $supportTemplate */
         $supportTemplate = $this->app->appSettings->get(
             names: SettingsEnum::SUPPORT_EMAIL_TEMPLATE,
             module: 'Support'
@@ -189,9 +199,9 @@ final class ApiController extends Controller
         $mail->template = \array_merge(
             $mail->template,
             [
-                '{user_name}' => $account->login,
-                '{ticket_id}' => $ticket->id,
-                '{ticket_status}' => $lang['Tasks']['S' . $ticket->task->status],
+                '{user_name}'      => $account?->login,
+                '{ticket_id}'      => $ticket->id,
+                '{ticket_status}'  => $lang['Tasks']['S' . $ticket->task->status],
                 '{ticket_subject}' => $ticket->task->title,
             ]
         );
@@ -358,7 +368,7 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticket_element', $request->getOrigin());
         $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
 
-        $ticket->task->taskElements[] = $element;
+        $ticket->task->taskElements[] = $element->taskElement;
 
         $this->notifyEmail($ticket, $response->header->l11n->language);
 

@@ -16,22 +16,22 @@ namespace Modules\Support\Controller;
 
 use Model\SettingMapper;
 use Modules\Media\Models\MediaMapper;
+use Modules\Profile\Models\SettingsEnum as ProfileSettingsEnum;
 use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\TicketMapper;
 use Modules\Support\Views\TicketView;
-use phpOMS\Asset\AssetType;
-use phpOMS\Contract\RenderableInterface;
-use phpOMS\DataStorage\Database\Query\OrderType;
-use phpOMS\Message\RequestAbstract;
-use phpOMS\Message\ResponseAbstract;
-use phpOMS\Views\View;
-use Modules\Profile\Models\SettingsEnum as ProfileSettingsEnum;
 use Modules\Tasks\Models\AccountRelationMapper;
 use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
+use phpOMS\Asset\AssetType;
+use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
+use phpOMS\DataStorage\Database\Query\OrderType;
+use phpOMS\Message\RequestAbstract;
+use phpOMS\Message\ResponseAbstract;
+use phpOMS\Views\View;
 
 /**
  * Support controller class.
@@ -102,7 +102,7 @@ final class BackendController extends Controller
 
         $view->data['tickets'] = $mapperQuery->execute();
 
-        $view->data['stats'] = TicketMapper::getStatOverview($request->header->account);
+        $view->data['stats'] = TicketMapper::getStatOverview();
 
         return $view;
     }
@@ -140,7 +140,6 @@ final class BackendController extends Controller
             ->with('app')
             ->where('task/tags/title/language', $request->header->l11n->language);
 
-        /** @var \Modules\Support\Models\Ticket */
         $view->data['ticket'] = $request->hasData('for')
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
@@ -160,7 +159,7 @@ final class BackendController extends Controller
 
         $view->data['tickets'] = TicketMapper::getAll()
             ->with('task')
-            ->where('task/for', $view->data['ticket']->task->for->id)
+            ->where('task/for', $view->data['ticket']->task->for?->id)
             ->sort('createdAt', OrderType::DESC)
             ->offset(1)
             ->limit(5)
@@ -171,7 +170,7 @@ final class BackendController extends Controller
         $view->data['hasContractManagement'] = $this->app->moduleManager->isActive('ContractManagement');
         if ($view->data['hasContractManagement']) {
             $view->data['contracts'] = \Modules\ContractManagement\Models\ContractMapper::getAll()
-                ->where('account', $view->data['ticket']->task->for->id)
+                ->where('account', $view->data['ticket']->task->for?->id)
                 ->where('end', $dt, '>=') // @todo consider to also allow $end === null
                 ->sort('createdAt', OrderType::DESC)
                 ->limit(5)

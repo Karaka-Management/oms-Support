@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
-use Modules\Admin\Models\AccountMapper;
 use Modules\Tasks\Models\AccountRelationMapper;
 use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
@@ -88,7 +87,7 @@ final class TicketMapper extends DataMapperFactory
         'app' => [
             'mapper'   => SupportAppMapper::class,
             'external' => 'support_ticket_app',
-        ]
+        ],
     ];
 
     /**
@@ -107,7 +106,14 @@ final class TicketMapper extends DataMapperFactory
      */
     public const PRIMARYFIELD = 'support_ticket_id';
 
-    public static function getStatOverview(int $account) : array
+    /**
+     * Get general ticket stats
+     *
+     * @return array{total:int, unassigned:int, open:int, closed:int, inprogress:int}
+     *
+     * @since 1.0.0
+     */
+    public static function getStatOverview() : array
     {
         $start = SmartDateTime::startOfMonth();
 
