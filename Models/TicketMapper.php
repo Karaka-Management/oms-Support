@@ -118,11 +118,11 @@ final class TicketMapper extends DataMapperFactory
         $start = SmartDateTime::startOfMonth();
 
         return [
-            'total'      => self::count()->with('task')->where('task/createdAt', $start, '>=')->execute(),
-            'unassigned' => self::count()->with('task')->where('for', null)->execute(),
-            'open'       => self::count()->with('task')->where('task/status', TaskStatus::OPEN)->execute(),
-            'closed'     => self::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->execute(),
-            'inprogress' => self::count()->with('task')->where('task/status', TaskStatus::WORKING)->execute(),
+            'total'      => self::count()->with('task')->where('task/createdAt', $start, '>=')->executeCount(),
+            'unassigned' => self::count()->with('task')->where('for', null)->executeCount(),
+            'open'       => self::count()->with('task')->where('task/status', TaskStatus::OPEN)->executeCount(),
+            'closed'     => self::count()->with('task')->where('task/createdAt', $start, '>=')->where('task/status', TaskStatus::DONE)->where('task/status', TaskStatus::CANCELED, '=', 'OR')->where('task/status', TaskStatus::SUSPENDED, '=', 'OR')->executeCount(),
+            'inprogress' => self::count()->with('task')->where('task/status', TaskStatus::WORKING)->executeCount(),
         ];
     }
 
