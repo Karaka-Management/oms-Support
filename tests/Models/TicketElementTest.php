@@ -38,7 +38,6 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         self::assertEquals(0, $this->element->id);
-        self::assertEquals(0, $this->element->time);
         self::assertEquals(0, $this->element->ticket);
     }
 
@@ -48,7 +47,6 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize() : void
     {
-        $this->element->time   = 10;
         $this->element->ticket = 2;
 
         $serialized = $this->element->jsonSerialize();
@@ -57,7 +55,6 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             [
                 'id'     => 0,
-                'time'   => 10,
                 'ticket' => 2,
             ],
             $serialized

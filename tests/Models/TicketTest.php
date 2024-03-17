@@ -39,7 +39,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         self::assertEquals(0, $this->ticket->id);
-        self::assertNull($this->ticket->for);
+        self::assertNull($this->ticket->task->for);
         self::assertEquals([], $this->ticket->getTicketElements());
         self::assertInstanceOf('\Modules\Tasks\Models\Task', $this->ticket->task);
         self::assertInstanceOf('\Modules\Support\Models\TicketElement', $this->ticket->getTicketElement(999));
@@ -90,7 +90,6 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             [
                 'id'             => 0,
-                'for'            => null,
                 'ticketElements' => [],
             ],
             $serialized
