@@ -19,6 +19,7 @@ use Modules\Support\Models\TicketElement;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Support\Models\TicketElement::class)]
 final class TicketElementTest extends \PHPUnit\Framework\TestCase
 {
     private TicketElement $element;
@@ -31,20 +32,14 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
         $this->element = new TicketElement();
     }
 
-    /**
-     * @covers \Modules\Support\Models\TicketElement
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         self::assertEquals(0, $this->element->id);
         self::assertEquals(0, $this->element->ticket);
     }
 
-    /**
-     * @covers \Modules\Support\Models\TicketElement
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testSerialize() : void
     {
         $this->element->ticket = 2;

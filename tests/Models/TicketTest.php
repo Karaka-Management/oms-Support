@@ -20,6 +20,7 @@ use Modules\Support\Models\TicketElement;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Support\Models\Ticket::class)]
 final class TicketTest extends \PHPUnit\Framework\TestCase
 {
     private Ticket $ticket;
@@ -32,10 +33,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         $this->ticket = new Ticket();
     }
 
-    /**
-     * @covers \Modules\Support\Models\Ticket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         self::assertEquals(0, $this->ticket->id);
@@ -46,10 +44,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertInstanceOf('\Modules\Support\Models\SupportApp', $this->ticket->app);
     }
 
-    /**
-     * @covers \Modules\Support\Models\Ticket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testElementInputOutput() : void
     {
         $element1 = new TicketElement();
@@ -62,10 +57,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertEquals([$element2, $element1], $this->ticket->invertTicketElements());
     }
 
-    /**
-     * @covers \Modules\Support\Models\Ticket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testElementRemove() : void
     {
         $element1 = new TicketElement();
@@ -77,10 +69,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($this->ticket->removeElement(0));
     }
 
-    /**
-     * @covers \Modules\Support\Models\Ticket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testSerialize() : void
     {
         $serialized = $this->ticket->jsonSerialize();

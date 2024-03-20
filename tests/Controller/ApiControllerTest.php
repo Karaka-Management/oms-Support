@@ -31,10 +31,9 @@ use phpOMS\Router\WebRouter;
 use phpOMS\Utils\TestUtils;
 
 /**
- * @testdox Modules\Support\tests\Controller\ApiControllerTest: Support api controller
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Support\tests\Controller\ApiControllerTest: Support api controller')]
 final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ApplicationAbstract $app;

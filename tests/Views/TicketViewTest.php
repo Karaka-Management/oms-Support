@@ -24,12 +24,10 @@ use Modules\Support\Views\TicketView;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Support\Views\TicketView::class)]
 class TicketViewTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Support\Views\TicketView
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         $view = new TicketView();
@@ -37,10 +35,7 @@ class TicketViewTest extends \PHPUnit\Framework\TestCase
         self::assertStringContainsString('', $view->getAccountImage(999));
     }
 
-    /**
-     * @covers \Modules\Support\Views\TicketView
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testAccountImageUrl() : void
     {
         $media              = new Media();

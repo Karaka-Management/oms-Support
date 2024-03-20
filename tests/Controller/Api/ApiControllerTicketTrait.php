@@ -23,8 +23,8 @@ trait ApiControllerTicketTrait
 {
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiSupportAppCreate() : void
     {
         $response = new HttpResponse();
@@ -39,8 +39,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiSupportAppCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -55,8 +55,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketCreate() : void
     {
         $response = new HttpResponse();
@@ -74,8 +74,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketGet() : void
     {
         $response = new HttpResponse();
@@ -90,8 +90,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -106,8 +106,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketElementCreate() : void
     {
         $response = new HttpResponse();
@@ -125,8 +125,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketElementGet() : void
     {
         $response = new HttpResponse();
@@ -141,8 +141,8 @@ trait ApiControllerTicketTrait
 
     /**
      * @covers \Modules\Support\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketElementCreateInvalidData() : void
     {
         $response = new HttpResponse();

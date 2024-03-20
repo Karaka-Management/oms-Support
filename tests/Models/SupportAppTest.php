@@ -19,6 +19,7 @@ use Modules\Support\Models\SupportApp;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Support\Models\SupportApp::class)]
 final class SupportAppTest extends \PHPUnit\Framework\TestCase
 {
     private SupportApp $app;
@@ -31,20 +32,14 @@ final class SupportAppTest extends \PHPUnit\Framework\TestCase
         $this->app = new SupportApp();
     }
 
-    /**
-     * @covers \Modules\Support\Models\SupportApp
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         self::assertEquals(0, $this->app->id);
         self::assertEquals('', $this->app->name);
     }
 
-    /**
-     * @covers \Modules\Support\Models\SupportApp
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testSerialize() : void
     {
         $this->app->name = 'Test Title';

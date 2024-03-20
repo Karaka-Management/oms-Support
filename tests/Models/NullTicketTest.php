@@ -19,31 +19,23 @@ use Modules\Support\Models\NullTicket;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Support\Models\NullTicket::class)]
 final class NullTicketTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Support\Models\NullTicket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Support\Models\Ticket', new NullTicket());
     }
 
-    /**
-     * @covers \Modules\Support\Models\NullTicket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullTicket(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Support\Models\NullTicket
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullTicket(2);
