@@ -27,7 +27,7 @@ use Modules\Support\Views\TicketView;
 class TicketViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Support\Views\TicketView
+     * @covers \Modules\Support\Views\TicketView
      * @group module
      */
     public function testDefault() : void
@@ -38,7 +38,7 @@ class TicketViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Views\TicketView
+     * @covers \Modules\Support\Views\TicketView
      * @group module
      */
     public function testAccountImageUrl() : void

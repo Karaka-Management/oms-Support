@@ -33,7 +33,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\Ticket
+     * @covers \Modules\Support\Models\Ticket
      * @group module
      */
     public function testDefault() : void
@@ -47,7 +47,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\Ticket
+     * @covers \Modules\Support\Models\Ticket
      * @group module
      */
     public function testElementInputOutput() : void
@@ -63,7 +63,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\Ticket
+     * @covers \Modules\Support\Models\Ticket
      * @group module
      */
     public function testElementRemove() : void
@@ -78,7 +78,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\Ticket
+     * @covers \Modules\Support\Models\Ticket
      * @group module
      */
     public function testSerialize() : void

@@ -22,7 +22,7 @@ use Modules\Support\Models\NullTicket;
 final class NullTicketTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Support\Models\NullTicket
+     * @covers \Modules\Support\Models\NullTicket
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullTicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\NullTicket
+     * @covers \Modules\Support\Models\NullTicket
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullTicketTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\NullTicket
+     * @covers \Modules\Support\Models\NullTicket
      * @group module
      */
     public function testJsonSerialize() : void

@@ -32,7 +32,7 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\TicketElement
+     * @covers \Modules\Support\Models\TicketElement
      * @group module
      */
     public function testDefault() : void
@@ -42,7 +42,7 @@ final class TicketElementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\TicketElement
+     * @covers \Modules\Support\Models\TicketElement
      * @group module
      */
     public function testSerialize() : void

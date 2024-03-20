@@ -22,7 +22,7 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerTicketTrait
 {
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiSupportAppCreate() : void
@@ -38,7 +38,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiSupportAppCreateInvalidData() : void
@@ -54,7 +54,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketCreate() : void
@@ -73,7 +73,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketGet() : void
@@ -89,7 +89,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketCreateInvalidData() : void
@@ -105,7 +105,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketElementCreate() : void
@@ -124,7 +124,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketElementGet() : void
@@ -140,7 +140,7 @@ trait ApiControllerTicketTrait
     }
 
     /**
-     * @covers Modules\Support\Controller\ApiController
+     * @covers \Modules\Support\Controller\ApiController
      * @group module
      */
     public function testApiTicketElementCreateInvalidData() : void

@@ -32,7 +32,7 @@ final class SupportAppTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\SupportApp
+     * @covers \Modules\Support\Models\SupportApp
      * @group module
      */
     public function testDefault() : void
@@ -42,7 +42,7 @@ final class SupportAppTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Support\Models\SupportApp
+     * @covers \Modules\Support\Models\SupportApp
      * @group module
      */
     public function testSerialize() : void
