@@ -32,7 +32,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/module?id={?id}'); ?>" method="post">
+                        <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/module?id={?id}&csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
@@ -44,32 +44,32 @@ echo $this->data['nav']->render(); ?>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('Email'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('MailServer'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('MailPort'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('MailUser'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('MailPassword'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('MailEncryption'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="email" value="" placeholder="">
+                                    <input id="iLogPath" name="settings_1000000007" type="email" value="">
                                 </div>
                             </div>
                             <div class="portlet-foot">

@@ -20,7 +20,7 @@ echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-6">
         <section class="portlet">
-            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template'); ?>" method="post">
+            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template?csrf={$CSRF}'); ?>" method="post">
                 <div class="portlet-head"><?= $this->getHtml('Ticket'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">
