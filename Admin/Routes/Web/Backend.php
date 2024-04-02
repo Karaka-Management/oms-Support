@@ -73,15 +73,4 @@ return [
             ],
         ],
     ],
-    '^/private/support/dashboard(\?.*$|$)' => [
-        [
-            'dest'       => '\Modules\Support\Controller\BackendController:viewPrivateSupportDashboard',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::DASHBOARD,
-            ],
-        ],
-    ],
 ];

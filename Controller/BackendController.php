@@ -82,7 +82,8 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Support/Theme/Backend/support-list');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
-        $mapperQuery = TicketMapper::getAll()
+        // @todo Use ticket implementation "getAnyRelatedToUser($request->header->account)
+        $mapperQuery = TicketMapper::getAnyRelatedToUser($request->header->account)
             ->with('task')
             ->with('task/createdBy')
             ->with('task/for')
@@ -90,17 +91,39 @@ final class BackendController extends Controller
             ->with('task/taskElements/accRelation')
             ->with('task/taskElements/accRelation/relation')
             ->with('app')
+            ->sort('task/createdAt', OrderType::DESC)
             ->limit(25);
 
         if ($request->getData('ptype') === 'p') {
-            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<');
+            $mapperQuery->where('id', $request->getDataInt('offset') ?? 0, '<');
         } elseif ($request->getData('ptype') === 'n') {
-            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>');
+            $mapperQuery->where('id', $request->getDataInt('offset') ?? 0, '>');
         } else {
             $mapperQuery->where('id', 0, '>');
         }
 
         $view->data['tickets'] = $mapperQuery->execute();
+
+        $openQuery = new Builder($this->app->dbPool->get(), true);
+        $openQuery->innerJoin(TaskMapper::TABLE, TaskMapper::TABLE . '_d2_task')
+            ->on(TicketMapper::TABLE . '_d1.support_ticket_task', '=', TaskMapper::TABLE . '_d2_task.task_id')
+            ->innerJoin(TaskElementMapper::TABLE)
+                ->on(TaskMapper::TABLE . '_d2_task.' . TaskMapper::PRIMARYFIELD, '=', TaskElementMapper::TABLE . '.task_element_task')
+            ->innerJoin(AccountRelationMapper::TABLE)
+                ->on(TaskElementMapper::TABLE . '.' . TaskElementMapper::PRIMARYFIELD, '=', AccountRelationMapper::TABLE . '.task_account_task_element')
+            ->andWhere(AccountRelationMapper::TABLE . '.task_account_account', '=', $request->header->account);
+
+        /** @var \Modules\Tasks\Models\Task[] $open */
+        $open = TicketMapper::getAll()
+            ->with('task')
+            ->with('task/createdBy')
+            ->where('task/type', TaskType::TEMPLATE, '!=')
+            ->where('task/status', TaskStatus::OPEN)
+            ->sort('task/createdAt', OrderType::DESC)
+            ->query($openQuery)
+            ->executeGetArray();
+
+        $view->data['open'] = $open;
 
         $view->data['stats'] = TicketMapper::getStatOverview();
 
@@ -163,7 +186,7 @@ final class BackendController extends Controller
             ->sort('createdAt', OrderType::DESC)
             ->offset(1)
             ->limit(5)
-            ->execute();
+            ->executeGetArray();
 
         $dt = new \DateTime();
 
@@ -174,7 +197,7 @@ final class BackendController extends Controller
                 ->where('end', $dt, '>=') // @todo consider to also allow $end === null
                 ->sort('createdAt', OrderType::DESC)
                 ->limit(5)
-                ->execute();
+                ->executeGetArray();
         } else {
             $view->data['contracts'] = [];
         }
@@ -246,73 +269,6 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behavior.
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param array            $data     Generic data
-     *
-     * @return RenderableInterface
-     *
-     * @since 1.0.0
-     * @codeCoverageIgnore
-     */
-    public function viewPrivateSupportDashboard(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
-    {
-        $head = $response->data['Content']->head;
-        $head->addAsset(AssetType::CSS, 'Modules/Tasks/Theme/Backend/css/styles.css?v=' . self::VERSION);
-
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Support/Theme/Backend/user-support-dashboard');
-        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
-
-        // @todo Use ticket implementation "getAnyRelatedToUser($request->header->account)
-        $mapperQuery = TicketMapper::getAnyRelatedToUser($request->header->account)
-            ->with('task')
-            ->with('task/createdBy')
-            ->with('task/for')
-            ->with('task/taskElements')
-            ->with('task/taskElements/accRelation')
-            ->with('task/taskElements/accRelation/relation')
-            ->with('app')
-            ->sort('task/createdAt', OrderType::DESC)
-            ->limit(25);
-
-        if ($request->getData('ptype') === 'p') {
-            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '<');
-        } elseif ($request->getData('ptype') === 'n') {
-            $mapperQuery->where('id', $request->getDataInt('id') ?? 0, '>');
-        } else {
-            $mapperQuery->where('id', 0, '>');
-        }
-
-        $view->data['tickets'] = $mapperQuery->execute();
-
-        $openQuery = new Builder($this->app->dbPool->get(), true);
-        $openQuery->innerJoin(TaskMapper::TABLE, TaskMapper::TABLE . '_d2_task')
-            ->on(TicketMapper::TABLE . '_d1.support_ticket_task', '=', TaskMapper::TABLE . '_d2_task.task_id')
-            ->innerJoin(TaskElementMapper::TABLE)
-                ->on(TaskMapper::TABLE . '_d2_task.' . TaskMapper::PRIMARYFIELD, '=', TaskElementMapper::TABLE . '.task_element_task')
-            ->innerJoin(AccountRelationMapper::TABLE)
-                ->on(TaskElementMapper::TABLE . '.' . TaskElementMapper::PRIMARYFIELD, '=', AccountRelationMapper::TABLE . '.task_account_task_element')
-            ->andWhere(AccountRelationMapper::TABLE . '.task_account_account', '=', $request->header->account);
-
-        /** @var \Modules\Tasks\Models\Task[] $open */
-        $open = TicketMapper::getAll()
-            ->with('task')
-            ->with('task/createdBy')
-            ->where('task/type', TaskType::TEMPLATE, '!=')
-            ->where('task/status', TaskStatus::OPEN)
-            ->sort('task/createdAt', OrderType::DESC)
-            ->query($openQuery)
-            ->execute();
-
-        $view->data['open'] = $open;
-
-        return $view;
-    }
-
-    /**
      * Method which generates the module profile view.
      *
      * @param RequestAbstract  $request  Request
@@ -330,11 +286,11 @@ final class BackendController extends Controller
 
         $id = $request->getDataString('id') ?? '';
 
-        $settings               = SettingMapper::getAll()->where('module', $id)->execute();
+        $settings               = SettingMapper::getAll()->where('module', $id)->executeGetArray();
         $view->data['settings'] = $settings;
 
         /** @var \Modules\Support\Models\SupportApp[] $applications */
-        $applications               = SupportAppMapper::getAll()->execute();
+        $applications               = SupportAppMapper::getAll()->executeGetArray();
         $view->data['applications'] = $applications;
 
         $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
