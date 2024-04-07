@@ -71,9 +71,9 @@ class Ticket
     public function toArray() : array
     {
         return [
-            'id'             => $this->id,
-            'task'           => $this->task,
-            'app'            => $this->app,
+            'id'   => $this->id,
+            'task' => $this->task,
+            'app'  => $this->app,
         ];
     }
 
