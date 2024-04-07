@@ -74,8 +74,8 @@
                 "from": "Support",
                 "permission": { "permission": 2, "category": null, "element": null },
                 "parent": 1002901001,
-                "children": [
-                ]
+                "children": [],
+                "status": 3
             },
             {
                 "id": 1002901301,

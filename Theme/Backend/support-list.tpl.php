@@ -40,7 +40,7 @@ echo $this->data['nav']->render(); ?>
                 <?php
                     $c = 0;
                 foreach ($this->data['open'] as $key => $ticket) : ++$c;
-                    $url = UriFactory::build('{/base}/support/ticket?{?}&id=' . $ticket->id);
+                    $url = UriFactory::build('{/base}/support/ticket/view?{?}&id=' . $ticket->id);
                 ?>
                     <tr data-href="<?= $url; ?>">
                         <td><a href="<?= $url; ?>">
@@ -81,7 +81,7 @@ echo $this->data['nav']->render(); ?>
                 <?php
                     $c = 0;
                 foreach ($this->data['tickets'] as $key => $ticket) : ++$c;
-                    $url = UriFactory::build('{/base}/support/ticket?{?}&id=' . $ticket->id);
+                    $url = UriFactory::build('{/base}/support/ticket/view?{?}&id=' . $ticket->id);
                 ?>
                     <tr data-href="<?= $url; ?>">
                         <td><a href="<?= $url; ?>">
@@ -112,11 +112,11 @@ echo $this->data['nav']->render(); ?>
             <div class="portlet-head"><?= $this->getHtml('Stats'); ?></div>
             <div class="portlet-body">
                 <table class="list">
-                    <tr><th><?= $this->getHtml('Unassigned'); ?><td><?= $this->data['stats']['unassigned']; ?>
-                    <tr><th><?= $this->getHtml('Open'); ?><td><?= $this->data['stats']['open']; ?>
-                    <tr><th><?= $this->getHtml('InProgress'); ?><td><?= $this->data['stats']['inprogress']; ?>
-                    <tr><th><?= $this->getHtml('Closed'); ?><td><?= $this->data['stats']['closed']; ?>
-                    <tr><th><?= $this->getHtml('Total'); ?><td><?= $this->data['stats']['total']; ?>
+                    <tr><th><?= $this->getHtml('Unassigned'); ?><td><?= $this->data['stats']['unassigned'] ?? 0; ?>
+                    <tr><th><?= $this->getHtml('Open'); ?><td><?= $this->data['stats']['open'] ?? 0; ?>
+                    <tr><th><?= $this->getHtml('InProgress'); ?><td><?= $this->data['stats']['inprogress'] ?? 0; ?>
+                    <tr><th><?= $this->getHtml('Closed'); ?><td><?= $this->data['stats']['closed'] ?? 0; ?>
+                    <tr><th><?= $this->getHtml('Total'); ?><td><?= $this->data['stats']['total'] ?? 0; ?>
                 </table>
             </div>
         </section>

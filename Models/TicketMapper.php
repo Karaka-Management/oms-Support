@@ -25,7 +25,7 @@ use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Stdlib\Base\SmartDateTime;
 
 /**
- * Mapper class.
+ * Ticket mapper class.
  *
  * @package Modules\Support\Models
  * @license OMS License 2.0
@@ -59,21 +59,6 @@ final class TicketMapper extends DataMapperFactory
         'task' => [
             'mapper'   => TaskMapper::class,
             'external' => 'support_ticket_task',
-        ],
-    ];
-
-    /**
-     * Has many relation.
-     *
-     * @var array<string, array{mapper:class-string, table:string, self?:?string, external?:?string, column?:string}>
-     * @since 1.0.0
-     */
-    public const HAS_MANY = [
-        'ticketElements' => [
-            'mapper'   => TicketElementMapper::class,
-            'table'    => 'support_ticket_element',
-            'self'     => 'support_ticket_element_ticket',
-            'external' => null,
         ],
     ];
 

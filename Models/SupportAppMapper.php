@@ -17,7 +17,7 @@ namespace Modules\Support\Models;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
- * Mapper class.
+ * SupportApp mapper class.
  *
  * @package Modules\Support\Models
  * @license OMS License 2.0

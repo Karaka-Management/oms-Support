@@ -52,14 +52,6 @@ class Ticket
     public SupportApp $app;
 
     /**
-     * Ticket elements.
-     *
-     * @var TicketElement[]
-     * @since 1.0.0
-     */
-    public array $ticketElements = [];
-
-    /**
      * Constructor.
      *
      * @param null|Task $task Creates the ticket from a task
@@ -74,84 +66,6 @@ class Ticket
     }
 
     /**
-     * Adding new task element.
-     *
-     * @param TicketElement $element Ticket element
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function addElement(TicketElement $element) : int
-    {
-        $this->ticketElements[] = $element;
-
-        \end($this->ticketElements);
-        $key = (int) \key($this->ticketElements);
-        \reset($this->ticketElements);
-
-        return $key;
-    }
-
-    /**
-     * Remove Element from list.
-     *
-     * @param int $id Ticket element
-     *
-     * @return bool
-     *
-     * @since 1.0.0
-     */
-    public function removeElement($id) : bool
-    {
-        if (isset($this->ticketElements[$id])) {
-            unset($this->ticketElements[$id]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get ticket elements.
-     *
-     * @return TicketElement[]
-     *
-     * @since 1.0.0
-     */
-    public function getTicketElements() : array
-    {
-        return $this->ticketElements;
-    }
-
-    /**
-     * Get ticket elements in inverted order.
-     *
-     * @return TicketElement[]
-     *
-     * @since 1.0.0
-     */
-    public function invertTicketElements() : array
-    {
-        return \array_reverse($this->ticketElements);
-    }
-
-    /**
-     * Get ticket elements.
-     *
-     * @param int $id Element id
-     *
-     * @return TicketElement
-     *
-     * @since 1.0.0
-     */
-    public function getTicketElement(int $id) : TicketElement
-    {
-        return $this->ticketElements[$id] ?? new NullTicketElement();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array
@@ -160,7 +74,6 @@ class Ticket
             'id'             => $this->id,
             'task'           => $this->task,
             'app'            => $this->app,
-            'ticketElements' => $this->ticketElements,
         ];
     }
 

@@ -22,9 +22,8 @@ use Modules\Support\Models\SettingsEnum;
 use Modules\Support\Models\SupportApp;
 use Modules\Support\Models\SupportAppMapper;
 use Modules\Support\Models\Ticket;
-use Modules\Support\Models\TicketElement;
-use Modules\Support\Models\TicketElementMapper;
 use Modules\Support\Models\TicketMapper;
+use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
 use Modules\Tasks\Models\TaskType;
@@ -232,7 +231,7 @@ final class ApiController extends Controller
      */
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
-        $request->setData('redirect', 'support/ticket?for={$id}');
+        $request->setData('redirect', 'support/ticket/view?for={$id}');
         $task       = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
         $task->type = TaskType::HIDDEN;
 
@@ -351,68 +350,30 @@ final class ApiController extends Controller
             return;
         }
 
+        // @question Consider to use the apiTaskElementCreate() function
+
         /** @var \Modules\Support\Models\Ticket $ticket */
         $ticket = TicketMapper::get()
             ->with('task')
             ->where('id', (int) ($request->getData('ticket')))
             ->execute();
 
-        $element = $this->createTicketElementFromRequest($request, $ticket);
+        $element = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
 
         $old = clone $ticket->task;
 
-        $ticket->task->status   = $element->taskElement->status;
-        $ticket->task->priority = $element->taskElement->priority;
-        $ticket->task->due      = $element->taskElement->due;
+        $ticket->task->status   = $element->status;
+        $ticket->task->priority = $element->priority;
+        $ticket->task->due      = $element->due;
 
-        $this->createModel($request->header->account, $element, TicketElementMapper::class, 'ticket_element', $request->getOrigin());
+        $this->createModel($request->header->account, $element, TaskElementMapper::class, 'ticket_element', $request->getOrigin());
         $this->updateModel($request->header->account, $old, $ticket->task, TaskMapper::class, 'ticket', $request->getOrigin());
 
-        $ticket->task->taskElements[] = $element->taskElement;
+        $ticket->task->taskElements[] = $element;
 
         $this->notifyEmail($ticket, $response->header->l11n->language);
 
         $this->createStandardCreateResponse($request, $response, $element);
-    }
-
-    /**
-     * Method to create ticket element from request.
-     *
-     * @param RequestAbstract $request Request
-     * @param Ticket          $ticket  Ticket
-     *
-     * @return TicketElement Returns the ticket created from the request
-     *
-     * @since 1.0.0
-     */
-    private function createTicketElementFromRequest(RequestAbstract $request, Ticket $ticket) : TicketElement
-    {
-        $taskElement = $this->app->moduleManager->get('Tasks')->createTaskElementFromRequest($request, $ticket->task);
-
-        $ticketElement         = new TicketElement($taskElement);
-        $ticketElement->ticket = $ticket->id;
-
-        return $ticketElement;
-    }
-
-    /**
-     * Api method to get a ticket
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param array            $data     Generic data
-     *
-     * @return void
-     *
-     * @api
-     *
-     * @since 1.0.0
-     */
-    public function apiTicketElementGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
-    {
-        /** @var \Modules\Support\Models\TicketElement $ticket */
-        $ticket = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->createStandardReturnResponse($request, $response, $ticket);
     }
 
     /**
@@ -430,37 +391,18 @@ final class ApiController extends Controller
      */
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        /** @var \Modules\Support\Models\TicketElement $old */
-        $old = TicketElementMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $new = $this->updateTicketElementFromRequest($request, $response, clone $old);
-        $this->updateModel($request->header->account, $old, $new, TicketElementMapper::class, 'ticket_element', $request->getOrigin());
+        $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
+        $new = $response->getData($request->uri->__toString())['response'];
 
         $ticket = TicketMapper::get()
             ->with('task')
-            ->where('task', $new->taskElement->task)
+            ->where('task', $new->task)
             ->execute();
 
         $this->notifyEmail($ticket, $response->header->l11n->language);
 
         //$this->updateModel($request->header->account, $ticket, $ticket, TicketMapper::class, 'ticket', $request->getOrigin());
         $this->createStandardUpdateResponse($request, $response, $new);
-    }
-
-    /**
-     * Method to update an ticket element from a request
-     *
-     * @param RequestAbstract $request Request
-     *
-     * @return TicketElement Returns the updated ticket element from the request
-     *
-     * @since 1.0.0
-     */
-    private function updateTicketElementFromRequest(RequestAbstract $request, ResponseAbstract $response, TicketElement $new) : TicketElement
-    {
-        $request->setData('id', $new->taskElement->task, true);
-        $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
-
-        return $new;
     }
 
     /**

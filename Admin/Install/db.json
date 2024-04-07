@@ -49,31 +49,5 @@
                 "foreignKey": "support_app_id"
             }
         }
-    },
-    "support_ticket_element": {
-        "name": "support_ticket_element",
-        "fields": {
-            "support_ticket_element_id": {
-                "name": "support_ticket_element_id",
-                "type": "INT",
-                "null": false,
-                "primary": true,
-                "autoincrement": true
-            },
-            "support_ticket_element_task_element": {
-                "name": "support_ticket_element_task_element",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "task_element",
-                "foreignKey": "task_element_id"
-            },
-            "support_ticket_element_ticket": {
-                "name": "support_ticket_element_ticket",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "support_ticket",
-                "foreignKey": "support_ticket_id"
-            }
-        }
     }
 }

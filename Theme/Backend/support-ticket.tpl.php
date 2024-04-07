@@ -415,10 +415,11 @@ echo $this->data['nav']->render(); ?>
                         $count = 0;
                         foreach ($this->data['tickets'] as $value) :
                             ++$count;
+                            $url = UriFactory::build('{/base}/support/ticket/view?{?}&id=' . $value->id);
                     ?>
-                    <tr>
-                        <td><?= $this->printHtml($value->task->title); ?>
-                        <td><?= $value->task->createdAt->format('Y-m-d'); ?>
+                    <tr data-href="<?= $url; ?>">
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->task->title); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $value->task->createdAt->format('Y-m-d'); ?></a>
                     <?php endforeach; ?>
                     <?php if ($count === 0) : ?>
                     <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
@@ -441,10 +442,11 @@ echo $this->data['nav']->render(); ?>
                         $count = 0;
                         foreach ($this->data['contracts'] as $value) :
                             ++$count;
+                            $url = UriFactory::build('{/base}/contract/view?{?}&id=' . $value->id);
                     ?>
-                    <tr>
-                        <td><?= $this->printHtml($value->title); ?>
-                        <td><?= $value->createdAt->format('Y-m-d'); ?>
+                    <tr data-href="<?= $url; ?>">
+                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->title); ?></a>
+                        <td><a href="<?= $url; ?>"><?= $value->createdAt->format('Y-m-d'); ?></a>
                     <?php endforeach; ?>
                     <?php if ($count === 0) : ?>
                     <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

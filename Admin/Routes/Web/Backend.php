@@ -22,6 +22,7 @@ return [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportList',
             'verb'       => RouteVerb::GET,
+            'active' => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -29,10 +30,11 @@ return [
             ],
         ],
     ],
-    '^/support/ticket(\?.*$|$)' => [
+    '^/support/ticket/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportTicket',
             'verb'       => RouteVerb::GET,
+            'active' => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -44,6 +46,7 @@ return [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportCreate',
             'verb'       => RouteVerb::GET,
+            'active' => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -51,10 +54,11 @@ return [
             ],
         ],
     ],
-    '^/support/analysis(\?.*$|$)' => [
+    '^/support/analysis/dashboard(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportAnalysis',
             'verb'       => RouteVerb::GET,
+            'active' => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -66,6 +70,7 @@ return [
         [
             'dest'       => '\Modules\Support\Controller\BackendController:viewSupportSettings',
             'verb'       => RouteVerb::GET,
+            'active' => false,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
