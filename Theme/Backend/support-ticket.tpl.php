@@ -178,7 +178,7 @@ echo $this->data['nav']->render(); ?>
             <?php $c = 0; $previous = null;
             foreach ($elements as $key => $element) : ++$c; ?>
                 <?php if (($c === 1 && $element->status !== TaskStatus::OPEN)
-                    || ($previous !== null && $element->status !== $previous->taskElement->status)
+                    || ($previous !== null && $element->status !== $previous->status)
                 ) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
@@ -194,7 +194,7 @@ echo $this->data['nav']->render(); ?>
                 <?php endif; ?>
 
                 <?php if (($c === 1 && $element->priority !== $task->priority)
-                    || ($previous !== null && $element->priority !== $previous->taskElement->priority)
+                    || ($previous !== null && $element->priority !== $previous->priority)
                 ) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
@@ -266,7 +266,7 @@ echo $this->data['nav']->render(); ?>
                                         )
                                     ) : ?>
                                     <?= $this->getHtml('Due'); ?>: <?= $this->printHtml($element->due->format('Y/m/d H:i')); ?>
-                                <?php elseif ($previous !== null && $previous->taskElement->priority !== $element->priority) : ?>
+                                <?php elseif ($previous !== null && $previous->priority !== $element->priority) : ?>
                                     <?= $this->getHtml('Priority'); ?>: <?= $this->getHtml('P' . $element->priority, 'Tasks'); ?>
                                 <?php endif; ?>
                             </div>

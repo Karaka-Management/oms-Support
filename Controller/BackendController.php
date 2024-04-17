@@ -83,7 +83,7 @@ final class BackendController extends Controller
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         // @todo Use ticket implementation "getAnyRelatedToUser($request->header->account)
-        $mapperQuery = TicketMapper::getAnyRelatedToUser($request->header->account)
+        $view->data['tickets'] = TicketMapper::getAnyRelatedToUser($request->header->account)
             ->with('task')
             ->with('task/createdBy')
             ->with('task/for')
@@ -92,17 +92,13 @@ final class BackendController extends Controller
             ->with('task/taskElements/accRelation/relation')
             ->with('app')
             ->sort('task/createdAt', OrderType::DESC)
-            ->limit(25);
-
-        if ($request->getData('ptype') === 'p') {
-            $mapperQuery->where('id', $request->getDataInt('offset') ?? 0, '<');
-        } elseif ($request->getData('ptype') === 'n') {
-            $mapperQuery->where('id', $request->getDataInt('offset') ?? 0, '>');
-        } else {
-            $mapperQuery->where('id', 0, '>');
-        }
-
-        $view->data['tickets'] = $mapperQuery->execute();
+            ->limit(50)
+            ->paginate(
+                'id',
+                $request->getData('ptype'),
+                $request->getDataInt('offset')
+            )
+            ->executeGetArray();
 
         $openQuery = new Builder($this->app->dbPool->get(), true);
         $openQuery->innerJoin(TaskMapper::TABLE, TaskMapper::TABLE . '_d2_task')
@@ -113,8 +109,7 @@ final class BackendController extends Controller
                 ->on(TaskElementMapper::TABLE . '.' . TaskElementMapper::PRIMARYFIELD, '=', AccountRelationMapper::TABLE . '.task_account_task_element')
             ->andWhere(AccountRelationMapper::TABLE . '.task_account_account', '=', $request->header->account);
 
-        /** @var \Modules\Tasks\Models\Task[] $open */
-        $open = TicketMapper::getAll()
+        $view->data['open'] = TicketMapper::getAll()
             ->with('task')
             ->with('task/createdBy')
             ->where('task/type', TaskType::TEMPLATE, '!=')
@@ -122,8 +117,6 @@ final class BackendController extends Controller
             ->sort('task/createdAt', OrderType::DESC)
             ->query($openQuery)
             ->executeGetArray();
-
-        $view->data['open'] = $open;
 
         $view->data['stats'] = TicketMapper::getStatOverview();
 
@@ -154,11 +147,10 @@ final class BackendController extends Controller
             ->with('task/createdBy')
             ->with('task/tags')
             ->with('task/tags/title')
-            ->with('ticketElements')
-            ->with('ticketElements/taskElement')
-            ->with('ticketElements/taskElement/createdBy')
-            ->with('ticketElements/taskElement/media')
-            ->with('attributes')
+            ->with('task/taskElements')
+            ->with('task/taskElements/createdBy')
+            ->with('task/taskElements/media')
+            ->with('task/attributes')
             ->with('task/for')
             ->with('app')
             ->where('task/tags/title/language', $request->header->l11n->language);
@@ -221,27 +213,6 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Support/Theme/Backend/ticket-create');
-        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
-
-        return $view;
-    }
-
-    /**
-     * Routing end-point for application behavior.
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param array            $data     Generic data
-     *
-     * @return RenderableInterface
-     *
-     * @since 1.0.0
-     * @codeCoverageIgnore
-     */
-    public function viewSupportAnalysis(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
-    {
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Support/Theme/Backend/support-analysis');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         return $view;

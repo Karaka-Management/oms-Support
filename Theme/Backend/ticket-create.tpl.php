@@ -20,19 +20,9 @@ echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-6">
         <section class="portlet">
-            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}helper/template?csrf={$CSRF}'); ?>" method="post">
+            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}support/ticket?csrf={$CSRF}'); ?>" method="post">
                 <div class="portlet-head"><?= $this->getHtml('Ticket'); ?></div>
                 <div class="portlet-body">
-                    <div class="form-group">
-                        <label for="iDepartment"><?= $this->getHtml('Department'); ?></label>
-                        <select id="iDepartment" name="department"></select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="iTopic"><?= $this->getHtml('Topic'); ?></label>
-                        <select id="iTopic" name="topic"></select>
-                    </div>
-
                     <div class="form-group">
                         <label for="iTitle"><?= $this->getHtml('Title'); ?></label>
                         <input id="iTitle" name="name" type="text" required>
