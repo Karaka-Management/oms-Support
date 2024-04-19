@@ -29,6 +29,7 @@ use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\DataStorage\Database\Query\OrderType;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
@@ -139,9 +140,6 @@ final class BackendController extends Controller
     {
         $view = new TicketView($this->app->l11nManager, $request, $response);
 
-        $view->setTemplate('/Modules/Support/Theme/Backend/support-ticket');
-        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
-
         $mapperQuery = TicketMapper::get()
             ->with('task')
             ->with('task/createdBy')
@@ -158,6 +156,16 @@ final class BackendController extends Controller
         $view->data['ticket'] = $request->hasData('for')
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
             : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
+
+        if ($view->data['ticket']->id === 0) {
+            $response->header->status = RequestStatusCode::R_404;
+            $view->setTemplate('/Web/Backend/Error/404');
+
+            return $view;
+        }
+
+        $view->setTemplate('/Modules/Support/Theme/Backend/support-ticket');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
 
         /** @var \Model\Setting $profileImage */
         $profileImage = $this->app->appSettings->get(names: ProfileSettingsEnum::DEFAULT_PROFILE_IMAGE, module: 'Profile');
@@ -267,5 +275,21 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
 
         return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewSupportAnalysis(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        return new View($this->app->l11nManager, $request, $response);
     }
 }
