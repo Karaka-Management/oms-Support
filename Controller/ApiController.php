@@ -392,7 +392,9 @@ final class ApiController extends Controller
     public function apiTicketElementSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
-        $new = $response->getData($request->uri->__toString())['response'];
+
+        /** @var \Modules\Tasks\models\TaskElement $new */
+        $new = $response->getDataArray($request->uri->__toString())['response'];
 
         $ticket = TicketMapper::get()
             ->with('task')
