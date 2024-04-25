@@ -393,7 +393,7 @@ final class ApiController extends Controller
     {
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
 
-        /** @var \Modules\Tasks\models\TaskElement $new */
+        /** @var \Modules\Tasks\Models\TaskElement $new */
         $new = $response->getDataArray($request->uri->__toString())['response'];
 
         $ticket = TicketMapper::get()

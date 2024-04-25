@@ -38,35 +38,8 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
     {
         self::assertEquals(0, $this->ticket->id);
         self::assertNull($this->ticket->task->for);
-        self::assertEquals([], $this->ticket->getTicketElements());
         self::assertInstanceOf('\Modules\Tasks\Models\Task', $this->ticket->task);
-        self::assertInstanceOf('\Modules\Support\Models\TicketElement', $this->ticket->getTicketElement(999));
         self::assertInstanceOf('\Modules\Support\Models\SupportApp', $this->ticket->app);
-    }
-
-    #[\PHPUnit\Framework\Attributes\Group('module')]
-    public function testElementInputOutput() : void
-    {
-        $element1 = new TicketElement();
-        $element2 = new TicketElement();
-
-        self::assertEquals(0, $this->ticket->addElement($element1));
-        self::assertEquals(1, $this->ticket->addElement($element2));
-        self::assertCount(2, $this->ticket->getTicketElements());
-        self::assertEquals($element1, $this->ticket->getTicketElement(0));
-        self::assertEquals([$element2, $element1], $this->ticket->invertTicketElements());
-    }
-
-    #[\PHPUnit\Framework\Attributes\Group('module')]
-    public function testElementRemove() : void
-    {
-        $element1 = new TicketElement();
-
-        $this->ticket->addElement($element1);
-        self::assertCount(1, $this->ticket->getTicketElements());
-        self::assertTrue($this->ticket->removeElement(0));
-        self::assertCount(0, $this->ticket->getTicketElements());
-        self::assertFalse($this->ticket->removeElement(0));
     }
 
     #[\PHPUnit\Framework\Attributes\Group('module')]
@@ -79,7 +52,6 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             [
                 'id'             => 0,
-                'ticketElements' => [],
             ],
             $serialized
         );

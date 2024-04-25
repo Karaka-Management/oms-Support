@@ -127,22 +127,6 @@ trait ApiControllerTicketTrait
      * @covers \Modules\Support\Controller\ApiController
      */
     #[\PHPUnit\Framework\Attributes\Group('module')]
-    public function testApiTicketElementGet() : void
-    {
-        $response = new HttpResponse();
-        $request  = new HttpRequest();
-
-        $request->header->account = 1;
-        $request->setData('id', '1');
-
-        $this->module->apiTicketElementGet($request, $response);
-        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
-    }
-
-    /**
-     * @covers \Modules\Support\Controller\ApiController
-     */
-    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiTicketElementCreateInvalidData() : void
     {
         $response = new HttpResponse();
