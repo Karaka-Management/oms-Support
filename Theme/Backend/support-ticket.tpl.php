@@ -123,7 +123,7 @@ echo $this->data['nav']->render(); ?>
 
         <div id="elements">
             <template id="elementTpl">
-                <section id="taskelmenet-0" class="portlet taskElement"
+                <section id="taskelement-0" class="portlet taskElement"
                     data-update-content="#elements"
                     data-update-element=".taskElement .taskElement-content"
                     data-update-tpl="#taskElementContentTpl"
@@ -210,7 +210,7 @@ echo $this->data['nav']->render(); ?>
                 <?php endif; ?>
 
                 <?php if ($element->description !== '') : ?>
-                <section id="taskelmenet-<?= $element->id; ?>" class="portlet taskElement"
+                <section id="taskelement-<?= $element->id; ?>" class="portlet taskElement"
                     data-update-content="#elements"
                     data-update-element=".taskElement .taskElement-content"
                     data-update-tpl="#taskElementContentTpl"
