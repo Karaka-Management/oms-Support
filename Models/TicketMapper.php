@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Support\Models;
 
+use Modules\Editor\Models\EditorDocMapper;
 use Modules\Tasks\Models\AccountRelationMapper;
 use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
@@ -47,6 +48,21 @@ final class TicketMapper extends DataMapperFactory
         'support_ticket_id'   => ['name' => 'support_ticket_id',   'type' => 'int', 'internal' => 'id'],
         'support_ticket_task' => ['name' => 'support_ticket_task', 'type' => 'int', 'internal' => 'task'],
         'support_ticket_app'  => ['name' => 'support_ticket_app', 'type' => 'int', 'internal' => 'app'],
+    ];
+
+    /**
+     * Has many relation.
+     *
+     * @var array<string, array{mapper:class-string, table:string, self?:?string, external?:?string, column?:string}>
+     * @since 1.0.0
+     */
+    public const HAS_MANY = [
+        'notes' => [
+            'mapper'   => EditorDocMapper::class,            /* mapper of the related object */
+            'table'    => 'support_ticket_note',         /* table of the related object, null if no relation table is used (many->1) */
+            'external' => 'support_ticket_note_doc',
+            'self'     => 'support_ticket_note_ticket',
+        ],
     ];
 
     /**

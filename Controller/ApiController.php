@@ -232,8 +232,7 @@ final class ApiController extends Controller
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
         $request->setData('redirect', 'support/ticket/view?for={$id}');
-        $task       = $this->app->moduleManager->get('Tasks')->createTaskFromRequest($request);
-        $task->type = TaskType::HIDDEN;
+        $task       = $this->app->moduleManager->get('Tasks', 'Api')->createTaskFromRequest($request);
 
         $ticket      = new Ticket($task);
         $ticket->app = new NullSupportApp($request->getDataInt('app') ?? 1);
@@ -465,6 +464,79 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['name'] = !$request->hasData('name'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create Note
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateNoteCreate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\Support\Models\Ticket $ticket */
+        $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+
+        $request->setData('virtualpath', $this->createTicketDir($ticket), true);
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorCreate($request, $response, $data);
+
+        if ($response->header->status !== RequestStatusCode::R_200) {
+            return;
+        }
+
+        /** @var \Modules\Editor\Models\EditorDoc $model */
+        $model = $response->getDataArray($request->uri->__toString())['response'];
+        $this->createModelRelation($request->header->account, $request->getDataInt('id'), $model->id, TicketMapper::class, 'notes', '', $request->getOrigin());
+    }
+
+    /**
+     * Create media directory path
+     *
+     * @param Ticket $ticket Ticket
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    private function createTicketDir(Ticket $ticket) : string
+    {
+        return '/Modules/Support/Ticket/'
+            . $this->app->unitId . '/'
+            . $ticket->task->createdAt->format('Y/m/d') . '/'
+            . $ticket->id;
+    }
+
+    /**
+     * Validate ticket note create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateNoteCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
             return $val;
         }
 

@@ -24,6 +24,10 @@ use Modules\Tasks\Models\TaskType;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @question Consider to add internal comment for a ticket
+ *      Maybe at least a remark field?
+ *      https://github.com/Karaka-Management/oms-Support/issues/11
  */
 class Ticket
 {
@@ -84,4 +88,6 @@ class Ticket
     {
         return $this->toArray();
     }
+
+    use \Modules\Editor\Models\EditorDocListTrait;
 }

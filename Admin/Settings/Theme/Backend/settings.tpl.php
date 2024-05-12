@@ -31,7 +31,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/module?id={?id}&csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
                             <div class="portlet-body">
@@ -77,11 +77,11 @@ echo $this->data['nav']->render(); ?>
                                 <input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Applications'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                             <table id="settingsList" class="default sticky">
@@ -126,7 +126,7 @@ echo $this->data['nav']->render(); ?>
                                 <?php endif; ?>
                             </table>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -135,7 +135,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table id="settingsList" class="default sticky">
@@ -208,7 +208,7 @@ echo $this->data['nav']->render(); ?>
                             <?php endif; ?>
                         </table>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>

@@ -49,5 +49,31 @@
                 "foreignKey": "support_app_id"
             }
         }
+    },
+    "support_ticket_note": {
+        "name": "support_ticket_note",
+        "fields": {
+            "support_ticket_note_id": {
+                "name": "support_ticket_note_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "support_ticket_note_ticket": {
+                "name": "support_ticket_note_ticket",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "support_ticket",
+                "foreignKey": "support_ticket_id"
+            },
+            "support_ticket_note_doc": {
+                "name": "support_ticket_note_doc",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "editor_doc",
+                "foreignKey": "editor_doc_id"
+            }
+        }
     }
 }
