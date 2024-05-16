@@ -26,7 +26,6 @@ use Modules\Support\Models\TicketMapper;
 use Modules\Tasks\Models\TaskElementMapper;
 use Modules\Tasks\Models\TaskMapper;
 use Modules\Tasks\Models\TaskStatus;
-use Modules\Tasks\Models\TaskType;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -232,7 +231,7 @@ final class ApiController extends Controller
     private function createTicketFromRequest(RequestAbstract $request) : Ticket
     {
         $request->setData('redirect', 'support/ticket/view?for={$id}');
-        $task       = $this->app->moduleManager->get('Tasks', 'Api')->createTaskFromRequest($request);
+        $task = $this->app->moduleManager->get('Tasks', 'Api')->createTaskFromRequest($request);
 
         $ticket      = new Ticket($task);
         $ticket->app = new NullSupportApp($request->getDataInt('app') ?? 1);
@@ -393,7 +392,11 @@ final class ApiController extends Controller
         $this->app->moduleManager->get('Tasks')->apiTaskElementSet($request, $response);
 
         /** @var \Modules\Tasks\Models\TaskElement $new */
-        $new = $response->getDataArray($request->uri->__toString())['response'];
+        $new = $response->getDataArray($request->uri->__toString())['response'] ?? null;
+        if ($new === null) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $new);
+        }
 
         $ticket = TicketMapper::get()
             ->with('task')
@@ -503,7 +506,12 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Editor\Models\EditorDoc $model */
-        $model = $response->getDataArray($request->uri->__toString())['response'];
+        $model = $response->getDataArray($request->uri->__toString())['response'] ?? null;
+        if ($model === null) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $model);
+        }
+
         $this->createModelRelation($request->header->account, $request->getDataInt('id'), $model->id, TicketMapper::class, 'notes', '', $request->getOrigin());
     }
 

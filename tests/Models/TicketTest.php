@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Support\tests\Models;
 
 use Modules\Support\Models\Ticket;
-use Modules\Support\Models\TicketElement;
 
 /**
  * @internal
@@ -51,7 +50,7 @@ final class TicketTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             [
-                'id'             => 0,
+                'id' => 0,
             ],
             $serialized
         );
