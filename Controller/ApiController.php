@@ -496,7 +496,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Support\Models\Ticket $ticket */
-        $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $ticket = TicketMapper::get()->where('id', (int) $request->getData('ref'))->execute();
 
         $request->setData('virtualpath', $this->createTicketDir($ticket), true);
         $this->app->moduleManager->get('Editor', 'Api')->apiEditorCreate($request, $response, $data);
@@ -512,7 +512,7 @@ final class ApiController extends Controller
             $this->createInvalidUpdateResponse($request, $response, $model);
         }
 
-        $this->createModelRelation($request->header->account, $request->getDataInt('id'), $model->id, TicketMapper::class, 'notes', '', $request->getOrigin());
+        $this->createModelRelation($request->header->account, $request->getDataInt('ref'), $model->id, TicketMapper::class, 'notes', '', $request->getOrigin());
     }
 
     /**
@@ -544,7 +544,7 @@ final class ApiController extends Controller
     private function validateNoteCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = !$request->hasData('id'))) {
+        if (($val['ref'] = !$request->hasData('ref'))) {
             return $val;
         }
 
