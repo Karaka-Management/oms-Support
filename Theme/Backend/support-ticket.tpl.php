@@ -47,8 +47,8 @@ echo $this->data['nav']->render(); ?>
                 <template id="contentTpl">
                     <div class="task-content">
                         <!-- @todo bind js after adding template -->
-                        <?= $this->getData('editor')->render('task-edit'); ?>
-                        <?= $this->getData('editor')->getData('text')->render(
+                        <?= $this->data['editor']->render('task-edit'); ?>
+                        <?= $this->data['editor']->data['text']->render(
                             'task-edit',
                             'plain',
                             'taskEdit',
@@ -164,8 +164,8 @@ echo $this->data['nav']->render(); ?>
                 <template id="taskElementContentTpl">
                     <div class="taskElement-content">
                         <!-- @todo bind js after adding template -->
-                        <?= $this->getData('editor')->render('task-element-edit'); ?>
-                        <?= $this->getData('editor')->getData('text')->render(
+                        <?= $this->data['editor']->render('task-element-edit'); ?>
+                        <?= $this->data['editor']->data['text']->render(
                                 'task-element-edit',
                                 'plain',
                                 'taskElementEdit',
@@ -321,11 +321,11 @@ echo $this->data['nav']->render(); ?>
                 <div class="portlet-head"><?= $this->getHtml('Message'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">
-                        <?= $this->getData('editor')->render('task-editor'); ?>
+                        <?= $this->data['editor']->render('task-editor'); ?>
                     </div>
 
                     <div class="form-group">
-                        <?= $this->getData('editor')->getData('text')->render(
+                        <?= $this->data['editor']->data['text']->render(
                             'task-editor',
                             'plain',
                             'taskElementCreate',
@@ -347,7 +347,7 @@ echo $this->data['nav']->render(); ?>
 
                     <div class="form-group">
                         <label for="iReceiver"><?= $this->getHtml('To'); ?></label>
-                        <?= $this->getData('accGrpSelector')->render('iReceiver', 'to', true); ?>
+                        <?= $this->data['accGrpSelector']->render('iReceiver', 'to', true); ?>
                     </div>
 
                     <div class="form-group wf-100">

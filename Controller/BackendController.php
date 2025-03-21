@@ -155,7 +155,7 @@ final class BackendController extends Controller
 
         $view->data['ticket'] = $request->hasData('for')
             ? $mapperQuery->where('task', (int) $request->getData('for'))->execute()
-            : $mapperQuery->where('id', (int) $request->getData('id'))->execute();
+            : $mapperQuery->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         if ($view->data['ticket']->id === 0) {
             $response->header->status = RequestStatusCode::R_404;

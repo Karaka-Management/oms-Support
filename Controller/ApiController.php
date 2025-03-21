@@ -255,7 +255,7 @@ final class ApiController extends Controller
     public function apiTicketGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Support\Models\Ticket $ticket */
-        $ticket = TicketMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $ticket = TicketMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->createStandardReturnResponse($request, $response, $ticket);
     }
 
@@ -277,7 +277,7 @@ final class ApiController extends Controller
         /** @var \Modules\Support\Models\Ticket $old */
         $old = TicketMapper::get()
             ->with('task')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $new = $this->updateTicketFromRequest($request, clone $old);
